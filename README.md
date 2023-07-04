@@ -9,17 +9,16 @@ Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN�
 软件架构说明
 
 
-#### 安装教程
+#### 启动要求
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  jdk1.8、maven、mysql、redis
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  maven导入依赖
+2.  修改litemall-db\src\main\resources\application-db.yml文件中的数据库配置
+3.  修改litemall-db\src\main\resources\application-db.yml文件中的redis配置
+4.  启动项目
 
 #### 参与贡献
 
