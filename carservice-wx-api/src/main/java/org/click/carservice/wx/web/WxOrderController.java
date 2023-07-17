@@ -10,18 +10,16 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.order.body.*;
-import org.click.carservice.wx.service.WxWebOrderService;
+import org.click.carservice.wx.web.impl.WxWebOrderService;
 import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -29,7 +27,7 @@ import java.util.List;
 
 /**
  * 订单服务
- * @author click
+ * @author Ysling
  */
 @Slf4j
 @RestController
@@ -68,7 +66,7 @@ public class WxOrderController {
      * @return 提交订单操作结果
      */
     @PostMapping("submit")
-    @RequestRateLimiter(rate = 1, rateInterval = 3, timeUnit = RateIntervalUnit.SECONDS, errMsg = "你有一笔相同订单已提交，请等待")
+    @RequestRateLimiter(rate = 1, rateInterval = 3, timeUnit = RateIntervalUnit.SECONDS , errMsg = "你有一笔相同订单已提交，请等待")
     public Object submit(@LoginUser String userId, @Valid @RequestBody OrderSubmitBody body) {
         return orderService.submit(userId, body);
     }
@@ -181,7 +179,7 @@ public class WxOrderController {
      */
     @PostMapping("admin/refund")
     public Object adminRefund(@LoginUser String userId, @Valid @RequestBody OrderAdminRefundBody body) {
-        return orderService.adminRefund(userId, body);
+        return orderService.adminRefund(userId , body);
     }
 
     /**
@@ -203,7 +201,7 @@ public class WxOrderController {
      */
     @PostMapping("admin/ship")
     public Object adminShip(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
-        return orderService.adminShip(userId, body);
+        return orderService.adminShip(userId , body);
     }
 
 

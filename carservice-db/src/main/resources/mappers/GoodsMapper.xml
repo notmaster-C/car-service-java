@@ -15,6 +15,7 @@
         <result column="brief" property="brief"/>
         <result column="pic_url" property="picUrl"/>
         <result column="share_url" property="shareUrl"/>
+        <result column="address" property="address" />
         <result column="is_groupon" property="isGroupon"/>
         <result column="is_new" property="isNew"/>
         <result column="is_hot" property="isHot"/>

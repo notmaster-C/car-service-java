@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +24,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Order(1)
-@WebFilter(urlPatterns = {"/wx/*", "/admin/*"}, filterName = "tenantFilter")
+@WebFilter(urlPatterns = {"/wx/*" , "/admin/*"}, filterName = "tenantFilter")
 public class TenantFilter extends OncePerRequestFilter {
 
 
@@ -41,15 +39,16 @@ public class TenantFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain chain) throws ServletException, IOException {
         try {
-            if (this.beforeRequest()) {
+            if (this.beforeRequest()){
                 chain.doFilter(request, response);
-            } else {
+            }else {
                 GlobalWebUtil.sendMessage(response, "未获取到租户授权");
             }
-        } catch (Exception e) {
+        }catch (Exception e){
+            log.error("异常地址："+request.getRequestURI());
             e.printStackTrace();
             GlobalWebUtil.sendMessage(response, e.getMessage());
-        } finally {
+        }finally {
             this.afterRequest();
         }
     }
@@ -61,14 +60,14 @@ public class TenantFilter extends OncePerRequestFilter {
     protected Boolean beforeRequest() {
         //获取当前请求租户
         String tenantId = TenantContextHolder.returnTenantId(false);
-        if (tenantId == null) {
+        if (tenantId == null){
             throw new RuntimeException("未找到授权租户");
         }
 
         //设置当前租户为默认租户
         TenantContextHolder.setDefaultId();
         //如果没有租户直接放行
-        if (tenantService.count() == 0) {
+        if (tenantService.count() == 0){
             return true;
         }
 

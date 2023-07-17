@@ -1,7 +1,7 @@
 package org.click.carservice.core.tasks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.tasks.service.TaskService;
 import org.redisson.api.RBlockingQueue;
@@ -24,24 +24,17 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisTaskServiceImpl implements TaskService {
 
-    @Autowired
-    private ActionLogService logService;
+
     @Autowired
     private ScheduledExecutorService executorService;
-    /**
-     * 延时队列
-     */
+    /**延时队列*/
     private final RDelayedQueue<TaskRunnable> delayedQueue;
-    /**
-     * 延时队列
-     */
+    /**延时队列*/
     private final RBlockingQueue<TaskRunnable> blockingQueue;
 
 
-    /**
-     * 注入RedissonClient
-     **/
-    public RedisTaskServiceImpl(@Qualifier("redisson") RedissonClient redissonClient) {
+    /**注入RedissonClient**/
+    public RedisTaskServiceImpl(@Qualifier("redisson") RedissonClient redissonClient){
         this.blockingQueue = redissonClient.getBlockingQueue("TASK-SERVICE");
         this.delayedQueue = redissonClient.getDelayedQueue(blockingQueue);
     }
@@ -61,7 +54,7 @@ public class RedisTaskServiceImpl implements TaskService {
             } catch (Exception e) {
                 e.printStackTrace();
                 //记录异常操作
-                logService.logOtherFail("系统处理延时任务", e);
+                ActionLogHandler.logOtherFail("系统处理延时任务", e);
             }
             // 第一次执行的时间为5秒，然后每隔1秒执行一次
         }, 1, 1, TimeUnit.MILLISECONDS);
@@ -69,9 +62,9 @@ public class RedisTaskServiceImpl implements TaskService {
 
 
     @Override
-    public void addTask(TaskRunnable task) {
-        for (TaskRunnable runnable : delayedQueue) {
-            if (runnable.equals(task)) {
+    public void addTask(TaskRunnable task){
+        for (TaskRunnable runnable :delayedQueue) {
+            if (runnable.equals(task)){
                 return;
             }
         }
@@ -85,9 +78,9 @@ public class RedisTaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void removeTask(TaskRunnable task) {
-        if (!delayedQueue.removeIf(runnable -> runnable.equals(task))) {
-            log.error(String.format("removeTask失败--{%s}", task.getId()));
+    public void removeTask(TaskRunnable task){
+        if (!delayedQueue.removeIf(runnable -> runnable.equals(task))){
+            log.error(String.format("removeTask失败--{%s}",task.getId()));
         }
     }
 

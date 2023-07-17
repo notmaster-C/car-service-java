@@ -10,19 +10,14 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.storage.service.StorageService;
-import org.click.carservice.core.utils.response.ResponseUtil;
+import org.click.carservice.wx.web.impl.WxWebStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 
 /**
@@ -36,14 +31,14 @@ import java.io.IOException;
 public class WxStorageController {
 
     @Autowired
-    private StorageService storageService;
+    private WxWebStorageService storageService;
 
     /**
      * 获取微信小程序上传的图片
      */
     @PostMapping("/upload")
     public Object upload(@RequestParam("file") MultipartFile file) throws IOException {
-        return ResponseUtil.ok(storageService.store(file));
+        return storageService.upload(file);
     }
 
     /**
@@ -52,12 +47,7 @@ public class WxStorageController {
      */
     @GetMapping("/fetch/{key:.+}")
     public ResponseEntity<Resource> fetch(@PathVariable String key) {
-        Resource file = storageService.generateFile(key);
-        if (file == null) {
-            return ResponseEntity.notFound().build();
-        }
-        MediaType mediaType = storageService.getMediaType(key);
-        return ResponseEntity.ok().contentType(mediaType).body(file);
+        return storageService.fetch(key);
     }
 
     /**
@@ -66,16 +56,7 @@ public class WxStorageController {
      */
     @GetMapping("/download/{key:.+}")
     public ResponseEntity<Resource> download(@PathVariable String key) {
-        Resource file = storageService.generateFile(key);
-        if (file == null) {
-            return ResponseEntity.notFound().build();
-        }
-        MediaType mediaType = storageService.getMediaType(key);
-        String headerValue = "attachment; filename=\"" + file.getFilename() + "\"";
-        return ResponseEntity.ok()
-                .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                .body(file);
+        return storageService.download(key);
     }
 
 }

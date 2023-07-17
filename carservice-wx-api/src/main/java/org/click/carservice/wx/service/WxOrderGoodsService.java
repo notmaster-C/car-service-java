@@ -19,8 +19,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * 订单商品服务
  * @author click
@@ -51,14 +49,6 @@ public class WxOrderGoodsService extends OrderGoodsServiceImpl {
         wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return getOne(wrapper, false);
     }
-
-    @Cacheable(sync = true)
-    public List<CarServiceOrderGoods> queryByOrderId(String orderId) {
-        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
-        return queryAll(wrapper);
-    }
-
 
     @CacheEvict(allEntries = true)
     public void deleteByOrderId(String orderId) {

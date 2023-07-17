@@ -1,20 +1,20 @@
 package org.click.carservice.core.tasks.impl;
 /**
- * Copyright (c) [click] [927069313@qq.com]
- * [carservice-plus] is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
+ *  Copyright (c) [ysling] [927069313@qq.com]
+ *  [CarService-plus] is licensed under Mulan PSL v2.
+ *  You can use this software according to the terms and conditions of the Mulan PSL v2.
+ *  You may obtain a copy of Mulan PSL v2 at:
+ *              http://license.coscl.org.cn/MulanPSL2
+ *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *  See the Mulan PSL v2 for more details.
  */
 
 import com.github.binarywang.wxpay.bean.marketing.transfer.BatchDetailsResult;
 import com.github.binarywang.wxpay.bean.marketing.transfer.BatchNumberResult;
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.DealingSlipCoreService;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 
 /**
  * 微信转账监控
- * @author click
+ * @author Ysling
  */
 @Slf4j
 public class DealingSlipMonitorTask extends TaskRunnable {
@@ -48,14 +48,14 @@ public class DealingSlipMonitorTask extends TaskRunnable {
     private static final long DEFAULT_SECONDS = 5 * 60 * 1000;
 
 
-    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip) {
+    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip){
         super(ID_PREFIX + dealingSlip.getId(), DEFAULT_SECONDS, dealingSlip.getTenantId(), TASK_NAME);
         this.dealingSlipId = dealingSlip.getId();
         this.outBatchNo = dealingSlip.getOutBatchNo();
         this.batchId = dealingSlip.getBatchId();
     }
 
-    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip, long delayInMilliseconds) {
+    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip, long delayInMilliseconds){
         super(ID_PREFIX + dealingSlip.getId(), delayInMilliseconds, dealingSlip.getTenantId(), TASK_NAME);
         this.dealingSlipId = dealingSlip.getId();
         this.outBatchNo = dealingSlip.getOutBatchNo();
@@ -65,26 +65,25 @@ public class DealingSlipMonitorTask extends TaskRunnable {
     @Override
     public void runTask() {
         IUserService userService = BeanUtil.getBean(IUserService.class);
-        ActionLogService logService = BeanUtil.getBean(ActionLogService.class);
         IDealingSlipService dealingSlipService = BeanUtil.getBean(IDealingSlipService.class);
         WxPayTransferService wxPayTransferService = BeanUtil.getBean(WxPayTransferService.class);
         DealingSlipCoreService dealingSlipCoreService = BeanUtil.getBean(DealingSlipCoreService.class);
         CarServiceDealingSlip dealingSlip = dealingSlipService.findById(this.dealingSlipId);
-        if (dealingSlip == null || !this.outBatchNo.equals(dealingSlip.getOutBatchNo())) {
+        if(dealingSlip == null || !this.outBatchNo.equals(dealingSlip.getOutBatchNo())) {
             return;
         }
         BatchNumberResult result = wxPayTransferService.queryBatchByOutBatchNo(outBatchNo);
-        for (BatchNumberResult.TransferDetail detail : result.getTransferDetailList()) {
+        for (BatchNumberResult.TransferDetail detail :result.getTransferDetailList()) {
             String detailStatus = detail.getDetailStatus();
             String outDetailNo = detail.getOutDetailNo();
             //添加转账批次ID
             dealingSlip.setBatchId(batchId);
             dealingSlip.setStatus(detailStatus);
-            if (!dealingSlipService.updateById(dealingSlip)) {
+            if (!dealingSlipService.updateById(dealingSlip)){
                 throw new RuntimeException("转账记录更新失败");
             }
             //返还提现金额
-            if (TransferStatus.isFail(detailStatus)) {
+            if (TransferStatus.isFail(detailStatus)){
                 CarServiceUser user = userService.findById(dealingSlip.getUserId());
                 BatchDetailsResult detailsResult = wxPayTransferService.queryBatchDetailByMch(outBatchNo, outDetailNo);
                 BigDecimal award = dealingSlip.getAward().negate();
@@ -93,7 +92,7 @@ public class DealingSlipMonitorTask extends TaskRunnable {
                 dealingSlip.setRemark(detailsResult.getFailReason());
                 dealingSlip.setBalance(user.getIntegral().add(award));
                 dealingSlipCoreService.updateIntegral(user, dealingSlip);
-                logService.logOrderFail(String.format("转账结果%s", detailStatus), "outBatchNo:" + this.outBatchNo);
+                ActionLogHandler.logOrderFail(String.format("转账结果%s", detailStatus), "outBatchNo:"+this.outBatchNo);
             }
         }
     }

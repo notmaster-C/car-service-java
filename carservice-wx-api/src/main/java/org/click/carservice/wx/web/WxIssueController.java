@@ -10,16 +10,12 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.wx.model.issue.body.IssueListBody;
-import org.click.carservice.wx.service.WxIssueService;
+import org.click.carservice.wx.web.impl.WxWebIssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 常见问题服务
@@ -32,14 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class WxIssueController {
 
     @Autowired
-    private WxIssueService issueService;
+    private WxWebIssueService issueService;
 
     /**
      * 帮助中心
      */
     @GetMapping("/list")
     public Object list(IssueListBody body) {
-        return ResponseUtil.okList(issueService.querySelective(body));
+        return issueService.list(body);
     }
 
 }

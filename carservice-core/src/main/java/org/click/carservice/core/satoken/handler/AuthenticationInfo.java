@@ -3,9 +3,10 @@ package org.click.carservice.core.satoken.handler;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
+import org.click.carservice.core.utils.captcha.CaptchaManager;
 import org.click.carservice.core.utils.http.GlobalWebUtil;
 import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.db.domain.CarServiceAdmin;
@@ -20,35 +21,27 @@ import java.util.List;
 
 /**
  * 授权登陆
- *
- * @author click
+ * @author Ysling
  */
 @Slf4j
 @Component
 public class AuthenticationInfo {
 
-    private static ActionLogService logHelper;
     private static CommonService commonService;
     private static IAdminService adminService;
 
     @Autowired
-    public void setLogHelper(ActionLogService logHelper) {
-        AuthenticationInfo.logHelper = logHelper;
-    }
-
-    @Autowired
-    public void setCommonService(CommonService commonService) {
+    public void setCommonService(CommonService commonService){
         AuthenticationInfo.commonService = commonService;
     }
 
     @Autowired
-    public void setAdminService(IAdminService adminService) {
+    public void setAdminService(IAdminService adminService){
         AuthenticationInfo.adminService = adminService;
     }
 
     /**
      * 授权登陆
-     *
      * @param admin 登陆实体
      */
     public static void login(CarServiceAdmin admin) {
@@ -59,14 +52,13 @@ public class AuthenticationInfo {
 
     /**
      * 扫码登录授权登陆
-     *
      * @param admin 登陆实体
      */
     public static void loginQr(CarServiceAdmin admin) {
         //添加登陆记录
         admin.setLastLoginIp(IpUtil.getIpAddr(GlobalWebUtil.getRequest()));
         admin.setLastLoginTime(LocalDateTime.now());
-        if (adminService.updateVersionSelective(admin) == 0) {
+        if (adminService.updateVersionSelective(admin) == 0){
             throw new RuntimeException("网络繁忙,请重试");
         }
         //退出登陆
@@ -74,37 +66,34 @@ public class AuthenticationInfo {
         //账号登陆
         StpUtil.login(admin.getId());
         //添加记录
-        logHelper.logAuthSucceed("扫码授权登录");
+        ActionLogHandler.logAuthSucceed("扫码授权登录");
     }
 
     /**
      * 授权登陆
-     *
      * @param admin 登陆实体
-     * @param code  验证码
+     * @param code 验证码
      */
     public static void login(CarServiceAdmin admin, String code) {
         String username = admin.getUsername();
         String password = admin.getPassword();
-        BeanUtil.copyProperties(login(username, password, code), admin);
+        BeanUtil.copyProperties(login(username, password , code), admin);
     }
 
     /**
      * 授权登陆
-     *
      * @param username 用户名
      * @param password 密码
      */
     public static CarServiceAdmin login(String username, String password) {
-        return login(username, password, null);
+        return login(username , password , null);
     }
 
     /**
      * 授权登陆
-     *
      * @param username 用户名
      * @param password 密码
-     * @param code     验证码
+     * @param code 验证码
      */
     public static CarServiceAdmin login(String username, String password, String code) {
         if (!StringUtils.hasText(username)) {
@@ -128,16 +117,16 @@ public class AuthenticationInfo {
         //添加登录记录
         admin.setLastLoginIp(IpUtil.getIpAddr(GlobalWebUtil.getRequest()));
         admin.setLastLoginTime(LocalDateTime.now());
-        if (adminService.updateVersionSelective(admin) == 0) {
+        if (adminService.updateVersionSelective(admin) == 0){
             throw new RuntimeException("网络繁忙,请重试");
         }
         //判断验证码是否正确
-//        if (StringUtils.hasText(code)){
-//            if (CaptchaManager.isCachedCaptcha(username, code)) {
-//                throw new RuntimeException("验证码校验失败");
-//            }
-//        }
-        logHelper.logAuthSucceed("账号授权登录");
+        if (StringUtils.hasText(code)){
+            if (CaptchaManager.isCachedCaptcha(username, code)) {
+                throw new RuntimeException("验证码校验失败");
+            }
+        }
+        ActionLogHandler.logAuthSucceed("账号授权登录");
         //退出登陆
         StpUtil.logout(admin.getId());
         //账号登陆

@@ -9,6 +9,8 @@
         <result column="goods_id" property="goodsId"/>
         <result column="goods_sn" property="goodsSn"/>
         <result column="goods_name" property="goodsName"/>
+        <result column="address" property="address" />
+        <result column="is_take_their" property="isTakeTheir" />
         <result column="product_id" property="productId"/>
         <result column="brand_id" property="brandId"/>
         <result column="brand_name" property="brandName"/>

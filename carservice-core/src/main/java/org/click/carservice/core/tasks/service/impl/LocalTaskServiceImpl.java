@@ -1,7 +1,7 @@
 package org.click.carservice.core.tasks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.tasks.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class LocalTaskServiceImpl implements TaskService {
 
-    @Autowired
-    private ActionLogService logService;
+
     @Autowired
     private ScheduledExecutorService executorService;
-    /**
-     * 延时队列
-     */
+    /**延时队列*/
     private final DelayQueue<TaskRunnable> delayQueue = new DelayQueue<>();
 
 
@@ -44,15 +41,15 @@ public class LocalTaskServiceImpl implements TaskService {
             } catch (Exception e) {
                 e.printStackTrace();
                 //记录异常操作
-                logService.logOtherFail("系统处理延时任务", e);
+                ActionLogHandler.logOtherFail("系统处理延时任务", e);
             }
             // 第一次执行的时间为5秒，然后每隔1秒执行一次
         }, 1, 1, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public void addTask(TaskRunnable task) {
-        if (delayQueue.contains(task)) {
+    public void addTask(TaskRunnable task){
+        if(delayQueue.contains(task)){
             return;
         }
         delayQueue.add(task);
@@ -65,9 +62,9 @@ public class LocalTaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void removeTask(TaskRunnable task) {
-        if (!delayQueue.remove(task)) {
-            log.error(String.format("removeTask失败--{%s}", task.getId()));
+    public void removeTask(TaskRunnable task){
+        if (!delayQueue.remove(task)){
+            log.error(String.format("removeTask失败--{%s}",task.getId()));
         }
     }
 

@@ -1,11 +1,10 @@
 package org.click.carservice.core.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.ip.IpUtil;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
@@ -19,12 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Order(2)
-@WebFilter(urlPatterns = {"/wx/*", "/admin/*"}, filterName = "requestLogPrintFilter")
+@WebFilter(urlPatterns = {"/wx/*" , "/admin/*"}, filterName = "requestLogPrintFilter")
 public class RequestLogPrintFilter extends CommonsRequestLoggingFilter {
-
-
-    @Autowired
-    private ActionLogService logService;
 
     /**
      * 开始时间
@@ -46,13 +41,13 @@ public class RequestLogPrintFilter extends CommonsRequestLoggingFilter {
     protected void afterRequest(@NotNull HttpServletRequest request, @NotNull String message) {
         long end = System.currentTimeMillis();
         StringBuilder builder = new StringBuilder();
-        builder.append("{当前租户:").append(TenantContextHolder.getLocalTenantId()).append("} ");
+        builder.append("{当前租户:").append(TenantContextHolder.returnTenantId(request , false)).append("} ");
         builder.append("{请求地址:").append(request.getMethod()).append("  ");
         builder.append(IpUtil.getIpAddr(request));
         builder.append(":");
         builder.append(request.getLocalPort());
         builder.append(request.getRequestURI());
-        if (request.getQueryString() != null) {
+        if (request.getQueryString() != null){
             builder.append("?");
             builder.append(request.getQueryString());
         }
@@ -60,8 +55,8 @@ public class RequestLogPrintFilter extends CommonsRequestLoggingFilter {
         builder.append("{执行时间:").append(end - start).append(" ms").append("}");
         log.info(builder.toString());
         //记录大于5秒的请求
-        if (end - start > 5000) {
-            logService.logOtherFail("接口响应大于5秒", builder.toString());
+        if (end - start > 5000){
+            ActionLogHandler.logOtherFail("接口响应大于5秒" , builder.toString());
         }
     }
 

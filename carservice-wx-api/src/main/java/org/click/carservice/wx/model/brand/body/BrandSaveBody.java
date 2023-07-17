@@ -50,6 +50,7 @@ public class BrandSaveBody implements Serializable {
     /**
      * 自提地址
      */
+    @NotNull(message = "自提地址不能为空")
     private String address;
     /**
      * 更新版本号

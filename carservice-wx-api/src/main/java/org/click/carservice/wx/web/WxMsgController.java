@@ -11,16 +11,11 @@ package org.click.carservice.wx.web;
  * See the Mulan PSL v2 for more details.
  */
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaMessage;
-import cn.binarywang.wx.miniapp.constant.WxMaConstants;
-import cn.binarywang.wx.miniapp.message.WxMaXmlOutMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.click.carservice.wx.web.impl.WxWebMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -34,7 +29,7 @@ import java.io.IOException;
 public class WxMsgController {
 
     @Autowired
-    private WxMaService wxMaService;
+    private WxWebMsgService msgService;
 
     /**
      * 消息校验，确定是微信发送的消息
@@ -44,75 +39,24 @@ public class WxMsgController {
      * @param echostr   随机字符串
      * @return 随机字符串
      */
-    @GetMapping(value = "/welcome", produces = "text/plain;charset=utf-8")
+    @GetMapping(value = "/welcome" , produces = "text/plain;charset=utf-8")
     public String doGet(@RequestParam(required = false) String signature,
                         @RequestParam(required = false) String timestamp,
                         @RequestParam(required = false) String nonce,
                         @RequestParam(required = false) String echostr) {
-        return wxMaService.checkSignature(timestamp, nonce, signature) ? echostr : null;
+        return msgService.doGet(signature, timestamp, nonce, echostr);
     }
 
     /**
      * 微信小程序事件推送
      */
-    @PostMapping(value = "/welcome", produces = "text/plain;charset=utf-8")
+    @PostMapping(value = "/welcome" , produces = "text/plain;charset=utf-8")
     public String doPost(@Valid @RequestBody String requestBody,
                          @RequestParam("nonce") String nonce,
                          @RequestParam("timestamp") String timestamp,
                          @RequestParam("msg_signature") String msgSignature,
                          @RequestParam("encrypt_type") String encryptType) throws IOException {
-        // 解密消息
-        WxMaMessage wxMaMessage = getWxMaMessage(requestBody, msgSignature, encryptType, timestamp, nonce);
-        log.info("收到消息：{}", wxMaMessage);
-        // 转到客服
-        WxMaXmlOutMessage wxMaXmlOutMessage = new WxMaXmlOutMessage();
-        wxMaXmlOutMessage.setToUserName(wxMaMessage.getFromUser());
-        wxMaXmlOutMessage.setFromUserName(wxMaMessage.getToUser());
-        // 转发到客服
-        wxMaXmlOutMessage.setMsgType("transfer_customer_service");
-        wxMaXmlOutMessage.setCreateTime(System.currentTimeMillis());
-        return toWxMaOutMessage(wxMaXmlOutMessage, encryptType);
-    }
-
-    /**
-     * 解析消息
-     */
-    public WxMaMessage getWxMaMessage(String requestBody, String msgSignature, String encryptType, String timestamp, String nonce) {
-        // 明文传输
-        if (StringUtils.isBlank(encryptType)) {
-            // json
-            if (WxMaConstants.MsgDataFormat.JSON.equals(wxMaService.getWxMaConfig().getMsgDataFormat())) {
-                return WxMaMessage.fromJson(requestBody);
-            } else {
-                return WxMaMessage.fromXml(requestBody);
-            }
-        }
-        // aes加密
-        else if ("aes".equals(encryptType)) {
-            if (WxMaConstants.MsgDataFormat.JSON.equals(wxMaService.getWxMaConfig().getMsgDataFormat())) {
-                // json
-                return WxMaMessage.fromEncryptedJson(requestBody, wxMaService.getWxMaConfig());
-            } else {
-                // xml
-                return WxMaMessage.fromEncryptedXml(requestBody, wxMaService.getWxMaConfig(), timestamp, nonce, msgSignature);
-            }
-        }
-        throw new RuntimeException("不可识别的消息加密方式");
-    }
-
-    /**
-     * 返回给微信服务器的消息
-     */
-    public String toWxMaOutMessage(WxMaXmlOutMessage wxMaXmlOutMessage, String encryptType) {
-        // 明文传输
-        if (StringUtils.isBlank(encryptType)) {
-            return wxMaXmlOutMessage.toXml();
-        }
-        // aes加密
-        else if ("aes".equals(encryptType)) {
-            return wxMaXmlOutMessage.toEncryptedXml(wxMaService.getWxMaConfig());
-        }
-        throw new RuntimeException("不可识别的消息加密方式");
+        return msgService.doPost(requestBody, nonce, timestamp, msgSignature, encryptType);
     }
 
 }

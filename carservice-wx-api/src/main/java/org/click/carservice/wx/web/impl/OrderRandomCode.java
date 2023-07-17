@@ -1,6 +1,9 @@
-package org.click.carservice.wx.service;
+package org.click.carservice.wx.web.impl;
 
 import org.click.carservice.core.utils.RandomStrUtil;
+import org.click.carservice.wx.service.WxAftersaleService;
+import org.click.carservice.wx.service.WxDealingSlipService;
+import org.click.carservice.wx.service.WxOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 编号生成
- *
- * @author click
+ * @author Ysling
  */
 @Service
 public class OrderRandomCode {
@@ -55,9 +57,9 @@ public class OrderRandomCode {
      * 生成商户订单号
      */
     public String generateOutTradeNo(String userId) {
-        String outTradeNo = RandomStrUtil.getRandom(32, RandomStrUtil.TYPE.NUMBER, true);
-        while (orderService.countByOutTradeNo(userId, outTradeNo)) {
-            outTradeNo = RandomStrUtil.getRandom(32, RandomStrUtil.TYPE.NUMBER, true);
+        String outTradeNo = RandomStrUtil.getRandom(32 ,RandomStrUtil.TYPE.NUMBER , true);
+        while (orderService.countByOutTradeNo(userId, outTradeNo)){
+            outTradeNo = RandomStrUtil.getRandom(32 ,RandomStrUtil.TYPE.NUMBER , true);
         }
         return outTradeNo;
     }
@@ -66,9 +68,9 @@ public class OrderRandomCode {
      * 生成转账批次单号
      */
     public String generateOutBatchNo(String userId) {
-        String outBatchNo = RandomStrUtil.getRandom(32, RandomStrUtil.TYPE.NUMBER, true);
-        while (dealingSlipService.isByOutBatchNo(userId, outBatchNo)) {
-            outBatchNo = RandomStrUtil.getRandom(32, RandomStrUtil.TYPE.NUMBER, true);
+        String outBatchNo = RandomStrUtil.getRandom(32 ,RandomStrUtil.TYPE.NUMBER , true);
+        while (dealingSlipService.isByOutBatchNo(userId, outBatchNo)){
+            outBatchNo = RandomStrUtil.getRandom(32 ,RandomStrUtil.TYPE.NUMBER , true);
         }
         return outBatchNo;
     }

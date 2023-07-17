@@ -1,14 +1,14 @@
 carservice:
   # 开发者应该设置成自己的wx相关信息
   wx:
-    token: xxxxxxxxxxxxxxxxxx
-    aes-key: xxxxxxxxxxxxxxxx
-    app-id: xxxxxxxxxxxxxxxxxx
-    app-secret: xxxxxxxxxxxxxxxxx
+    token: 70__95l5wicp-tGf6wleO0sU2zENZfVprKhAJMobI1V_V9uyYyJ9BZJcH0vmr87lXYaCrsE2A4F_3eYekwuU5y9gQGdGj6bFAb7H-YNXYTuGLcBn3_z5aWOutkzP6ERYYiACAJQQ
+    aes-key: jNZmrDpBTzqI4UWsdV0BjPpZ3gTkl5Dt3dLUkKt0zfk
+    app-id: wx31185374e39e7ef5
+    app-secret: 9a593e14bef9ce4169a3418a2e29914e
     mch-id: 1621104141
-    mch-key: xxxxxxxxxxxxxxxxxx
-    api-v3-key: xxxxxxxxxxxxxxxxxx
-    notify-url: https://xxxxxxxxx/wx/order/pay-notify
+    mch-key: 5ee396fab2f3b732a4e5748f708ef445
+    api-v3-key: 6gzdzj3osemyrsy8bv3yj6abi1xjxux7
+    notify-url: https://www.ysling.com.cn/wx/order/pay-notify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
     key-path: D:/微信支付/WXCertUtil/cert/1621104141_20220218_cert/apiclient_cert.p12
@@ -21,8 +21,8 @@ carservice:
       # 邮件通知配置,邮箱一般用于接收业务通知例如收到新的订单，sendto 定义邮件接收者，通常为商城运营人员
       enable: true
       host: smtp.qq.com
-      username: xxxxxxxx # 账号
-      password: xxxxxxxxxxxxxx # 密码（163需要授权第三方登录密码，请查看设置-客户端授权码密码开通）
+      username: 1492445352@qq.com # 账号
+      password: jbfipslmiicabadd # 密码（163需要授权第三方登录密码，请查看设置-客户端授权码密码开通）
       sendFrom: 1492445352@qq.com # 账号
       sendTo: 1543267684@qq.com
       port: 465
@@ -45,7 +45,7 @@ carservice:
           templateId: 633781
       tencent:
         appid: 1400367955
-        appkey: xxxxxxxxxxxxxxx
+        appkey: 80a1522e4aecaceb89d1186059bbddcb
       aliyun:
         regionId: xxx
         accessKeyId: xxx
@@ -55,7 +55,7 @@ carservice:
   express:
     enable: false
     appId: "1649067"
-    appKey: "xxxxxxxxxxxxxxxxxx"
+    appKey: "efdd28ba-c3d2-4a25-97ed-3344bd774d7d"
     vendors:
       - code: "ZS"
         name: "商家自送"
@@ -105,8 +105,8 @@ carservice:
     # 腾讯对象存储配置信息
     # 请参考 https://cloud.tencent.com/document/product/436/6249
     tencent:
-      secretId: xxxxxxxxxxxxxxxxxx
-      secretKey: xxxxxxxxxxxxxxxxxxxx
+      secretId: AKID41kiU2OZXGoGfVAgz3sUr163vhHdlfNz
+      secretKey: iKkupYHpCYr2zjKn5DE6nYAcw7KWelqy
       region: ap-chengdu
       bucketName: xxxxxxxxxxxx
     # 七牛云对象存储配置信息
@@ -115,6 +115,13 @@ carservice:
       accessKey: 111111
       secretKey: xxxxxx
       bucketName: carservice
+
+  #百度内容审核校验
+  baidu:
+    enable: false
+    appid: xxxxxxxxx
+    apiKey: xxxxxxxxx
+    secretKey: xxxxxxxxx
 
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

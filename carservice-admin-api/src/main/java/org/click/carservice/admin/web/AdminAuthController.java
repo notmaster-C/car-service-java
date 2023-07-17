@@ -26,10 +26,10 @@ import org.click.carservice.admin.model.auth.result.LoginResult;
 import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.admin.service.AdminTenantService;
 import org.click.carservice.core.annotation.JsonBody;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
 import org.click.carservice.core.satoken.handler.AuthenticationInfo;
-import org.click.carservice.core.service.ActionLogService;
 import org.click.carservice.core.service.QrcodeCoreService;
 import org.click.carservice.core.utils.RandomStrUtil;
 import org.click.carservice.core.utils.RegexUtil;
@@ -60,8 +60,6 @@ public class AdminAuthController {
 
     @Autowired
     private QrcodeCoreService qCodeService;
-    @Autowired
-    private ActionLogService logHelper;
     @Autowired
     private NotifyMailService mailService;
     @Autowired
@@ -156,7 +154,7 @@ public class AdminAuthController {
         // 当前会话注销登录
         StpUtil.logout();
         //记录日志
-        logHelper.logAuthSucceed("退出登录");
+        ActionLogHandler.logAuthSucceed("退出登录");
         return ResponseUtil.ok();
     }
 

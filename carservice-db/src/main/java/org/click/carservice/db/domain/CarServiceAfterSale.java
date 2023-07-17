@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("car_service_after_sale")
+@TableName("car_service_aftersale")
 public class CarServiceAfterSale implements Serializable {
 
     private static final long serialVersionUID = 1L;

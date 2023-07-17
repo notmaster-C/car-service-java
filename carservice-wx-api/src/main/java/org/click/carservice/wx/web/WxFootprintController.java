@@ -10,13 +10,11 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
-import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.wx.annotation.LoginUser;
-import org.click.carservice.wx.service.WxFootprintService;
+import org.click.carservice.wx.web.impl.WxWebFootprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WxFootprintController {
 
     @Autowired
-    private WxFootprintService footprintService;
+    private WxWebFootprintService footprintService;
 
 
     /**
@@ -43,24 +41,20 @@ public class WxFootprintController {
      */
     @GetMapping("list")
     public Object list(@LoginUser String userId, PageBody body) {
-        return ResponseUtil.okList(footprintService.queryByAddTime(userId, body));
+        return footprintService.list(userId , body);
     }
 
     /**
      * 删除用户足迹
-     *
      * @param userId 用户ID
      * @param id   足迹ID
      * @return 删除操作结果
      */
     @PostMapping("delete")
     public Object delete(@LoginUser String userId, @JsonBody String id) {
-        if (footprintService.findById(userId, id) == null) {
-            return ResponseUtil.badArgumentValue();
-        }
-        footprintService.deleteById(id);
-        return ResponseUtil.ok();
+        return footprintService.delete(userId , id);
     }
+
 
 
 }

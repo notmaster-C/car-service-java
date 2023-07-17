@@ -115,14 +115,14 @@ public class AdminTenantController {
 
         //添加租户
         tenantService.add(tenant);
-        //初始化租户超级管理员
-        this.tenantAdminInit(tenant.getId());
         //添加小程序配置
         wxStartupRunner.addWxConfig(tenant);
         //添加数据源
         dataSourceHandler.addDataSource(tenant);
         //添加redis库
         redisStartupRunner.setRedisFactory(tenant.getId());
+        //初始化租户超级管理员
+        this.tenantAdminInit(tenant.getId());
         return ResponseUtil.ok();
     }
 

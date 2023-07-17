@@ -29,7 +29,7 @@ public class AftersaleDetailResult implements Serializable {
     /**
      * 售后商品信息
      */
-    private List<CarServiceOrderGoods> orderGoods;
+    private CarServiceOrderGoods orderGoods;
 
 
 }

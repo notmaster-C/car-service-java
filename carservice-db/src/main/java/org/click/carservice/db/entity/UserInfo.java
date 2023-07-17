@@ -14,7 +14,7 @@ package org.click.carservice.db.entity;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * 用户信息
@@ -67,7 +67,7 @@ public class UserInfo implements Serializable {
     /**
      * 生日
      */
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     /**
      * uni登陆ID
      */

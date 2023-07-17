@@ -1,14 +1,14 @@
-package org.click.carservice.core.service;
+package org.click.carservice.core.handler;
 /**
- * Copyright (c) [click] [927069313@qq.com]
- * [carservice-plus] is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
+ *  Copyright (c) [ysling] [927069313@qq.com]
+ *  [litemall-plus] is licensed under Mulan PSL v2.
+ *  You can use this software according to the terms and conditions of the Mulan PSL v2.
+ *  You may obtain a copy of Mulan PSL v2 at:
+ *              http://license.coscl.org.cn/MulanPSL2
+ *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *  See the Mulan PSL v2 for more details.
  */
 
 import cn.dev33.satoken.stp.StpUtil;
@@ -19,13 +19,13 @@ import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.db.domain.CarServiceLog;
 import org.click.carservice.db.service.ILogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 这里的日志类型设计成四种（当然开发者需要可以自己扩展）
@@ -36,28 +36,42 @@ import java.io.StringWriter;
  * <p>
  * 当然可能很多操作是不需要记录到数据库的，例如编辑商品、编辑广告品之类。
  *
- * @author click
- * @Async 异步处理可防止事务回滚
+ * @author Ysling
+ * 异步处理可防止事务回滚 @Async
  */
 @Slf4j
-@Service
-public class ActionLogService {
+@Component
+public class ActionLogHandler {
 
-    public static final Short LOG_TYPE_GENERAL = 0;
-    public static final Short LOG_TYPE_AUTH = 1;
-    public static final Short LOG_TYPE_ORDER = 2;
-    public static final Short LOG_TYPE_OTHER = 3;
+    /**一般日志*/
+    public static final  Short LOG_TYPE_GENERAL = 0;
+    /**安全日志*/
+    public static final  Short LOG_TYPE_AUTH = 1;
+    /**订单日志*/
+    public static final  Short LOG_TYPE_ORDER = 2;
+    /**其他日志*/
+    public static final  Short LOG_TYPE_OTHER = 3;
+    /**日志记录接口*/
+    private static ILogService logService;
+    /**线程池*/
+    private static ThreadPoolExecutor executorService;
 
     @Autowired
-    private ILogService logService;
+    public void setLogService(ILogService logService) {
+        ActionLogHandler.logService = logService;
+    }
+
+    @Autowired
+    public void setExecutorService(ThreadPoolExecutor executorService) {
+        ActionLogHandler.executorService = executorService;
+    }
 
     /**
      * 操作成功
      * 一般日志：用户觉得需要查看的一般操作日志，建议是默认的日志级别
      * @param action 操作动作
      */
-    @Async
-    public void logGeneralSucceed(String action) {
+    public static void logGeneralSucceed(String action) {
         logAdmin(LOG_TYPE_GENERAL, action, true, "", "");
     }
 
@@ -67,8 +81,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param result 操作结果
      */
-    @Async
-    public void logGeneralSucceed(String action, String result) {
+    public static void logGeneralSucceed(String action, String result) {
         logAdmin(LOG_TYPE_GENERAL, action, true, result, "");
     }
 
@@ -79,8 +92,7 @@ public class ActionLogService {
      * @param result 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logGeneralSucceed(String action, String result, String comment) {
+    public static void logGeneralSucceed(String action, String result, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, true, result, comment);
     }
 
@@ -90,8 +102,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param error 操作结果
      */
-    @Async
-    public void logGeneralFail(String action, String error) {
+    public static void logGeneralFail(String action, String error) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, "");
     }
 
@@ -102,8 +113,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logGeneralFail(String action, String error, String comment) {
+    public static void logGeneralFail(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -112,8 +122,7 @@ public class ActionLogService {
      * 安全日志：用户安全相关的操作日志，例如登录、删除管理员
      * @param action 操作动作
      */
-    @Async
-    public void logAuthSucceed(String action) {
+    public static void logAuthSucceed(String action) {
         logAdmin(LOG_TYPE_AUTH, action, true, "", "");
     }
 
@@ -123,8 +132,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param result 操作结果
      */
-    @Async
-    public void logAuthSucceed(String action, String result) {
+    public static void logAuthSucceed(String action, String result) {
         logAdmin(LOG_TYPE_AUTH, action, true, result, "");
     }
 
@@ -135,8 +143,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logAuthSucceed(String action, String error, String comment) {
+    public static void logAuthSucceed(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -146,8 +153,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param error 操作结果
      */
-    @Async
-    public void logAuthFail(String action, String error) {
+    public static void logAuthFail(String action, String error) {
         logAdmin(LOG_TYPE_AUTH, action, false, error, "");
     }
 
@@ -158,8 +164,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logAuthFail(String action, String error, String comment) {
+    public static void logAuthFail(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -168,8 +173,7 @@ public class ActionLogService {
      * 订单日志：用户交易相关的操作日志，例如订单发货、退款
      * @param action 操作动作
      */
-    @Async
-    public void logOrderSucceed(String action) {
+    public static void logOrderSucceed(String action) {
         logAdmin(LOG_TYPE_ORDER, action, true, "", "");
     }
 
@@ -179,8 +183,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param result 操作结果
      */
-    @Async
-    public void logOrderSucceed(String action, String result) {
+    public static void logOrderSucceed(String action, String result) {
         logAdmin(LOG_TYPE_ORDER, action, true, result, "");
     }
 
@@ -191,8 +194,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logOrderSucceed(String action, String error, String comment) {
+    public static void logOrderSucceed(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -202,8 +204,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param error 操作结果
      */
-    @Async
-    public void logOrderFail(String action, String error) {
+    public static void logOrderFail(String action, String error) {
         logAdmin(LOG_TYPE_ORDER, action, false, error, "");
     }
 
@@ -214,8 +215,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logOrderFail(String action, String error, String comment) {
+    public static void logOrderFail(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -224,8 +224,7 @@ public class ActionLogService {
      * 其他日志：如果以上三种不合适，可以选择其他日志，建议是优先级最低的日志级别
      * @param action 操作动作
      */
-    @Async
-    public void logOtherSucceed(String action) {
+    public static void logOtherSucceed(String action) {
         logAdmin(LOG_TYPE_OTHER, action, true, "", "");
     }
 
@@ -235,8 +234,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param result 操作结果
      */
-    @Async
-    public void logOtherSucceed(String action, String result) {
+    public static void logOtherSucceed(String action, String result) {
         logAdmin(LOG_TYPE_OTHER, action, true, result, "");
     }
 
@@ -247,8 +245,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logOtherSucceed(String action, String error, String comment) {
+    public static void logOtherSucceed(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -258,8 +255,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param error 操作结果
      */
-    @Async
-    public void logOtherFail(String action, String error) {
+    public static void logOtherFail(String action, String error) {
         logAdmin(LOG_TYPE_OTHER, action, false, error, "");
     }
 
@@ -269,8 +265,7 @@ public class ActionLogService {
      * @param action 操作动作
      * @param error 操作结果
      */
-    @Async
-    public void logOtherFail(String action, Throwable error) {
+    public static void logOtherFail(String action, Throwable error) {
         String trace = getExceptionPrintStackTrace(error);
         logAdmin(LOG_TYPE_OTHER, action, false, trace, "");
     }
@@ -282,8 +277,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logOtherFail(String action, String error, String comment) {
+    public static void logOtherFail(String action, String error, String comment) {
         logAdmin(LOG_TYPE_GENERAL, action, false, error, comment);
     }
 
@@ -294,8 +288,7 @@ public class ActionLogService {
      * @param error 操作结果
      * @param comment 操作备注
      */
-    @Async
-    public void logOtherFail(String action, Throwable error, String comment) {
+    public static void logOtherFail(String action, Throwable error, String comment) {
         String trace = getExceptionPrintStackTrace(error);
         logAdmin(LOG_TYPE_GENERAL, action, false, trace, comment);
     }
@@ -304,7 +297,7 @@ public class ActionLogService {
      * 获取异常堆栈信息
      * @param e 异常
      */
-    public String getExceptionPrintStackTrace(Throwable e) {
+    public static String getExceptionPrintStackTrace(Throwable e) {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         return sw.toString();
@@ -318,36 +311,38 @@ public class ActionLogService {
      * @param result  操作结果
      * @param comment 补充信息
      */
-    public void logAdmin(Short type, String action, Boolean succeed, String result, String comment) {
-        CarServiceLog log = new CarServiceLog();
-        try {
-            log.setAdmin(StpUtil.getLoginIdAsString());
-        } catch (Exception e) {
-            log.setAdmin("匿名用户");
-        }
-        HttpServletRequest request = GlobalWebUtil.getRequest();
-        if (request != null) {
-            if (!StringUtils.hasText(comment)) {
-                log.setComment(request.getRequestURI());
+    public static void logAdmin(Short type, String action, Boolean succeed, String result, String comment) {
+        executorService.submit(()->{
+            CarServiceLog log = new CarServiceLog();
+            try {
+                log.setAdmin(StpUtil.getLoginIdAsString());
+            }catch (Exception e){
+                log.setAdmin("匿名用户");
             }
-            String ip = IpUtil.getIpAddr(request);
-            IpInfo ipInfo = IpUtil.getCityInfo(ip);
-            if (ipInfo != null) {
-                log.setIp(ipInfo.getAddress());
-            } else {
-                log.setIp(ip);
+            HttpServletRequest request = GlobalWebUtil.getRequest();
+            if (request != null){
+                if (!StringUtils.hasText(comment)){
+                    log.setComment(request.getRequestURI());
+                }
+                String ip = IpUtil.getIpAddr(request);
+                IpInfo ipInfo = IpUtil.getCityInfo(ip);
+                if (ipInfo != null){
+                    log.setIp(ipInfo.getAddress());
+                }else {
+                    log.setIp(ip);
+                }
+            }else {
+                log.setIp("127.0.0.1");
             }
-        } else {
-            log.setIp("127.0.0.1");
-        }
-        log.setType(type);
-        log.setAction(action);
-        log.setStatus(succeed);
-        log.setResult(result);
-        if (StringUtils.hasText(comment)) {
-            log.setComment(comment);
-        }
-        logService.add(log);
+            log.setType(type);
+            log.setAction(action);
+            log.setStatus(succeed);
+            log.setResult(result);
+            if (StringUtils.hasText(comment)){
+                log.setComment(comment);
+            }
+            logService.add(log);
+        });
     }
 
 }

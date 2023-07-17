@@ -12,22 +12,15 @@ package org.click.carservice.wx.web;
  */
 
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.CarServiceKeyword;
-import org.click.carservice.db.domain.CarServiceSearchHistory;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.search.body.SearchListBody;
-import org.click.carservice.wx.model.search.result.SearchIndexResult;
-import org.click.carservice.wx.service.WxKeywordService;
-import org.click.carservice.wx.service.WxSearchHistoryService;
+import org.click.carservice.wx.web.impl.WxWebSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 商品搜索服务
@@ -40,33 +33,16 @@ import java.util.List;
 public class WxSearchController {
 
     @Autowired
-    private WxKeywordService keywordsService;
-    @Autowired
-    private WxSearchHistoryService searchHistoryService;
+    private WxWebSearchService searchService;
 
     /**
      * 搜索页面信息
-     * <p>
-     * 如果用户已登录，则给出用户历史搜索记录；
-     * 如果没有登录，则给出空历史搜索记录。
-     *
      * @param userId 用户ID，可选
      * @return 搜索页面信息
      */
     @GetMapping("index")
     public Object index(@LoginUser(require = false) String userId) {
-        //取出输入框默认的关键词
-        CarServiceKeyword defaultKeyword = keywordsService.queryDefault();
-        //取出热闹关键词
-        List<CarServiceKeyword> hotKeywordList = keywordsService.queryHots();
-        //用户历史搜索
-        List<CarServiceSearchHistory> historyList = searchHistoryService.queryByUid(userId);
-        //结果
-        SearchIndexResult result = new SearchIndexResult();
-        result.setDefaultKeyword(defaultKeyword);
-        result.setHotKeywordList(hotKeywordList);
-        result.setHistoryKeywordList(historyList);
-        return ResponseUtil.ok(result);
+        return searchService.index(userId);
     }
 
     /**
@@ -76,13 +52,7 @@ public class WxSearchController {
      */
     @GetMapping("helper")
     public Object helper(SearchListBody body) {
-        List<CarServiceKeyword> keywordsList = keywordsService.queryByKeyword(body);
-        String[] keys = new String[keywordsList.size()];
-        int index = 0;
-        for (CarServiceKeyword key : keywordsList) {
-            keys[index++] = key.getKeyword();
-        }
-        return ResponseUtil.ok(keys);
+        return searchService.helper(body);
     }
 
     /**
@@ -92,8 +62,7 @@ public class WxSearchController {
      */
     @PostMapping("clear/history")
     public Object clearHistory(@LoginUser String userId) {
-        searchHistoryService.deleteByUid(userId);
-        return ResponseUtil.ok();
+        return searchService.clearHistory(userId);
     }
 
 

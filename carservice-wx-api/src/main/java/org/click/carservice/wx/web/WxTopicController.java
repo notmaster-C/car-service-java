@@ -10,29 +10,14 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.CarServiceGoods;
-import org.click.carservice.db.domain.CarServiceTopic;
-import org.click.carservice.db.enums.CollectType;
-import org.click.carservice.db.enums.LikeType;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.topic.body.TopicListBody;
-import org.click.carservice.wx.model.topic.result.TopicDetailResult;
-import org.click.carservice.wx.service.WxCollectService;
-import org.click.carservice.wx.service.WxGoodsService;
-import org.click.carservice.wx.service.WxLikeService;
-import org.click.carservice.wx.service.WxTopicService;
+import org.click.carservice.wx.web.impl.WxWebTopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 专题服务
@@ -45,20 +30,14 @@ import java.util.List;
 public class WxTopicController {
 
     @Autowired
-    private WxTopicService topicService;
-    @Autowired
-    private WxGoodsService goodsService;
-    @Autowired
-    private WxCollectService collectService;
-    @Autowired
-    private WxLikeService likeService;
+    private WxWebTopicService topicService;
 
     /**
      * 专题列表
      */
     @GetMapping("list")
     public Object list(TopicListBody body) {
-        return ResponseUtil.okList(topicService.queryList(body));
+        return topicService.list(body);
     }
 
     /**
@@ -68,20 +47,7 @@ public class WxTopicController {
      */
     @GetMapping("detail")
     public Object detail(@LoginUser String userId, @NotNull String id) {
-        CarServiceTopic topic = topicService.findById(id);
-        List<CarServiceGoods> goods = new ArrayList<>();
-        for (String i : topic.getGoodsIds()) {
-            CarServiceGoods good = goodsService.findByIdVO(i);
-            if (null != good) {
-                goods.add(good);
-            }
-        }
-        TopicDetailResult result = new TopicDetailResult();
-        result.setTopic(topic);
-        result.setGoods(goods);
-        result.setTopicLike(likeService.count(LikeType.TYPE_TOPIC, topic.getId(), userId));
-        result.setUserHasCollect(collectService.count(userId, CollectType.TYPE_TOPIC, id));
-        return ResponseUtil.ok(result);
+        return topicService.detail(userId , id);
     }
 
     /**
@@ -91,7 +57,7 @@ public class WxTopicController {
      */
     @GetMapping("related")
     public Object related(@NotNull String id) {
-        return ResponseUtil.okList(topicService.queryRelatedList(id, 4));
+        return topicService.related(id);
     }
 
 }

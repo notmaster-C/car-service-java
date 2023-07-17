@@ -4,20 +4,18 @@ import org.springframework.util.AntPathMatcher;
 
 /**
  * 多租户请求白名单枚举类
- *
- * @author click
+ * @author
  */
 public enum IgnoreRequest {
 
-    /**
-     * 多租户请求白名单
-     */
+    /**多租户请求白名单*/
+    request10("/admin/storage/uploadFile", "富文本图片上传"),
     request9("/admin/auth/captcha", "登录验证码"),
     request8("/wx/msg/**", "微信消息推送"),
     request7("/admin/auth/login_by_qr", "扫码登录"),
     request6("/admin/auth/login", "后台登陆接口"),
-    request4("/wx/storage/fetch/**", "微信图片管理接口"),
-    request3("/wx/storage/download/**", "微信图片管理接口"),
+    request4("/wx/storage/fetch/**", "图片查看接口"),
+    request3("/wx/storage/download/**", "图片下载接口"),
     request2("/wx/order/pay-notify", "支付回调接口"),
     request1("/wx/home/index", "微信首页信息附带授权");
 
@@ -31,7 +29,6 @@ public enum IgnoreRequest {
 
     /**
      * 对比请求
-     *
      * @param request 请求地址
      * @return 存在true 不存在false
      */

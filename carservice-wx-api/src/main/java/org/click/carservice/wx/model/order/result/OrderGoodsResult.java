@@ -20,6 +20,14 @@ public class OrderGoodsResult implements Serializable {
      */
     private String goodsName;
     /**
+     * 自提地址
+     */
+    private String address;
+    /**
+     * 是否自提
+     */
+    private Boolean isTakeTheir;
+    /**
      * 购买数量
      */
     private Integer number;

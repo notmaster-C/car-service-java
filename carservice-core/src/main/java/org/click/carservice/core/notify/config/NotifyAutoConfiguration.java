@@ -10,18 +10,18 @@ package org.click.carservice.core.notify.config;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import com.github.qcloudsms.SmsSingleSender;
+import org.click.carservice.core.notify.config.NotifyProperties;
 import org.click.carservice.core.notify.model.SmsType;
 import org.click.carservice.core.notify.sender.AliyunSmsSender;
 import org.click.carservice.core.notify.sender.TencentSmsSender;
 import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.notify.service.NotifyMobileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-
 import java.util.Properties;
 
 /**
@@ -31,11 +31,8 @@ import java.util.Properties;
 @EnableConfigurationProperties(NotifyProperties.class)
 public class NotifyAutoConfiguration {
 
-    private final NotifyProperties properties;
-
-    public NotifyAutoConfiguration(NotifyProperties properties) {
-        this.properties = properties;
-    }
+    @Autowired
+    private NotifyProperties properties;
 
     @Bean
     public NotifyMailService mailService() {
@@ -54,9 +51,10 @@ public class NotifyAutoConfiguration {
         NotifyMobileService mobileService = new NotifyMobileService();
         NotifyProperties.Sms smsConfig = properties.getSms();
         if (smsConfig.isEnable()) {
-            if (SmsType.TENCENT.getType().equals(smsConfig.getActive())) {
+            if(SmsType.TENCENT.getType().equals(smsConfig.getActive())) {
                 mobileService.setSmsSender(tencentSmsSender());
-            } else if (SmsType.ALIYUN.getType().equals(smsConfig.getActive())) {
+            }
+            else if(SmsType.ALIYUN.getType().equals(smsConfig.getActive())) {
                 mobileService.setSmsSender(aliyunSmsSender());
             }
             mobileService.setSmsTemplate(smsConfig.getTemplate());
@@ -72,9 +70,9 @@ public class NotifyAutoConfiguration {
         mailSender.setPassword(mailConfig.getPassword());
         mailSender.setPort(mailConfig.getPort());
         Properties properties = new Properties();
-        properties.put("mail.smtp.auth", true);
-        properties.put("mail.smtp.timeout", 5000);
-        properties.put("mail.smtp.starttls.enable", true);
+        properties.put("mail.smtp.auth",true);
+        properties.put("mail.smtp.timeout",5000);
+        properties.put("mail.smtp.starttls.enable",true);
         properties.put("mail.smtp.socketFactory.fallback", "false");
         //阿里云 必须加入配置 outlook配置又不需要 视情况而定.发送不成功多数是这里的配置问题
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");

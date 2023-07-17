@@ -16,6 +16,15 @@ import java.util.List;
 public class OrderDetailResult implements Serializable {
 
     /**
+     * 自提地址
+     */
+    private String address;
+    /**
+     * 是否自提
+     */
+    private Boolean isTakeTheir;
+
+    /**
      * 订单信息
      */
     private OrderInfo orderInfo;
@@ -26,7 +35,7 @@ public class OrderDetailResult implements Serializable {
     /**
      * 订单商品信息
      */
-    private List<CarServiceOrderGoods> orderGoods;
+    private CarServiceOrderGoods orderGoods;
     /**
      * 团购提示
      */

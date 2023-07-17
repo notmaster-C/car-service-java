@@ -77,6 +77,11 @@ public class CarServiceGoods implements Serializable {
     @TableField("`share_url`")
     private String shareUrl;
     /**
+     * 自提地址
+     */
+    @TableField("`address`")
+    private String address;
+    /**
      * 是否团购商品
      */
     @TableField("`is_groupon`")
@@ -203,6 +208,10 @@ public class CarServiceGoods implements Serializable {
      * 商品分享海报
      */
     public static final String SHARE_URL = "`share_url`";
+    /**
+     * 自提地址
+     */
+    public static final String ADDRESS = "`address`";
     /**
      * 是否团购商品
      */

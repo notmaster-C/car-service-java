@@ -1,15 +1,15 @@
-package org.click.carservice.wx.model.order.result;
+package org.ysling.CarService.wx.model.order.result;
 
 import lombok.Data;
 import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.entity.OrderHandleOption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
- * @author click
+ * @author Ysling
  */
 @Data
 public class OrderListResult implements Serializable {
@@ -26,6 +26,10 @@ public class OrderListResult implements Serializable {
      * 订单金额
      */
     private BigDecimal actualPrice;
+    /**
+     * 是否自提
+     */
+    private Boolean isTakeTheir;
     /**
      * 订单状态文本
      */
@@ -51,8 +55,8 @@ public class OrderListResult implements Serializable {
      */
     private String grouponStatus;
     /**
-     * 商品列表
+     * 商品信息
      */
-    private List<OrderGoodsResult> goodsList;
+    private CarServiceOrderGoods orderGoods;
 
 }

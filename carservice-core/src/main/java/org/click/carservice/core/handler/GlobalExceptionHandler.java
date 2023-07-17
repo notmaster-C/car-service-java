@@ -1,33 +1,29 @@
 package org.click.carservice.core.handler;
 /**
- * Copyright (c) [click] [927069313@qq.com]
- * [carservice-plus] is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
+ *  Copyright (c) [ysling] [927069313@qq.com]
+ *  [litemall-plus] is licensed under Mulan PSL v2.
+ *  You can use this software according to the terms and conditions of the Mulan PSL v2.
+ *  You may obtain a copy of Mulan PSL v2 at:
+ *              http://license.coscl.org.cn/MulanPSL2
+ *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *  See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.RedisSystemException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -35,22 +31,18 @@ import java.util.Set;
 
 /**
  * 全局异常配置类
- * @author click
+ * @author Ysling
  */
-
 @Order
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @Autowired
-    private ActionLogService actionLogService;
-
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public Object seriousHandler(Exception e) {
         log.error(e.getMessage(), e);
-        actionLogService.logGeneralFail("Exception", e.getMessage());
+        ActionLogHandler.logGeneralFail("Exception",e.getMessage());
         return ResponseUtil.fail(e.getMessage());
     }
 
@@ -135,7 +127,7 @@ public class GlobalExceptionHandler {
         //获取实体类定义的校验注解字段上的message作为异常信息，@NotBlank(message = "用户密码不能为空！")异常信息即为"用户密码不能为空！"
         log.error(e.getMessage(), e);
         FieldError fieldError = e.getBindingResult().getFieldError();
-        if (fieldError == null) {
+        if (fieldError == null){
             return ResponseUtil.badArgumentValue();
         }
         return ResponseUtil.fail(fieldError.getDefaultMessage());

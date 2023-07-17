@@ -20,7 +20,7 @@ import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.notify.service.NotifyMobileService;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
 import org.click.carservice.core.satoken.handler.AuthenticationInfo;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.CouponAssignService;
 import org.click.carservice.core.utils.RandomStrUtil;
 import org.click.carservice.core.utils.RegexUtil;
@@ -73,7 +73,7 @@ public class WxAuthController {
 
 
     @Autowired
-    private ActionLogService logHelper;
+    private ActionLogHandler logHelper;
     @Autowired
     private WxUserService userService;
     @Autowired

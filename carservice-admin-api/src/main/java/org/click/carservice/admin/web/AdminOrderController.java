@@ -24,7 +24,7 @@ import org.click.carservice.admin.service.AdminOrderGoodsService;
 import org.click.carservice.admin.service.AdminOrderService;
 import org.click.carservice.admin.service.AdminUserService;
 import org.click.carservice.core.express.service.ExpressService;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.OrderCoreService;
 import org.click.carservice.core.tasks.impl.OrderUnconfirmedTask;
 import org.click.carservice.core.tasks.service.TaskService;
@@ -75,9 +75,6 @@ public class AdminOrderController {
     private WxPayRefundService wxPayRefundService;
     @Autowired
     private ExpressService expressService;
-    @Autowired
-    private ActionLogService logHelper;
-
 
     /**
      * 查询订单
@@ -245,7 +242,7 @@ public class AdminOrderController {
         CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
-        logHelper.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
         return ResponseUtil.ok();
     }
 
@@ -285,7 +282,7 @@ public class AdminOrderController {
         //添加确认收货定时任务
         taskService.addTask(new OrderUnconfirmedTask(order));
 
-        logHelper.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
         return ResponseUtil.ok();
     }
 
@@ -331,7 +328,7 @@ public class AdminOrderController {
         // 删除订单商品
         orderGoodsService.deleteByOrderId(orderId);
         //添加删除日志
-        logHelper.logOrderSucceed("删除", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("删除", "订单编号 " + order.getOrderSn());
         return ResponseUtil.ok();
     }
 

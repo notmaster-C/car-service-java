@@ -10,7 +10,6 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
-
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +27,6 @@ public class WxIndexController {
 
     /**
      * 测试数据
-     *
      * @return 测试数据
      */
     @GetMapping("/index")

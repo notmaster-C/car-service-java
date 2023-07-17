@@ -19,7 +19,7 @@ import org.click.carservice.admin.model.aftersale.body.AftersaleListBody;
 import org.click.carservice.admin.service.AdminAftersaleService;
 import org.click.carservice.admin.service.AdminOrderService;
 import org.click.carservice.admin.service.AdminUserService;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.AftersaleCoreService;
 import org.click.carservice.core.service.OrderCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
@@ -55,8 +55,6 @@ public class AdminAftersaleController {
     private AftersaleCoreService aftersaleCoreService;
     @Autowired
     private SubscribeMessageService subscribeMessageService;
-    @Autowired
-    private ActionLogService logService;
     @Autowired
     private AdminAftersaleService aftersaleService;
     @Autowired
@@ -202,7 +200,7 @@ public class AdminAftersaleController {
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         //记录操作日志
-        logService.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
         return ResponseUtil.ok();
     }
 

@@ -48,25 +48,20 @@ public class WxCartService extends CartServiceImpl {
      * 添加到购物车
      */
     @CacheEvict(allEntries = true)
-    public boolean addCart(String userId, CarServiceCart cart, Integer number, CarServiceGoods goods, CarServiceGoodsProduct product) {
-        if (product == null || number > product.getNumber()) {
+    public boolean addCart(String userId, CarServiceCart cart, CarServiceGoods goods, CarServiceGoodsProduct product) {
+        if (product == null || cart.getNumber() > product.getNumber()) {
             return true;
         }
-        cart.setId(null);
+        cart.setUserId(userId);
         cart.setBrandId(goods.getBrandId());
         cart.setGoodsSn(goods.getGoodsSn());
         cart.setGoodsName((goods.getName()));
-        if (Objects.isNull(product.getUrl())) {
-            cart.setPicUrl(goods.getPicUrl());
-        } else {
-            cart.setPicUrl(product.getUrl());
-        }
+        cart.setAddress(goods.getAddress());
+        cart.setIsTakeTheir(goods.getIsTakeTheir());
         cart.setPrice(product.getPrice());
+        cart.setPicUrl(product.getUrl());
         cart.setSpecifications(product.getSpecifications());
-        cart.setUserId(userId);
-        cart.setChecked(true);
-        this.add(cart);
-        return false;
+        return !saveOrUpdate(cart);
     }
 
 

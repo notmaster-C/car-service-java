@@ -52,6 +52,16 @@ public class CarServiceCart implements Serializable {
     @TableField("`goods_name`")
     private String goodsName;
     /**
+     * 自提地址
+     */
+    @TableField("`address`")
+    private String address;
+    /**
+     * 是否自提
+     */
+    @TableField("`is_take_their`")
+    private Boolean isTakeTheir;
+    /**
      * 商品货品表的货品ID
      */
     @TableField("`product_id`")
@@ -143,6 +153,14 @@ public class CarServiceCart implements Serializable {
      * 商品名称
      */
     public static final String GOODS_NAME = "`goods_name`";
+    /**
+     * 自提地址
+     */
+    public static final String ADDRESS = "`address`";
+    /**
+     * 是否自提
+     */
+    public static final String IS_TAKE_THEIR = "`is_take_their`";
     /**
      * 商品货品表的货品ID
      */

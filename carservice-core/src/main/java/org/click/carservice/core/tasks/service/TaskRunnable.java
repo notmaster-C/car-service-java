@@ -1,21 +1,21 @@
 package org.click.carservice.core.tasks.service;
 /**
- * Copyright (c) [click] [927069313@qq.com]
- * [carservice-plus] is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
+ *  Copyright (c) [ysling] [927069313@qq.com]
+ *  [litemall-plus] is licensed under Mulan PSL v2.
+ *  You can use this software according to the terms and conditions of the Mulan PSL v2.
+ *  You may obtain a copy of Mulan PSL v2 at:
+ *              http://license.coscl.org.cn/MulanPSL2
+ *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *  See the Mulan PSL v2 for more details.
  */
 
 import com.google.common.primitives.Ints;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.core.service.ActionLogService;
+import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.BeanUtil;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义任务线程
- * @author click
+ * @author Ysling
  */
 @Slf4j
 @Data
@@ -75,7 +75,7 @@ public abstract class TaskRunnable implements Runnable, Serializable, Delayed {
         if (!(o instanceof TaskRunnable)) {
             return false;
         }
-        TaskRunnable t = (TaskRunnable) o;
+        TaskRunnable t = (TaskRunnable)o;
         return this.id.equals(t.getId());
     }
 
@@ -84,7 +84,6 @@ public abstract class TaskRunnable implements Runnable, Serializable, Delayed {
      */
     @Override
     public void run() {
-        ActionLogService logService = BeanUtil.getBean(ActionLogService.class);
         TransactionDefinition transactionDefinition = BeanUtil.getBean(TransactionDefinition.class);
         DataSourceTransactionManager transactionManager = BeanUtil.getBean(DataSourceTransactionManager.class);
         //添加当前租户
@@ -99,12 +98,12 @@ public abstract class TaskRunnable implements Runnable, Serializable, Delayed {
             runTask();
             log.info(String.format("系统处理延时任务 -> [结束-%s] [任务ID-%s]", taskName, id));
             //添加操作日志
-            logService.logOrderSucceed("系统处理延时任务", String.format("[%s] [任务ID-%s]", taskName, id));
+            ActionLogHandler.logOrderSucceed("系统处理延时任务", String.format("[%s] [任务ID-%s]", taskName, id));
             // 手动提交事务
             transactionManager.commit(transactionStatus);
         } catch (Throwable exception) {
             //手动回滚事务 最好是放在catch 里面,防止程序异常而事务一直卡在哪里未提交
-            if (transactionStatus != null) {
+            if (transactionStatus != null){
                 transactionManager.rollback(transactionStatus);
             }
             //事务回滚后继续抛出异常
