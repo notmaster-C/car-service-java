@@ -1,0 +1,135 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>carservice-all</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.click</groupId>
+        <artifactId>carservice-plus</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.click</groupId>
+            <artifactId>carservice-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.click</groupId>
+            <artifactId>carservice-db</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.click</groupId>
+            <artifactId>carservice-wx-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.click</groupId>
+            <artifactId>carservice-admin-api</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.3</version>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <configuration>
+                            <executable>true</executable>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <!--将../carservice-admin/dist打包到/target/classes/static-->
+                    <!--                    <execution>-->
+                    <!--                        <id>copy-resources</id>-->
+                    <!--                        <phase>validate</phase>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>copy-resources</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
+                    <!--                            <resources>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>../carservice-admin/dist</directory>-->
+                    <!--                                </resource>-->
+                    <!--                            </resources>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
+                    <!--将../carservice-admin-api/src/main/resources/打包到/target/classes/-->
+                    <execution>
+                        <id>copy-resources-admin-api</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../carservice-admin-api/src/main/resources/</directory>
+                                    <excludes>
+                                        <exclude>smart-doc.json</exclude>
+                                        <exclude>logback-spring.xml</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!--将../carservice-wx-api/src/main/resources/打包到/target/classes/-->
+                    <execution>
+                        <id>copy-resources-wx-api</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../carservice-wx-api/src/main/resources/</directory>
+                                    <excludes>
+                                        <exclude>smart-doc.json</exclude>
+                                        <exclude>logback-spring.xml</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!--将../carservice-core/src/main/resources/打包到/target/classes/-->
+                    <execution>
+                        <id>copy-resources-core</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../carservice-core/src/main/resources/</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

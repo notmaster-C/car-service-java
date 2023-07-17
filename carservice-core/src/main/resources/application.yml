@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: core, db
+  messages:
+    encoding: UTF-8
+  mvc:
+    static-path-pattern: /static/**
+logging:
+  level:
+    root: DEBUG
+    org.springframework: DEBUG
+    org.mybatis: DEBUG
+    org.click.carservice.core: DEBUG

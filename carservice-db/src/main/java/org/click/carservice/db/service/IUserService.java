@@ -1,0 +1,15 @@
+package org.click.carservice.db.service;
+
+import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.mybatis.IBaseService;
+
+/**
+ * <p>
+ * 用户表 服务类
+ * </p>
+ *
+ * @author click
+ */
+public interface IUserService extends IBaseService<carserviceUser> {
+
+}

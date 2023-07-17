@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.ysling</groupId>
-    <artifactId>litemall-plus</artifactId>
+    <groupId>org.click</groupId>
+    <artifactId>carservice-plus</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
 
@@ -20,33 +20,33 @@
     </properties>
 
     <modules>
-        <module>litemall-core</module>
-        <module>litemall-db</module>
-        <module>litemall-wx-api</module>
-        <module>litemall-admin-api</module>
-        <module>litemall-all</module>
+        <module>carservice-core</module>
+        <module>carservice-db</module>
+        <module>carservice-wx-api</module>
+        <module>carservice-admin-api</module>
+        <module>carservice-all</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.ysling</groupId>
-                <artifactId>litemall-core</artifactId>
+                <groupId>org.click</groupId>
+                <artifactId>carservice-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.ysling</groupId>
-                <artifactId>litemall-db</artifactId>
+                <groupId>org.click</groupId>
+                <artifactId>carservice-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.ysling</groupId>
-                <artifactId>litemall-wx-api</artifactId>
+                <groupId>org.click</groupId>
+                <artifactId>carservice-wx-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.ysling</groupId>
-                <artifactId>litemall-admin-api</artifactId>
+                <groupId>org.click</groupId>
+                <artifactId>carservice-admin-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

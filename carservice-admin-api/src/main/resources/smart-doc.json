@@ -1,0 +1,20 @@
+{
+  "serverUrl": "https://www.click.com.cn",
+  "isStrict": false,
+  "allInOne": true,
+  "outPath": "src/main/resources/static/admin-doc",
+  "coverOld": true,
+  "md5EncryptedHtmlName": false,
+  "projectName": "carservice-plus",
+  "requestHeaders": [
+    {
+      "name": "X-carservice-Admin-Token",
+      "type": "string",
+      "desc": "管理员token",
+      "required": true
+    }
+  ],
+  "responseBodyAdvice": {
+    "className": "org.click.carservice.core.utils.response.ResponseUtil"
+  }
+}

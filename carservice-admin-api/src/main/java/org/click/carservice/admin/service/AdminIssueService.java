@@ -1,0 +1,59 @@
+package org.click.carservice.admin.service;
+/**
+ * Copyright (c) [click] [927069313@qq.com]
+ * [carservice-plus] is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ */
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.click.carservice.admin.model.issue.body.IssueListBody;
+import org.click.carservice.core.utils.response.ResponseUtil;
+import org.click.carservice.db.domain.carserviceIssue;
+import org.click.carservice.db.service.impl.IssueServiceImpl;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Objects;
+
+
+/**
+ * 常见问题服务
+ * @author click
+ */
+@Service
+@CacheConfig(cacheNames = "carservice_issue")
+public class AdminIssueService extends IssueServiceImpl {
+
+
+    public Object validate(carserviceIssue issue) {
+        String question = issue.getQuestion();
+        if (Objects.isNull(question)) {
+            return ResponseUtil.badArgument();
+        }
+        String answer = issue.getAnswer();
+        if (Objects.isNull(answer)) {
+            return ResponseUtil.badArgument();
+        }
+        return null;
+    }
+
+    @Cacheable(sync = true)
+    public List<carserviceIssue> querySelective(IssueListBody body) {
+        QueryWrapper<carserviceIssue> wrapper = startPage(body);
+        if (StringUtils.hasText(body.getQuestion())) {
+            wrapper.like(carserviceIssue.QUESTION, body.getQuestion());
+        }
+        return queryAll(wrapper);
+    }
+
+
+}
