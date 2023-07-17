@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.SystemMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceSystem">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceSystem">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="value" property="value"/>

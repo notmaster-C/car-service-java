@@ -22,34 +22,34 @@ public class HomeIndexResult implements Serializable {
     /**
      * 广告列表
      */
-    private List<carserviceAd> banner;
+    private List<CarServiceAd> banner;
     /**
      * 分类列表
      */
-    private List<carserviceCategory> channel;
+    private List<CarServiceCategory> channel;
     /**
      * 优惠券列表
      */
-    private List<carserviceCoupon> couponList;
+    private List<CarServiceCoupon> couponList;
     /**
      * 新品商品
      */
-    private List<carserviceGoods> newGoodsList;
+    private List<CarServiceGoods> newGoodsList;
     /**
      * 热卖商品
      */
-    private List<carserviceGoods> hotGoodsList;
+    private List<CarServiceGoods> hotGoodsList;
     /**
      * 所有商品第一页
      */
-    private PageInfo<carserviceGoods> allGoodsList;
+    private PageInfo<CarServiceGoods> allGoodsList;
     /**
      * 赏金规则列表
      */
-    private List<carserviceRewardTask> rewardTaskList;
+    private List<CarServiceRewardTask> rewardTaskList;
     /**
      * 团购规则列表
      */
-    private List<carserviceGrouponRules> grouponRuleList;
+    private List<CarServiceGrouponRules> grouponRuleList;
 
 }

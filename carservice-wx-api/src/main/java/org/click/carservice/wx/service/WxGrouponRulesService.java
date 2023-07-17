@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.service.impl.GrouponRulesServiceImpl;
@@ -33,39 +33,39 @@ public class WxGrouponRulesService extends GrouponRulesServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryOnByGoodsId(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
-        wrapper.eq(carserviceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+    public List<CarServiceGrouponRules> queryOnByGoodsId(String goodsId) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
+        wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryByGoodsId(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
-        return queryAll(wrapper);
-    }
-
-
-    @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryByGroupon(Integer limit) {
-        QueryWrapper<carserviceGrouponRules> wrapper = startPage(new PageBody(limit));
-        wrapper.eq(carserviceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+    public List<CarServiceGrouponRules> queryByGoodsId(String goodsId) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryList(PageBody body) {
-        QueryWrapper<carserviceGrouponRules> wrapper = startPage(body);
-        wrapper.eq(carserviceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+    public List<CarServiceGrouponRules> queryByGroupon(Integer limit) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = startPage(new PageBody(limit));
+        wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public boolean isExpired(carserviceGrouponRules rules) {
+    public List<CarServiceGrouponRules> queryList(PageBody body) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = startPage(body);
+        wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+        return queryAll(wrapper);
+    }
+
+
+    @Cacheable(sync = true)
+    public boolean isExpired(CarServiceGrouponRules rules) {
         return (rules == null || rules.getExpireTime().isBefore(LocalDateTime.now()));
     }
 

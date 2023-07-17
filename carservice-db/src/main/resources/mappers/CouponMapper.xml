@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.CouponMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceCoupon">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceCoupon">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="depict" property="depict"/>

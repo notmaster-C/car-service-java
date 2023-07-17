@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.coupon.body.CouponUserListBody;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.service.impl.CouponUserServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,16 +32,16 @@ public class AdminCouponUserService extends CouponUserServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceCouponUser> querySelective(CouponUserListBody body) {
-        QueryWrapper<carserviceCouponUser> wrapper = startPage(body);
+    public List<CarServiceCouponUser> querySelective(CouponUserListBody body) {
+        QueryWrapper<CarServiceCouponUser> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceCouponUser.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceCouponUser.USER_ID, body.getUserId());
         }
         if (body.getCouponId() != null) {
-            wrapper.eq(carserviceCouponUser.COUPON_ID, body.getCouponId());
+            wrapper.eq(CarServiceCouponUser.COUPON_ID, body.getCouponId());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceCouponUser.STATUS, body.getStatus());
+            wrapper.eq(CarServiceCouponUser.STATUS, body.getStatus());
         }
         return queryAll(wrapper);
     }

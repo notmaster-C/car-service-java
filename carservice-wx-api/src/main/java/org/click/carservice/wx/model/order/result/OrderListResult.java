@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.order.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGroupon;
+import org.click.carservice.db.domain.CarServiceGroupon;
 import org.click.carservice.db.entity.OrderHandleOption;
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ public class OrderListResult implements Serializable {
     /**
      * 团购信息
      */
-    private carserviceGroupon groupon;
+    private CarServiceGroupon groupon;
     /**
      * 是否团购
      */

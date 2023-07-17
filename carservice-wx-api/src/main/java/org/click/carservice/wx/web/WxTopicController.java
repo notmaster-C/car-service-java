@@ -13,8 +13,8 @@ package org.click.carservice.wx.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceTopic;
 import org.click.carservice.db.enums.CollectType;
 import org.click.carservice.db.enums.LikeType;
 import org.click.carservice.wx.annotation.LoginUser;
@@ -68,10 +68,10 @@ public class WxTopicController {
      */
     @GetMapping("detail")
     public Object detail(@LoginUser String userId, @NotNull String id) {
-        carserviceTopic topic = topicService.findById(id);
-        List<carserviceGoods> goods = new ArrayList<>();
+        CarServiceTopic topic = topicService.findById(id);
+        List<CarServiceGoods> goods = new ArrayList<>();
         for (String i : topic.getGoodsIds()) {
-            carserviceGoods good = goodsService.findByIdVO(i);
+            CarServiceGoods good = goodsService.findByIdVO(i);
             if (null != good) {
                 goods.add(good);
             }

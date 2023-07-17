@@ -18,8 +18,8 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.notify.service.NotifyMailService;
-import org.click.carservice.db.domain.carserviceAftersale;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceAfterSale;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class WxPayRefundService {
      * 微信退款
      * @param order 订单详情
      */
-    public WxPayRefundResult wxPayRefund(carserviceOrder order) {
+    public WxPayRefundResult wxPayRefund(CarServiceOrder order) {
         if (order.getPayId() == null) {
             throw new RuntimeException("仅线上支付支持微信退款");
         }
@@ -64,7 +64,7 @@ public class WxPayRefundService {
      * 售后退款
      * @param order 订单详情
      */
-    public WxPayRefundResult wxPayAftersaleRefund(carserviceOrder order, carserviceAftersale aftersaleOne) {
+    public WxPayRefundResult wxPayAftersaleRefund(CarServiceOrder order, CarServiceAfterSale aftersaleOne) {
         if (order.getPayId() == null) {
             throw new RuntimeException("仅线上支付支持微信退款");
         }

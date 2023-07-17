@@ -20,7 +20,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.click.carservice.core.redis.writer.RedisConnectionHolder;
 import org.click.carservice.core.redis.writer.RedisConnectionWriter;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -67,8 +67,8 @@ public class RedisStartupRunner {
         String defaultId = TenantContextHolder.getDefaultId();
         this.setRedisFactory(defaultId);
         //初始化租户redis索引
-        List<carserviceTenant> tenantList = tenantService.list();
-        for (carserviceTenant tenant : tenantList) {
+        List<CarServiceTenant> tenantList = tenantService.list();
+        for (CarServiceTenant tenant : tenantList) {
             this.setRedisFactory(tenant.getId());
         }
     }

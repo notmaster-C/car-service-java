@@ -22,7 +22,7 @@ import org.click.carservice.admin.service.AdminDealingSlipService;
 import org.click.carservice.admin.service.AdminUserService;
 import org.click.carservice.core.service.DealingSlipCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -79,7 +79,7 @@ public class AdminUserController {
     @SaCheckPermission("admin:user:update")
     @RequiresPermissionsDesc(menu = {"用户管理", "会员管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object userUpdate(@Valid @RequestBody carserviceUser user) {
+    public Object userUpdate(@Valid @RequestBody CarServiceUser user) {
         //判断是否修改余额，如果是添加修改记录
         dealingSlipCoreService.systemIntegralUpdate(user);
         return ResponseUtil.ok();
@@ -93,12 +93,12 @@ public class AdminUserController {
     @PostMapping("/upload")
     public Object create(@RequestParam("file") MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.getReader(file.getInputStream());
-        List<carserviceUser> userList = reader.readAll(carserviceUser.class);
-        for (carserviceUser user : userList) {
+        List<CarServiceUser> userList = reader.readAll(CarServiceUser.class);
+        for (CarServiceUser user : userList) {
             if (user.getId() == null) {
                 userService.add(user);
             } else {
-                carserviceUser service = userService.findById(user.getId());
+                CarServiceUser service = userService.findById(user.getId());
                 if (service == null) {
                     userService.add(user);
                 } else {
@@ -121,7 +121,7 @@ public class AdminUserController {
         if (Objects.isNull(body.getUserId())) {
             return ResponseUtil.unlogin();
         }
-        carserviceUser user = userService.findById(body.getUserId());
+        CarServiceUser user = userService.findById(body.getUserId());
         if (user == null) {
             return ResponseUtil.fail("用户不存在");
         }

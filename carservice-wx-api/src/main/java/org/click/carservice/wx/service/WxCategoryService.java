@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 import org.click.carservice.db.service.impl.CategoryServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,38 +30,38 @@ public class WxCategoryService extends CategoryServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryL1() {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCategory.LEVEL, "L1");
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryL1() {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCategory.LEVEL, "L1");
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryByPid(String pid) {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCategory.PID, pid);
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryByPid(String pid) {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCategory.PID, pid);
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryL2ByIds(List<String> ids) {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.in(carserviceCategory.ID, ids);
-        wrapper.eq(carserviceCategory.LEVEL, "L2");
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryL2ByIds(List<String> ids) {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServiceCategory.ID, ids);
+        wrapper.eq(CarServiceCategory.LEVEL, "L2");
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryChannel() {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCategory.LEVEL, "L1");
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryChannel() {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCategory.LEVEL, "L1");
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 

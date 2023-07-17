@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceDynamic;
+import org.click.carservice.db.domain.CarServiceDynamic;
 import org.click.carservice.db.service.impl.DynamicServiceImpl;
 import org.click.carservice.wx.model.dynamic.body.DynamicListBody;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,10 +33,10 @@ public class WxDynamicService extends DynamicServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceDynamic> querySelective(DynamicListBody body) {
-        QueryWrapper<carserviceDynamic> wrapper = startPage(body);
+    public List<CarServiceDynamic> querySelective(DynamicListBody body) {
+        QueryWrapper<CarServiceDynamic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getContent())) {
-            wrapper.like(carserviceDynamic.CONTENT, body.getContent());
+            wrapper.like(CarServiceDynamic.CONTENT, body.getContent());
         }
         return queryAll(wrapper);
     }

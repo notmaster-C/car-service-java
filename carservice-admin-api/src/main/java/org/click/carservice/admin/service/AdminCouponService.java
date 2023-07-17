@@ -16,7 +16,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.click.carservice.admin.model.coupon.body.CouponListBody;
 import org.click.carservice.core.utils.RandomStrUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCoupon;
+import org.click.carservice.db.domain.CarServiceCoupon;
 import org.click.carservice.db.enums.CouponStatus;
 import org.click.carservice.db.enums.CouponType;
 import org.click.carservice.db.service.impl.CouponServiceImpl;
@@ -37,7 +37,7 @@ import java.util.List;
 public class AdminCouponService extends CouponServiceImpl {
 
 
-    public Object validate(carserviceCoupon coupon) {
+    public Object validate(CarServiceCoupon coupon) {
         String name = coupon.getName();
         String depict = coupon.getDepict();
         String tag = coupon.getTag();
@@ -66,12 +66,12 @@ public class AdminCouponService extends CouponServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceCoupon findByCode(String code) {
-        QueryWrapper<carserviceCoupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCoupon.CODE, code);
-        wrapper.eq(carserviceCoupon.TYPE, CouponType.TYPE_CODE.getStatus());
-        wrapper.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
-        List<carserviceCoupon> couponList = queryAll(wrapper);
+    public CarServiceCoupon findByCode(String code) {
+        QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCoupon.CODE, code);
+        wrapper.eq(CarServiceCoupon.TYPE, CouponType.TYPE_CODE.getStatus());
+        wrapper.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
+        List<CarServiceCoupon> couponList = queryAll(wrapper);
         if (couponList.size() > 1) {
             return null;
         } else if (couponList.size() == 0) {
@@ -82,16 +82,16 @@ public class AdminCouponService extends CouponServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceCoupon> querySelective(CouponListBody body) {
-        QueryWrapper<carserviceCoupon> wrapper = startPage(body);
+    public List<CarServiceCoupon> querySelective(CouponListBody body) {
+        QueryWrapper<CarServiceCoupon> wrapper = startPage(body);
         if (body.getType() != null) {
-            wrapper.eq(carserviceCoupon.TYPE, body.getType());
+            wrapper.eq(CarServiceCoupon.TYPE, body.getType());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceCoupon.STATUS, body.getStatus());
+            wrapper.eq(CarServiceCoupon.STATUS, body.getStatus());
         }
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceCoupon.NAME, body.getName());
+            wrapper.like(CarServiceCoupon.NAME, body.getName());
         }
         return queryAll(wrapper);
     }

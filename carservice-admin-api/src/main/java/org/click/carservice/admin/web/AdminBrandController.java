@@ -21,8 +21,8 @@ import org.click.carservice.admin.service.AdminBrandService;
 import org.click.carservice.admin.service.AdminGoodsService;
 import org.click.carservice.core.service.GoodsCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceBrand;
-import org.click.carservice.db.domain.carserviceGoods;
+import org.click.carservice.db.domain.CarServiceBrand;
+import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.enums.BrandStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -77,7 +77,7 @@ public class AdminBrandController {
     @RequiresPermissionsDesc(menu = {"商场管理", "品牌管理"}, button = "添加")
     @PostMapping("/create")
     public Object create(@Valid @RequestBody BrandSaveBody body) {
-        carserviceBrand brand = new carserviceBrand();
+        CarServiceBrand brand = new CarServiceBrand();
         BeanUtil.copyProperties(body, brand);
         Object error = brandService.validate(brand);
         if (error != null) {
@@ -93,15 +93,15 @@ public class AdminBrandController {
     @SaCheckPermission("admin:brand:update")
     @RequiresPermissionsDesc(menu = {"商场管理", "品牌管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceBrand brand) {
+    public Object update(@Valid @RequestBody CarServiceBrand brand) {
         Object error = brandService.validate(brand);
         if (error != null) {
             return error;
         }
         //禁用店铺删除所有商品
         if (!brand.getStatus().equals(BrandStatus.STATUS_NORMAL.getStatus())) {
-            List<carserviceGoods> goodsList = goodsService.queryByBrand(brand.getId());
-            for (carserviceGoods goods : goodsList) {
+            List<CarServiceGoods> goodsList = goodsService.queryByBrand(brand.getId());
+            for (CarServiceGoods goods : goodsList) {
                 goodsCoreService.goodsDelete(goods);
             }
         }
@@ -121,8 +121,8 @@ public class AdminBrandController {
         if (brandService.deleteById(id) == 0) {
             return ResponseUtil.fail("删除失败请重试");
         }
-        List<carserviceGoods> goodsList = goodsService.queryByBrand(id);
-        for (carserviceGoods goods : goodsList) {
+        List<CarServiceGoods> goodsList = goodsService.queryByBrand(id);
+        for (CarServiceGoods goods : goodsList) {
             goodsCoreService.goodsDelete(goods);
         }
         return ResponseUtil.ok();

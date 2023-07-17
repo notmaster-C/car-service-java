@@ -1,9 +1,9 @@
 package org.click.carservice.wx.model.order.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceGrouponRules;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.entity.UserInfo;
 
 import java.io.Serializable;
@@ -26,7 +26,7 @@ public class OrderDetailResult implements Serializable {
     /**
      * 订单商品信息
      */
-    private List<carserviceOrderGoods> orderGoods;
+    private List<CarServiceOrderGoods> orderGoods;
     /**
      * 团购提示
      */
@@ -42,11 +42,11 @@ public class OrderDetailResult implements Serializable {
     /**
      * 团购信息
      */
-    private carserviceGroupon groupon;
+    private CarServiceGroupon groupon;
     /**
      * 团购规则
      */
-    private carserviceGrouponRules rules;
+    private CarServiceGrouponRules rules;
     /**
      * 用户信息列表
      */

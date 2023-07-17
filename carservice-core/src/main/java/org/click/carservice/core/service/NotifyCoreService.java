@@ -34,13 +34,13 @@ public class NotifyCoreService {
      *
      * @param order 订单
      */
-    public void orderNotify(carserviceOrder order) {
+    public void orderNotify(CarServiceOrder order) {
         //获取订单商品
-        List<carserviceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
-        for (carserviceOrderGoods orderGoods : orderGoodsList) {
-            carserviceBrand brand = brandService.findById(order.getBrandId());
+        List<CarServiceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
+        for (CarServiceOrderGoods orderGoods : orderGoodsList) {
+            CarServiceBrand brand = brandService.findById(order.getBrandId());
             //新订单订阅通知
-            carserviceUser user = userService.findById(brand.getUserId());
+            CarServiceUser user = userService.findById(brand.getUserId());
             if (brand.getUserId() != null && user != null) {
                 subscribeMessageService.newOrderSubscribe(user.getOpenid(), order, orderGoods);
             }
@@ -60,11 +60,11 @@ public class NotifyCoreService {
      *
      * @param order 订单
      */
-    public void orderRefundNotify(carserviceOrder order) {
-        List<carserviceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
-        for (carserviceOrderGoods orderGoods : orderGoodsList) {
+    public void orderRefundNotify(CarServiceOrder order) {
+        List<CarServiceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
+        for (CarServiceOrderGoods orderGoods : orderGoodsList) {
             String refundMessage = NotifyMessageUtil.refundMessage(order, orderGoods);
-            carserviceBrand brand = brandService.findById(order.getBrandId());
+            CarServiceBrand brand = brandService.findById(order.getBrandId());
             if (StringUtils.hasText(brand.getMail())) {
                 mailService.notifyMail("退款申请", refundMessage, brand.getMail());
             } else {
@@ -78,9 +78,9 @@ public class NotifyCoreService {
      *
      * @param order 订单
      */
-    public void aftersaleRefundNotify(carserviceOrder order, carserviceAftersale aftersale) {
-        carserviceBrand brand = brandService.findById(order.getBrandId());
-        carserviceOrderGoods orderGoods = commonService.findByOrderId(order.getId());
+    public void aftersaleRefundNotify(CarServiceOrder order, CarServiceAfterSale aftersale) {
+        CarServiceBrand brand = brandService.findById(order.getBrandId());
+        CarServiceOrderGoods orderGoods = commonService.findByOrderId(order.getId());
         String message = NotifyMessageUtil.aftersaleMessage(order, orderGoods, aftersale);
         if (StringUtils.hasText(brand.getMail())) {
             mailService.notifyMail("售后申请", message, brand.getMail());

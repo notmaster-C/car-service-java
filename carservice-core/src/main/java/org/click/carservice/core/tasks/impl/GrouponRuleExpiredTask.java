@@ -16,10 +16,10 @@ import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.service.OrderCoreService;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceGrouponRules;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.GrouponStatus;
 import org.click.carservice.db.enums.OrderStatus;
@@ -46,12 +46,12 @@ public class GrouponRuleExpiredTask extends TaskRunnable {
     private static final String taskName = "团购规则过期";
 
 
-    public GrouponRuleExpiredTask(carserviceGrouponRules grouponRules, long delayInMilliseconds) {
+    public GrouponRuleExpiredTask(CarServiceGrouponRules grouponRules, long delayInMilliseconds) {
         super(idPrefix + grouponRules.getId(), delayInMilliseconds, grouponRules.getTenantId(), taskName);
         this.grouponRuleId = grouponRules.getId();
     }
 
-    public GrouponRuleExpiredTask(carserviceGrouponRules grouponRules) {
+    public GrouponRuleExpiredTask(CarServiceGrouponRules grouponRules) {
         super(idPrefix + grouponRules.getId(), 0, grouponRules.getTenantId(), taskName);
         this.grouponRuleId = grouponRules.getId();
     }
@@ -66,7 +66,7 @@ public class GrouponRuleExpiredTask extends TaskRunnable {
         IGrouponRulesService grouponRulesService = BeanUtil.getBean(IGrouponRulesService.class);
 
         //查找团购规则
-        carserviceGrouponRules grouponRules = grouponRulesService.findById(grouponRuleId);
+        CarServiceGrouponRules grouponRules = grouponRulesService.findById(grouponRuleId);
         if (grouponRules == null) {
             return;
         }
@@ -74,7 +74,7 @@ public class GrouponRuleExpiredTask extends TaskRunnable {
             return;
         }
         //查找团购商品
-        carserviceGoods goods = goodsService.findById(grouponRules.getGoodsId());
+        CarServiceGoods goods = goodsService.findById(grouponRules.getGoodsId());
         if (goods == null) {
             return;
         }
@@ -96,9 +96,9 @@ public class GrouponRuleExpiredTask extends TaskRunnable {
         }
 
         // 用户团购订单处理
-        List<carserviceGroupon> grouponList = commonService.queryByRuleId(grouponRuleId);
-        for (carserviceGroupon groupon : grouponList) {
-            carserviceOrder order = orderService.findById(groupon.getOrderId());
+        List<CarServiceGroupon> grouponList = commonService.queryByRuleId(grouponRuleId);
+        for (CarServiceGroupon groupon : grouponList) {
+            CarServiceOrder order = orderService.findById(groupon.getOrderId());
             if (groupon.getStatus().equals(GrouponStatus.STATUS_NONE.getStatus())) {
                 //团购未付款或订单金额为零，设置团购取消
                 groupon.setStatus(GrouponStatus.STATUS_CANCEL.getStatus());

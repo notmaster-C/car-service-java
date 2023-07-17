@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.service.ActionLogService;
 import org.click.carservice.core.utils.ApiUtil;
-import org.click.carservice.db.domain.carserviceDynamic;
+import org.click.carservice.db.domain.CarServiceDynamic;
 import org.click.carservice.db.service.IDynamicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,7 +35,7 @@ public class ApiJob {
         JSONObject dataJson = JSONObject.parseObject(data);
         String text = dataJson.getString("text");
         if (text != null) {
-            carserviceDynamic dynamic = new carserviceDynamic();
+            CarServiceDynamic dynamic = new CarServiceDynamic();
             dynamic.setContent(text);
             dynamic.setUserId(USER_ID);
             dynamic.setPicUrls(new String[0]);

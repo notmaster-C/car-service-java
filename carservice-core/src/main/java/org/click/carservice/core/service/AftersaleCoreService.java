@@ -1,8 +1,8 @@
 package org.click.carservice.core.service;
 
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAftersale;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceAfterSale;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.AftersaleStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IAftersaleService;
@@ -35,13 +35,13 @@ public class AftersaleCoreService {
      * @param aftersale 售后信息
      * @return 成功
      */
-    public Object recept(carserviceAftersale aftersale) {
+    public Object recept(CarServiceAfterSale aftersale) {
         //判断售后状态
         if (!aftersale.getStatus().equals(AftersaleStatus.STATUS_REQUEST.getStatus())) {
             throw new RuntimeException("当前售后状态不能进行审核通过操作");
         }
 
-        carserviceOrder order = commonService.findOrderById(aftersale.getUserId(), aftersale.getOrderId());
+        CarServiceOrder order = commonService.findOrderById(aftersale.getUserId(), aftersale.getOrderId());
         if (order == null) {
             throw new RuntimeException("未找到售后订单=" + aftersale.getOrderId());
         }
@@ -67,13 +67,13 @@ public class AftersaleCoreService {
      * @param aftersale 售后
      * @return 成功
      */
-    public Object reject(carserviceAftersale aftersale) {
+    public Object reject(CarServiceAfterSale aftersale) {
         //判断售后状态
         if (!aftersale.getStatus().equals(AftersaleStatus.STATUS_REQUEST.getStatus())) {
             throw new RuntimeException("当前售后状态不能进行审核拒绝操作");
         }
 
-        carserviceOrder order = commonService.findOrderById(aftersale.getUserId(), aftersale.getOrderId());
+        CarServiceOrder order = commonService.findOrderById(aftersale.getUserId(), aftersale.getOrderId());
         if (order == null) {
             throw new RuntimeException("未找到售后订单=" + aftersale.getOrderId());
         }

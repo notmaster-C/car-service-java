@@ -20,9 +20,9 @@ import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.admin.service.AdminNoticeAdminService;
 import org.click.carservice.admin.service.AdminNoticeService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carserviceNotice;
-import org.click.carservice.db.domain.carserviceNoticeAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServiceNotice;
+import org.click.carservice.db.domain.CarServiceNoticeAdmin;
 import org.click.carservice.db.entity.IdsBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -74,7 +74,7 @@ public class AdminNoticeAdminController {
     @SaCheckLogin
     @PostMapping("/notice/cat")
     public Object catNotice(@NotNull String noticeId) {
-        carserviceNoticeAdmin noticeAdmin = noticeAdminService.find(noticeId, StpUtil.getLoginIdAsString());
+        CarServiceNoticeAdmin noticeAdmin = noticeAdminService.find(noticeId, StpUtil.getLoginIdAsString());
         if (noticeAdmin == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -84,7 +84,7 @@ public class AdminNoticeAdminController {
         if (noticeAdminService.updateVersionSelective(noticeAdmin) == 0) {
             return ResponseUtil.updatedDateExpired();
         }
-        carserviceNotice notice = noticeService.findById(noticeId);
+        CarServiceNotice notice = noticeService.findById(noticeId);
         NoticeAdminCatResult result = new NoticeAdminCatResult();
         result.setTitle(notice.getTitle());
         result.setContent(notice.getContent());
@@ -92,7 +92,7 @@ public class AdminNoticeAdminController {
         if (notice.getAdminId().equals("0")) {
             result.setAdmin("系统");
         } else {
-            carserviceAdmin admin = adminService.findById(notice.getAdminId());
+            CarServiceAdmin admin = adminService.findById(notice.getAdminId());
             result.setAdmin(admin.getUsername());
             result.setAvatar(admin.getAvatar());
         }

@@ -1,7 +1,7 @@
 package org.click.carservice.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.click.carservice.db.domain.carserviceRole;
+import org.click.carservice.db.domain.CarServiceRole;
 
 /**
  * <p>
@@ -10,6 +10,6 @@ import org.click.carservice.db.domain.carserviceRole;
  *
  * @author click
  */
-public interface RoleMapper extends BaseMapper<carserviceRole> {
+public interface RoleMapper extends BaseMapper<CarServiceRole> {
 
 }

@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceAddress;
+import org.click.carservice.db.domain.CarServiceAddress;
 import org.click.carservice.db.service.impl.AddressServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,46 +32,46 @@ public class WxAddressService extends AddressServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceAddress> queryByUid(String userId) {
-        QueryWrapper<carserviceAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAddress.USER_ID, userId);
+    public List<CarServiceAddress> queryByUid(String userId) {
+        QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAddress.USER_ID, userId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceAddress query(String userId, String id) {
-        QueryWrapper<carserviceAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAddress.USER_ID, userId);
-        wrapper.eq(carserviceAddress.ID, id);
+    public CarServiceAddress query(String userId, String id) {
+        QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAddress.USER_ID, userId);
+        wrapper.eq(CarServiceAddress.ID, id);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public void deleteByUser(String userId, String id) {
-        QueryWrapper<carserviceAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAddress.USER_ID, userId);
-        wrapper.eq(carserviceAddress.ID, id);
+        QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAddress.USER_ID, userId);
+        wrapper.eq(CarServiceAddress.ID, id);
         remove(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceAddress findDefault(String userId) {
-        QueryWrapper<carserviceAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAddress.USER_ID, userId);
-        wrapper.eq(carserviceAddress.IS_DEFAULT, true);
+    public CarServiceAddress findDefault(String userId) {
+        QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAddress.USER_ID, userId);
+        wrapper.eq(CarServiceAddress.IS_DEFAULT, true);
         return getOne(wrapper, false);
     }
 
 
     @CacheEvict(allEntries = true)
     public void resetDefault(String userId) {
-        carserviceAddress address = new carserviceAddress();
+        CarServiceAddress address = new CarServiceAddress();
         address.setIsDefault(false);
         address.setUpdateTime(LocalDateTime.now());
-        QueryWrapper<carserviceAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAddress.USER_ID, userId);
+        QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAddress.USER_ID, userId);
         update(address, wrapper);
     }
 

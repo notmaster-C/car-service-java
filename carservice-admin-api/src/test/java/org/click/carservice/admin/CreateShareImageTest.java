@@ -1,7 +1,7 @@
 package org.click.carservice.admin;
 
 import org.click.carservice.core.service.QrcodeCoreService;
-import org.click.carservice.db.domain.carserviceGoods;
+import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.service.IGoodsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ public class CreateShareImageTest {
 
     @Test
     public void test() {
-        carserviceGoods goods = goodsService.findById("1181010");
+        CarServiceGoods goods = goodsService.findById("1181010");
         qCodeService.createGoodShareImage(goods);
     }
 }

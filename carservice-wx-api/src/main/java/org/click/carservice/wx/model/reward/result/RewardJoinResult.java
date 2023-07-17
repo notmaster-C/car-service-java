@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.reward.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceReward;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceReward;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 
 import java.io.Serializable;
 
@@ -19,11 +19,11 @@ public class RewardJoinResult implements Serializable {
     /**
      * 赏金参与信息
      */
-    private carserviceReward reward;
+    private CarServiceReward reward;
 
     /**
      * 赏金规则信息
      */
-    private carserviceRewardTask rewardTask;
+    private CarServiceRewardTask rewardTask;
 
 }

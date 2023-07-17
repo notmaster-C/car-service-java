@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.cart.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceAddress;
-import org.click.carservice.db.domain.carserviceCart;
+import org.click.carservice.db.domain.CarServiceAddress;
+import org.click.carservice.db.domain.CarServiceCart;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -45,7 +45,7 @@ public class CartCheckoutResult implements Serializable {
     /**
      * 选中地址
      */
-    private carserviceAddress checkedAddress;
+    private CarServiceAddress checkedAddress;
     /**
      * 优惠券可用数量
      */
@@ -73,6 +73,6 @@ public class CartCheckoutResult implements Serializable {
     /**
      * 选中商品列表
      */
-    private List<carserviceCart> checkedGoodsList;
+    private List<CarServiceCart> checkedGoodsList;
 
 }

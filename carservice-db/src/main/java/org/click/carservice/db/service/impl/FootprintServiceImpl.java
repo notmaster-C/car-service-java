@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceFootprint;
+import org.click.carservice.db.domain.CarServiceFootprint;
 import org.click.carservice.db.mapper.FootprintMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IFootprintService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_footprint")
-public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, carserviceFootprint> implements IFootprintService {
+public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, CarServiceFootprint> implements IFootprintService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFootprint findById(String id) {
+    public CarServiceFootprint findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFootprint> queryAll(Wrapper<carserviceFootprint> queryWrapper) {
+    public List<CarServiceFootprint> queryAll(Wrapper<CarServiceFootprint> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceFootprint record) {
+    public int add(CarServiceFootprint record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceFootprint> list) {
+    public boolean batchAdd(List<CarServiceFootprint> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceFootprint record) {
+    public int updateSelective(CarServiceFootprint record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceFootprint record) {
+    public int updateVersionSelective(CarServiceFootprint record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, cars
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceFootprint> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceFootprint> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceFootprint entity) {
+    public boolean save(CarServiceFootprint entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceFootprint> entityList) {
+    public boolean saveBatch(Collection<CarServiceFootprint> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceFootprint entity) {
+    public boolean saveOrUpdate(CarServiceFootprint entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceFootprint entity, Wrapper<carserviceFootprint> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceFootprint entity, Wrapper<CarServiceFootprint> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceFootprint> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceFootprint> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceFootprint entity) {
+    public boolean removeById(CarServiceFootprint entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, cars
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceFootprint> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceFootprint> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, cars
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceFootprint entity) {
+    public boolean updateById(CarServiceFootprint entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceFootprint> updateWrapper) {
+    public boolean update(Wrapper<CarServiceFootprint> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceFootprint entity, Wrapper<carserviceFootprint> updateWrapper) {
+    public boolean update(CarServiceFootprint entity, Wrapper<CarServiceFootprint> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceFootprint> entityList) {
+    public boolean updateBatchById(Collection<CarServiceFootprint> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFootprint getById(Serializable id) {
+    public CarServiceFootprint getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFootprint> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceFootprint> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFootprint> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceFootprint> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFootprint getOne(Wrapper<carserviceFootprint> queryWrapper) {
+    public CarServiceFootprint getOne(Wrapper<CarServiceFootprint> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class FootprintServiceImpl extends IBaseServiceImpl<FootprintMapper, cars
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceFootprint> queryWrapper) {
+    public long count(Wrapper<CarServiceFootprint> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFootprint> list(Wrapper<carserviceFootprint> queryWrapper) {
+    public List<CarServiceFootprint> list(Wrapper<CarServiceFootprint> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFootprint> list() {
+    public List<CarServiceFootprint> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceFootprint> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceFootprint> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

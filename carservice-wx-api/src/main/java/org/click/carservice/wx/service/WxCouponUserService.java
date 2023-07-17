@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.service.impl.CouponUserServiceImpl;
 import org.click.carservice.wx.model.coupon.body.CouponListBody;
 import org.springframework.cache.annotation.CacheConfig;
@@ -32,38 +32,38 @@ public class WxCouponUserService extends CouponUserServiceImpl {
 
     @Cacheable(sync = true)
     public Integer countUserAndCoupon(String userId, String couponId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.USER_ID, userId);
-        wrapper.eq(carserviceCouponUser.COUPON_ID, couponId);
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.USER_ID, userId);
+        wrapper.eq(CarServiceCouponUser.COUPON_ID, couponId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
     public Integer countCoupon(String couponId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.COUPON_ID, couponId);
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.COUPON_ID, couponId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCouponUser> queryList(String userId, CouponListBody body) {
-        QueryWrapper<carserviceCouponUser> wrapper = startPage(body);
+    public List<CarServiceCouponUser> queryList(String userId, CouponListBody body) {
+        QueryWrapper<CarServiceCouponUser> wrapper = startPage(body);
         if (userId != null) {
-            wrapper.eq(carserviceCouponUser.USER_ID, userId);
+            wrapper.eq(CarServiceCouponUser.USER_ID, userId);
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceCouponUser.STATUS, body.getStatus());
+            wrapper.eq(CarServiceCouponUser.STATUS, body.getStatus());
         }
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCouponUser> queryAll(String userId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.USER_ID, userId);
+    public List<CarServiceCouponUser> queryAll(String userId) {
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.USER_ID, userId);
         return queryAll(wrapper);
     }
 

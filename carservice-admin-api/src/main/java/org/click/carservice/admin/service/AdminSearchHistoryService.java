@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.history.body.HistoryListBody;
-import org.click.carservice.db.domain.carserviceSearchHistory;
+import org.click.carservice.db.domain.CarServiceSearchHistory;
 import org.click.carservice.db.service.impl.SearchHistoryServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,13 +32,13 @@ public class AdminSearchHistoryService extends SearchHistoryServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceSearchHistory> querySelective(HistoryListBody body) {
-        QueryWrapper<carserviceSearchHistory> wrapper = startPage(body);
+    public List<CarServiceSearchHistory> querySelective(HistoryListBody body) {
+        QueryWrapper<CarServiceSearchHistory> wrapper = startPage(body);
         if (StringUtils.hasText(body.getUserId())) {
-            wrapper.eq(carserviceSearchHistory.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceSearchHistory.USER_ID, body.getUserId());
         }
         if (StringUtils.hasText(body.getKeyword())) {
-            wrapper.like(carserviceSearchHistory.KEYWORD, body.getKeyword());
+            wrapper.like(CarServiceSearchHistory.KEYWORD, body.getKeyword());
         }
         return queryAll(wrapper);
     }

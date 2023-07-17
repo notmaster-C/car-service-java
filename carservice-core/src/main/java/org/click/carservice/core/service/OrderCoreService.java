@@ -74,15 +74,15 @@ public class OrderCoreService {
      * 支付成功
      * @param order 订单
      */
-    public void orderPaySuccess(carserviceOrder order) {
+    public void orderPaySuccess(CarServiceOrder order) {
         //有赏金更新赏金
-        carserviceReward reward = commonService.findByRewardOrderId(order.getId());
+        CarServiceReward reward = commonService.findByRewardOrderId(order.getId());
         if (reward != null) {
             rewardCoreService.updateRewardStatus(reward);
         }
 
         //更新分享记录
-        carserviceShare share = commonService.findByShareOrderId(order.getId());
+        CarServiceShare share = commonService.findByShareOrderId(order.getId());
         if (share != null) {
             share.setStatus(ShareStatus.STATUS_SUCCEED.getStatus());
             if (shareService.updateVersionSelective(share) == 0) {
@@ -91,7 +91,7 @@ public class OrderCoreService {
         }
 
         // 支付成功，有团购信息，更新团购信息
-        carserviceGroupon groupon = commonService.findByGrouponOrderId(order.getId());
+        CarServiceGroupon groupon = commonService.findByGrouponOrderId(order.getId());
         if (groupon != null) {
             grouponCoreService.updateGrouponStatus(groupon);
         } else {
@@ -121,7 +121,7 @@ public class OrderCoreService {
     /**
      * 添加订单信息和订单商品信息
      */
-    public void addOrderAndOrderGoods(carserviceCart cartGoods, carserviceOrder order, carserviceUser user) {
+    public void addOrderAndOrderGoods(CarServiceCart cartGoods, CarServiceOrder order, CarServiceUser user) {
         // 商品总价 = (商品数量 * 商品单价)
         BigDecimal checkedGoodsPrice = cartGoods.getPrice().multiply(BigDecimal.valueOf(cartGoods.getNumber()));
 
@@ -168,7 +168,7 @@ public class OrderCoreService {
         orderService.add(order);
 
         // 订单商品
-        carserviceOrderGoods orderGoods = new carserviceOrderGoods();
+        CarServiceOrderGoods orderGoods = new CarServiceOrderGoods();
         orderGoods.setOrderId(order.getId());
         orderGoods.setGoodsId(cartGoods.getGoodsId());
         orderGoods.setGoodsSn(cartGoods.getGoodsSn());
@@ -188,11 +188,11 @@ public class OrderCoreService {
      * @param number    增加数量
      */
     public void addStock(String productId, Short number) {
-        carserviceGoodsProduct product = goodsProductService.findById(productId);
+        CarServiceGoodsProduct product = goodsProductService.findById(productId);
         product.setNumber(product.getNumber() + number);
         //库存减少条件 number >= number
-        QueryWrapper<carserviceGoodsProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsProduct.ID, productId);
+        QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsProduct.ID, productId);
         if (!goodsProductService.update(product, wrapper)) {
             throw new RuntimeException("库存增加失败");
         }
@@ -204,12 +204,12 @@ public class OrderCoreService {
      * @param number    减少数量
      */
     public void reduceStock(String productId, Short number) {
-        carserviceGoodsProduct product = goodsProductService.findById(productId);
+        CarServiceGoodsProduct product = goodsProductService.findById(productId);
         product.setNumber(product.getNumber() - number);
         //库存减少条件 number >= number
-        QueryWrapper<carserviceGoodsProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsProduct.ID, productId);
-        wrapper.ge(carserviceGoodsProduct.NUMBER, number);
+        QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsProduct.ID, productId);
+        wrapper.ge(CarServiceGoodsProduct.NUMBER, number);
         if (!goodsProductService.update(product, wrapper)) {
             throw new RuntimeException("库存减少失败");
         }
@@ -219,10 +219,10 @@ public class OrderCoreService {
      * 扣减库存
      * @param cartGoods 购物车商品
      */
-    public void reduceStock(carserviceCart cartGoods) {
+    public void reduceStock(CarServiceCart cartGoods) {
         // 商品货品数量减少
         String productId = cartGoods.getProductId();
-        carserviceGoodsProduct product = productService.findById(productId);
+        CarServiceGoodsProduct product = productService.findById(productId);
         if (product.getNumber() < cartGoods.getNumber()) {
             throw new RuntimeException("库存不足");
         }
@@ -249,17 +249,17 @@ public class OrderCoreService {
      * 返还订单 如货品数量增加，优惠券返还，余额返还
      * @param order 订单
      */
-    public void orderRelease(carserviceOrder order) {
+    public void orderRelease(CarServiceOrder order) {
         // 商品货品数量增加
-        List<carserviceOrderGoods> orderGoodsList = commonService.queryByOrderGoodsOid(order.getId());
-        for (carserviceOrderGoods orderGoods : orderGoodsList) {
+        List<CarServiceOrderGoods> orderGoodsList = commonService.queryByOrderGoodsOid(order.getId());
+        for (CarServiceOrderGoods orderGoods : orderGoodsList) {
             //判断商品库存是否为0,如果是则上架商品
             Short number = orderGoods.getNumber();
             String productId = orderGoods.getProductId();
             addStock(productId, number);
 
             //商品上架
-            carserviceGoods goods = goodsService.findById(orderGoods.getGoodsId());
+            CarServiceGoods goods = goodsService.findById(orderGoods.getGoodsId());
             if (GoodsStatus.getIsUnsold(goods)) {
                 goods.setStatus(GoodsStatus.GOODS_ON_SALE.getStatus());
                 if (goodsService.updateVersionSelective(goods) == 0) {
@@ -269,7 +269,7 @@ public class OrderCoreService {
         }
 
         //设置分享取消
-        carserviceShare share = commonService.findByShareOrderId(order.getId());
+        CarServiceShare share = commonService.findByShareOrderId(order.getId());
         if (share != null) {
             share.setStatus(ShareStatus.STATUS_CANCEL.getStatus());
             if (shareService.updateVersionSelective(share) == 0) {
@@ -278,7 +278,7 @@ public class OrderCoreService {
         }
 
         //设置赏金取消
-        carserviceReward reward = commonService.findByRewardOrderId(order.getId());
+        CarServiceReward reward = commonService.findByRewardOrderId(order.getId());
         if (reward != null) {
             reward.setStatus(RewardStatus.STATUS_CANCEL.getStatus());
             if (rewardService.updateVersionSelective(reward) <= 0) {
@@ -287,9 +287,9 @@ public class OrderCoreService {
         }
 
         //设置团购取消状态
-        carserviceGroupon groupon = commonService.findByGrouponOrderId(order.getId());
+        CarServiceGroupon groupon = commonService.findByGrouponOrderId(order.getId());
         if (groupon != null) {
-            carserviceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
+            CarServiceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
             if (!grouponRules.getStatus().equals(GrouponRuleStatus.RULE_STATUS_ON.getStatus())) {
                 if (order.getActualPrice().compareTo(BigDecimal.ZERO) <= 0) {
                     //团购未付款或订单金额为零，设置团购取消
@@ -310,7 +310,7 @@ public class OrderCoreService {
         //返还余额
         BigDecimal integralPrice = order.getIntegralPrice();
         if (integralPrice.compareTo(BigDecimal.ZERO) > 0) {
-            carserviceUser user = userService.findById(order.getUserId());
+            CarServiceUser user = userService.findById(order.getUserId());
             if (user == null) {
                 throw new RuntimeException("未找到用户");
             }
@@ -322,8 +322,8 @@ public class OrderCoreService {
         }
 
         // 返还优惠券
-        List<carserviceCouponUser> couponUsers = commonService.queryByCouponUserOid(order.getId());
-        for (carserviceCouponUser couponUser : couponUsers) {
+        List<CarServiceCouponUser> couponUsers = commonService.queryByCouponUserOid(order.getId());
+        for (CarServiceCouponUser couponUser : couponUsers) {
             // 优惠券状态设置为可使用
             couponUser.setStatus(CouponUserStatus.STATUS_USABLE.getStatus());
             couponUser.setUpdateTime(LocalDateTime.now());

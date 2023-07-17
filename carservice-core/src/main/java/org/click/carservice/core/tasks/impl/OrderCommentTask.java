@@ -16,8 +16,8 @@ import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IOrderGoodsService;
 import org.click.carservice.db.service.IOrderService;
@@ -41,12 +41,12 @@ public class OrderCommentTask extends TaskRunnable {
     private static final long defaultSeconds = SystemConfig.getOrderComment() * 24 * 60 * 60 * 1000;
 
 
-    public OrderCommentTask(carserviceOrder order, long delayInMilliseconds) {
+    public OrderCommentTask(CarServiceOrder order, long delayInMilliseconds) {
         super(idPrefix + order.getId(), delayInMilliseconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
 
-    public OrderCommentTask(carserviceOrder order) {
+    public OrderCommentTask(CarServiceOrder order) {
         super(idPrefix + order.getId(), defaultSeconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
@@ -57,7 +57,7 @@ public class OrderCommentTask extends TaskRunnable {
         IOrderService orderService = BeanUtil.getBean(IOrderService.class);
         IOrderGoodsService orderGoodsService = BeanUtil.getBean(IOrderGoodsService.class);
 
-        carserviceOrder order = orderService.findById(this.orderId);
+        CarServiceOrder order = orderService.findById(this.orderId);
         if (order == null || !OrderStatus.isConfirmStatus(order)) {
             return;
         }
@@ -69,8 +69,8 @@ public class OrderCommentTask extends TaskRunnable {
         }
 
         //设置订单商品禁止评论
-        List<carserviceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
-        for (carserviceOrderGoods orderGoods : orderGoodsList) {
+        List<CarServiceOrderGoods> orderGoodsList = commonService.queryByOid(order.getId());
+        for (CarServiceOrderGoods orderGoods : orderGoodsList) {
             orderGoods.setComment(-1);
             if (orderGoodsService.updateVersionSelective(orderGoods) == 0) {
                 throw new RuntimeException("商品评论更新失败");

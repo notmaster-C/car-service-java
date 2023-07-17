@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.groupon.body.GrouponListBody;
-import org.click.carservice.db.domain.carserviceGroupon;
+import org.click.carservice.db.domain.CarServiceGroupon;
 import org.click.carservice.db.service.impl.GrouponServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,19 +31,19 @@ public class AdminGrouponService extends GrouponServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGroupon> querySelective(GrouponListBody body) {
-        QueryWrapper<carserviceGroupon> wrapper = startPage(body);
+    public List<CarServiceGroupon> querySelective(GrouponListBody body) {
+        QueryWrapper<CarServiceGroupon> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceGroupon.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceGroupon.USER_ID, body.getUserId());
         }
         if (body.getRuleId() != null) {
-            wrapper.eq(carserviceGroupon.RULES_ID, body.getRuleId());
+            wrapper.eq(CarServiceGroupon.RULES_ID, body.getRuleId());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceGroupon.STATUS, body.getStatus());
+            wrapper.eq(CarServiceGroupon.STATUS, body.getStatus());
         }
         if (body.getGrouponId() != null) {
-            wrapper.eq(carserviceGroupon.GROUPON_ID, body.getGrouponId());
+            wrapper.eq(CarServiceGroupon.GROUPON_ID, body.getGrouponId());
         }
         return queryAll(wrapper);
     }

@@ -23,8 +23,8 @@ import org.click.carservice.admin.service.AdminTenantService;
 import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.entity.AdminInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -70,7 +70,7 @@ public class AdminProfileController {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0134);
         }
 
-        carserviceAdmin admin = adminService.findById(StpUtil.getLoginIdAsString());
+        CarServiceAdmin admin = adminService.findById(StpUtil.getLoginIdAsString());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (!encoder.matches(oldPassword, admin.getPassword())) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0210);
@@ -90,10 +90,10 @@ public class AdminProfileController {
     @SaCheckLogin
     @GetMapping("/detail")
     public Object detail() {
-        carserviceAdmin admin = adminService.findById(StpUtil.getLoginIdAsString());
+        CarServiceAdmin admin = adminService.findById(StpUtil.getLoginIdAsString());
         AdminInfo info = new AdminInfo();
         BeanUtil.copyProperties(admin, info);
-        carserviceTenant tenant = tenantService.findById(admin.getTenantId());
+        CarServiceTenant tenant = tenantService.findById(admin.getTenantId());
         info.setTenant(tenant != null ? tenant.getAddress() : "平台管理员");
         return ResponseUtil.ok(info);
     }
@@ -105,7 +105,7 @@ public class AdminProfileController {
     @SaCheckLogin
     @PostMapping("/update")
     public Object update(@Valid @RequestBody AdminUpdateBody body) {
-        carserviceAdmin admin = new carserviceAdmin();
+        CarServiceAdmin admin = new CarServiceAdmin();
         admin.setId(StpUtil.getLoginIdAsString());
         BeanUtil.copyProperties(body, admin);
         if (adminService.updateVersionSelective(admin) == 0) {

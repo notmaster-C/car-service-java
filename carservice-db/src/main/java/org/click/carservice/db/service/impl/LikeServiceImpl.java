@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceLike;
+import org.click.carservice.db.domain.CarServiceLike;
 import org.click.carservice.db.mapper.LikeMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.ILikeService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_like")
-public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, carserviceLike> implements ILikeService {
+public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, CarServiceLike> implements ILikeService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceLike findById(String id) {
+    public CarServiceLike findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceLike> queryAll(Wrapper<carserviceLike> queryWrapper) {
+    public List<CarServiceLike> queryAll(Wrapper<CarServiceLike> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceLike record) {
+    public int add(CarServiceLike record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceLike> list) {
+    public boolean batchAdd(List<CarServiceLike> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceLike record) {
+    public int updateSelective(CarServiceLike record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceLike record) {
+    public int updateVersionSelective(CarServiceLike record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, carserviceLike
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceLike> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceLike> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceLike entity) {
+    public boolean save(CarServiceLike entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceLike> entityList) {
+    public boolean saveBatch(Collection<CarServiceLike> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceLike entity) {
+    public boolean saveOrUpdate(CarServiceLike entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceLike entity, Wrapper<carserviceLike> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceLike entity, Wrapper<CarServiceLike> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceLike> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceLike> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceLike entity) {
+    public boolean removeById(CarServiceLike entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, carserviceLike
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceLike> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceLike> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, carserviceLike
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceLike entity) {
+    public boolean updateById(CarServiceLike entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceLike> updateWrapper) {
+    public boolean update(Wrapper<CarServiceLike> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceLike entity, Wrapper<carserviceLike> updateWrapper) {
+    public boolean update(CarServiceLike entity, Wrapper<CarServiceLike> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceLike> entityList) {
+    public boolean updateBatchById(Collection<CarServiceLike> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceLike getById(Serializable id) {
+    public CarServiceLike getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceLike> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceLike> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceLike> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceLike> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceLike getOne(Wrapper<carserviceLike> queryWrapper) {
+    public CarServiceLike getOne(Wrapper<CarServiceLike> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class LikeServiceImpl extends IBaseServiceImpl<LikeMapper, carserviceLike
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceLike> queryWrapper) {
+    public long count(Wrapper<CarServiceLike> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceLike> list(Wrapper<carserviceLike> queryWrapper) {
+    public List<CarServiceLike> list(Wrapper<CarServiceLike> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceLike> list() {
+    public List<CarServiceLike> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceLike> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceLike> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

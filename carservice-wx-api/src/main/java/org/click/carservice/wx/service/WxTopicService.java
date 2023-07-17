@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceTopic;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.service.impl.TopicServiceImpl;
 import org.click.carservice.wx.model.topic.body.TopicListBody;
@@ -33,27 +33,27 @@ public class WxTopicService extends TopicServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceTopic> queryList(PageBody body) {
+    public List<CarServiceTopic> queryList(PageBody body) {
         return queryAll(startPage(body));
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceTopic> queryList(TopicListBody body) {
-        QueryWrapper<carserviceTopic> wrapper = startPage(body);
+    public List<CarServiceTopic> queryList(TopicListBody body) {
+        QueryWrapper<CarServiceTopic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {
-            wrapper.like(carserviceTopic.TITLE, body.getTitle());
+            wrapper.like(CarServiceTopic.TITLE, body.getTitle());
         }
-        wrapper.orderByDesc(carserviceTopic.WEIGHT);
+        wrapper.orderByDesc(CarServiceTopic.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceTopic> queryRelatedList(String id, Integer limit) {
-        QueryWrapper<carserviceTopic> wrapper = startPage(new PageBody(limit));
-        wrapper.notIn(carserviceTopic.ID, id);
-        wrapper.orderByDesc(carserviceTopic.WEIGHT);
+    public List<CarServiceTopic> queryRelatedList(String id, Integer limit) {
+        QueryWrapper<CarServiceTopic> wrapper = startPage(new PageBody(limit));
+        wrapper.notIn(CarServiceTopic.ID, id);
+        wrapper.orderByDesc(CarServiceTopic.WEIGHT);
         return queryAll(wrapper);
     }
 

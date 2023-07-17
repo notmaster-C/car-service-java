@@ -85,9 +85,9 @@ public class WxAftersaleController {
      */
     @GetMapping("list")
     public Object list(@LoginUser String userId, AftersaleListBody body) {
-        List<carserviceAftersale> aftersaleList = aftersaleService.querySelective(userId, body);
+        List<CarServiceAfterSale> aftersaleList = aftersaleService.querySelective(userId, body);
         List<AftersaleListResult> aftersaleVoList = new ArrayList<>(aftersaleList.size());
-        for (carserviceAftersale aftersale : aftersaleList) {
+        for (CarServiceAfterSale aftersale : aftersaleList) {
             AftersaleListResult result = new AftersaleListResult();
             result.setAftersale(aftersale);
             result.setStatusText(AftersaleStatus.parseValue(aftersale.getStatus()));
@@ -106,9 +106,9 @@ public class WxAftersaleController {
     @GetMapping("detail")
     public Object detail(@LoginUser String userId, @NotNull String orderId) {
         // 订单信息
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
-            carserviceBrand brand = brandService.findByUserId(userId);
+            CarServiceBrand brand = brandService.findByUserId(userId);
             if (brand == null) {
                 return ResponseUtil.fail("订单不存在");
             }
@@ -118,12 +118,12 @@ public class WxAftersaleController {
             }
         }
 
-        List<carserviceOrderGoods> orderGoodsList = orderGoodsService.queryByOrderId(orderId);
+        List<CarServiceOrderGoods> orderGoodsList = orderGoodsService.queryByOrderId(orderId);
         if (orderGoodsList == null || orderGoodsList.size() <= 0) {
             return ResponseUtil.fail("订单不存在");
         }
 
-        carserviceAftersale aftersale = aftersaleService.findByOrderId(order.getUserId(), orderId);
+        CarServiceAfterSale aftersale = aftersaleService.findByOrderId(order.getUserId(), orderId);
         if (aftersale == null) {
             return ResponseUtil.fail("无售后记录");
         }
@@ -143,7 +143,7 @@ public class WxAftersaleController {
      * @return 操作结果
      */
     @PostMapping("submit")
-    public Object submit(@LoginUser String userId, @Valid @RequestBody carserviceAftersale aftersale) {
+    public Object submit(@LoginUser String userId, @Valid @RequestBody CarServiceAfterSale aftersale) {
         Object error = validate(aftersale);
         if (error != null) {
             return error;
@@ -155,10 +155,10 @@ public class WxAftersaleController {
         }
 
         //文本校验
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         secCheckService.checkMessage(user.getOpenid(), aftersale.toString());
 
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (Objects.isNull(order)) {
             return ResponseUtil.badArgumentValue();
         }
@@ -212,18 +212,18 @@ public class WxAftersaleController {
      * @return 操作结果
      */
     @PostMapping("cancel")
-    public Object cancel(@LoginUser String userId, @Valid @RequestBody carserviceAftersale aftersale) {
+    public Object cancel(@LoginUser String userId, @Valid @RequestBody CarServiceAfterSale aftersale) {
         String id = aftersale.getId();
         if (id == null) {
             return ResponseUtil.badArgument();
         }
-        carserviceAftersale aftersaleOne = aftersaleService.findById(userId, id);
+        CarServiceAfterSale aftersaleOne = aftersaleService.findById(userId, id);
         if (aftersaleOne == null) {
             return ResponseUtil.badArgument();
         }
 
         String orderId = aftersaleOne.getOrderId();
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (!order.getUserId().equals(userId)) {
             return ResponseUtil.badArgumentValue();
         }
@@ -253,8 +253,8 @@ public class WxAftersaleController {
      * 审核通过
      */
     @PostMapping("/recept")
-    public Object recept(@Valid @RequestBody carserviceAftersale aftersale) {
-        carserviceOrder order = orderService.findById(aftersale.getOrderId());
+    public Object recept(@Valid @RequestBody CarServiceAfterSale aftersale) {
+        CarServiceOrder order = orderService.findById(aftersale.getOrderId());
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -270,8 +270,8 @@ public class WxAftersaleController {
      * 审核驳回
      */
     @PostMapping("/reject")
-    public Object reject(@Valid @RequestBody carserviceAftersale aftersale) {
-        carserviceOrder order = orderService.findById(aftersale.getOrderId());
+    public Object reject(@Valid @RequestBody CarServiceAfterSale aftersale) {
+        CarServiceOrder order = orderService.findById(aftersale.getOrderId());
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -286,13 +286,13 @@ public class WxAftersaleController {
      * 售后退款
      */
     @PostMapping("/refund")
-    public Object refund(@Valid @RequestBody carserviceAftersale aftersale) {
-        carserviceOrder order = orderService.findById(aftersale.getOrderId());
+    public Object refund(@Valid @RequestBody CarServiceAfterSale aftersale) {
+        CarServiceOrder order = orderService.findById(aftersale.getOrderId());
         if (order == null) {
             return ResponseUtil.badArgument();
         }
 
-        carserviceAftersale aftersaleOne = aftersaleService.findByOrderId(order.getUserId(), order.getId());
+        CarServiceAfterSale aftersaleOne = aftersaleService.findByOrderId(order.getUserId(), order.getId());
         if (aftersaleOne == null) {
             return ResponseUtil.fail("售后不存在");
         }
@@ -329,7 +329,7 @@ public class WxAftersaleController {
         }
 
         //订单退款订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         //记录操作日志
@@ -337,7 +337,7 @@ public class WxAftersaleController {
         return ResponseUtil.ok();
     }
 
-    private Object validate(carserviceAftersale aftersale) {
+    private Object validate(CarServiceAfterSale aftersale) {
         if (aftersale == null) {
             return ResponseUtil.badArgument();
         }

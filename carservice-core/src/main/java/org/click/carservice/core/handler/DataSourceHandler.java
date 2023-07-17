@@ -6,7 +6,7 @@ import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.bcrypt.CryptoUtil;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,8 +36,8 @@ public class DataSourceHandler {
     @PostConstruct
     public void init() {
         log.info("初始化 -> [初始化动态数据源]");
-        List<carserviceTenant> tenantList = tenantService.list();
-        for (carserviceTenant tenant : tenantList) {
+        List<CarServiceTenant> tenantList = tenantService.list();
+        for (CarServiceTenant tenant : tenantList) {
             this.addDataSource(tenant);
         }
     }
@@ -45,7 +45,7 @@ public class DataSourceHandler {
     /**
      * 添加数据源
      */
-    public void addDataSource(carserviceTenant tenant) {
+    public void addDataSource(CarServiceTenant tenant) {
         if (!StringUtils.hasText(tenant.getJdbcUrl())) {
             return;
         }

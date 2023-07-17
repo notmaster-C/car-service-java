@@ -11,7 +11,7 @@ package org.click.carservice.db.enums;
  * See the Mulan PSL v2 for more details.
  */
 
-import org.click.carservice.db.domain.carserviceGroupon;
+import org.click.carservice.db.domain.CarServiceGroupon;
 
 import java.io.Serializable;
 
@@ -50,35 +50,35 @@ public enum GrouponStatus implements Serializable {
     /**
      * 是否待开团
      */
-    public static Boolean isNone(carserviceGroupon groupon) {
+    public static Boolean isNone(CarServiceGroupon groupon) {
         return groupon.getStatus().equals(STATUS_NONE.getStatus());
     }
 
     /**
      * 团购中（已支付）
      */
-    public static Boolean isOn(carserviceGroupon groupon) {
+    public static Boolean isOn(CarServiceGroupon groupon) {
         return groupon.getStatus().equals(STATUS_ON.getStatus());
     }
 
     /**
      * 团购失败（待退款）
      */
-    public static Boolean isFail(carserviceGroupon groupon) {
+    public static Boolean isFail(CarServiceGroupon groupon) {
         return groupon.getStatus().equals(STATUS_FAIL.getStatus());
     }
 
     /**
      * 团购成功（待发货）
      */
-    public static Boolean isSucceed(carserviceGroupon groupon) {
+    public static Boolean isSucceed(CarServiceGroupon groupon) {
         return groupon.getStatus().equals(STATUS_SUCCEED.getStatus());
     }
 
     /**
      * 团购取消（未支付）
      */
-    public static Boolean isCancel(carserviceGroupon groupon) {
+    public static Boolean isCancel(CarServiceGroupon groupon) {
         return groupon.getStatus().equals(STATUS_CANCEL.getStatus());
     }
 

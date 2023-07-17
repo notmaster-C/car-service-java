@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceReward;
+import org.click.carservice.db.domain.CarServiceReward;
 import org.click.carservice.db.mapper.RewardMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IRewardService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_reward")
-public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, carserviceReward> implements IRewardService {
+public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, CarServiceReward> implements IRewardService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceReward findById(String id) {
+    public CarServiceReward findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceReward> queryAll(Wrapper<carserviceReward> queryWrapper) {
+    public List<CarServiceReward> queryAll(Wrapper<CarServiceReward> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceReward record) {
+    public int add(CarServiceReward record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceReward> list) {
+    public boolean batchAdd(List<CarServiceReward> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceReward record) {
+    public int updateSelective(CarServiceReward record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceReward record) {
+    public int updateVersionSelective(CarServiceReward record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceReward> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceReward> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceReward entity) {
+    public boolean save(CarServiceReward entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceReward> entityList) {
+    public boolean saveBatch(Collection<CarServiceReward> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceReward entity) {
+    public boolean saveOrUpdate(CarServiceReward entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceReward entity, Wrapper<carserviceReward> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceReward entity, Wrapper<CarServiceReward> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceReward> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceReward> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceReward entity) {
+    public boolean removeById(CarServiceReward entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceReward> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceReward> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceReward entity) {
+    public boolean updateById(CarServiceReward entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceReward> updateWrapper) {
+    public boolean update(Wrapper<CarServiceReward> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceReward entity, Wrapper<carserviceReward> updateWrapper) {
+    public boolean update(CarServiceReward entity, Wrapper<CarServiceReward> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceReward> entityList) {
+    public boolean updateBatchById(Collection<CarServiceReward> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceReward getById(Serializable id) {
+    public CarServiceReward getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceReward> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceReward> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceReward> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceReward> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceReward getOne(Wrapper<carserviceReward> queryWrapper) {
+    public CarServiceReward getOne(Wrapper<CarServiceReward> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class RewardServiceImpl extends IBaseServiceImpl<RewardMapper, carservice
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceReward> queryWrapper) {
+    public long count(Wrapper<CarServiceReward> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceReward> list(Wrapper<carserviceReward> queryWrapper) {
+    public List<CarServiceReward> list(Wrapper<CarServiceReward> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceReward> list() {
+    public List<CarServiceReward> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceReward> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceReward> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

@@ -15,7 +15,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.keyword.body.KeywordListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceKeyword;
+import org.click.carservice.db.domain.CarServiceKeyword;
 import org.click.carservice.db.service.impl.KeywordServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,7 +34,7 @@ import java.util.Objects;
 public class AdminKeywordService extends KeywordServiceImpl {
 
 
-    public Object validate(carserviceKeyword keywords) {
+    public Object validate(CarServiceKeyword keywords) {
         String keyword = keywords.getKeyword();
         if (Objects.isNull(keyword)) {
             return ResponseUtil.badArgument();
@@ -43,15 +43,15 @@ public class AdminKeywordService extends KeywordServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceKeyword> querySelective(KeywordListBody body) {
-        QueryWrapper<carserviceKeyword> wrapper = startPage(body);
+    public List<CarServiceKeyword> querySelective(KeywordListBody body) {
+        QueryWrapper<CarServiceKeyword> wrapper = startPage(body);
         if (StringUtils.hasText(body.getKeyword())) {
-            wrapper.like(carserviceKeyword.KEYWORD, body.getKeyword());
+            wrapper.like(CarServiceKeyword.KEYWORD, body.getKeyword());
         }
         if (StringUtils.hasText(body.getUrl())) {
-            wrapper.like(carserviceKeyword.URL, body.getUrl());
+            wrapper.like(CarServiceKeyword.URL, body.getUrl());
         }
-        wrapper.orderByDesc(carserviceKeyword.WEIGHT);
+        wrapper.orderByDesc(CarServiceKeyword.WEIGHT);
         return queryAll(wrapper);
     }
 

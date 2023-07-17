@@ -77,14 +77,14 @@ public class WxCartController {
     @GetMapping("index")
     public Object index(@LoginUser String userId) {
 
-        List<carserviceCart> list = cartService.queryByUid(userId);
-        List<carserviceCart> cartList = new ArrayList<>();
+        List<CarServiceCart> list = cartService.queryByUid(userId);
+        List<CarServiceCart> cartList = new ArrayList<>();
 
         // TODO
         // 如果系统检查商品已删除或已下架，则系统自动删除。
         // 更好的效果应该是告知用户商品失效，允许用户点击按钮来清除失效商品。
-        for (carserviceCart cart : list) {
-            carserviceGoods goods = goodsService.findById(cart.getGoodsId());
+        for (CarServiceCart cart : list) {
+            CarServiceGoods goods = goodsService.findById(cart.getGoodsId());
             if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
                 if (cartService.deleteById(cart.getId()) == 0) {
                     throw new RuntimeException("购物车商品删除失败");
@@ -103,7 +103,7 @@ public class WxCartController {
         Integer checkedGoodsCount = 0;
         //选中商品总价
         BigDecimal checkedGoodsAmount = new BigDecimal("0.00");
-        for (carserviceCart cart : cartList) {
+        for (CarServiceCart cart : cartList) {
             goodsCount += cart.getNumber();
             goodsAmount = goodsAmount.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
             if (cart.getChecked()) {
@@ -136,7 +136,7 @@ public class WxCartController {
      * @return 加入购物车操作结果
      */
     @PostMapping("add")
-    public Object add(@LoginUser String userId, @Valid @RequestBody carserviceCart cart) {
+    public Object add(@LoginUser String userId, @Valid @RequestBody CarServiceCart cart) {
         String goodsId = cart.getGoodsId();
         String productId = cart.getProductId();
         Integer number = cart.getNumber().intValue();
@@ -148,19 +148,19 @@ public class WxCartController {
         }
 
         //判断商品是否可以购买
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
             return ResponseUtil.fail("商品已下架");
         }
 
         //添加店铺名称
-        carserviceBrand brand = brandService.findById(goods.getBrandId());
+        CarServiceBrand brand = brandService.findById(goods.getBrandId());
         if (brand != null) {
             cart.setBrandName(brand.getName());
         }
-        carserviceGoodsProduct product = productService.findById(productId);
+        CarServiceGoodsProduct product = productService.findById(productId);
         //判断购物车中是否存在此规格商品
-        carserviceCart existCart = cartService.queryExist(goodsId, productId, userId);
+        CarServiceCart existCart = cartService.queryExist(goodsId, productId, userId);
         if (existCart == null) {
             //取得规格的信息,判断规格库存
             if (cartService.addCart(userId, cart, number, goods, product)) {
@@ -193,7 +193,7 @@ public class WxCartController {
      * @return 立即购买操作结果
      */
     @PostMapping("fast/add")
-    public Object fastAdd(@LoginUser String userId, @Valid @RequestBody carserviceCart cart) {
+    public Object fastAdd(@LoginUser String userId, @Valid @RequestBody CarServiceCart cart) {
         String goodsId = cart.getGoodsId();
         String productId = cart.getProductId();
         Integer number = cart.getNumber().intValue();
@@ -205,20 +205,20 @@ public class WxCartController {
         }
 
         //判断商品是否可以购买
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
             return ResponseUtil.fail("商品已下架");
         }
 
         //添加店铺名称
-        carserviceBrand brand = brandService.findById(goods.getBrandId());
+        CarServiceBrand brand = brandService.findById(goods.getBrandId());
         if (brand != null) {
             cart.setBrandName(brand.getName());
         }
 
-        carserviceGoodsProduct product = productService.findById(productId);
+        CarServiceGoodsProduct product = productService.findById(productId);
         //判断购物车中是否存在此规格商品
-        carserviceCart existCart = cartService.queryExist(goodsId, productId, userId);
+        CarServiceCart existCart = cartService.queryExist(goodsId, productId, userId);
         if (existCart == null) {
             //取得规格的信息,判断规格库存
             if (cartService.addCart(userId, cart, number, goods, product)) {
@@ -247,7 +247,7 @@ public class WxCartController {
      * @return 修改结果
      */
     @PostMapping("update")
-    public Object update(@LoginUser String userId, @Valid @RequestBody carserviceCart cartItem) {
+    public Object update(@LoginUser String userId, @Valid @RequestBody CarServiceCart cartItem) {
         String id = cartItem.getId();
         String goodsId = cartItem.getGoodsId();
         String productId = cartItem.getProductId();
@@ -261,7 +261,7 @@ public class WxCartController {
 
         //判断是否存在该订单
         // 如果不存在，直接返回错误
-        carserviceCart existCart = cartService.findById(userId, id);
+        CarServiceCart existCart = cartService.findById(userId, id);
         if (existCart == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -272,13 +272,13 @@ public class WxCartController {
         }
 
         //判断商品是否可以购买
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
             return ResponseUtil.fail("商品已下架");
         }
 
         //取得规格的信息,判断规格库存
-        carserviceGoodsProduct product = productService.findById(productId);
+        CarServiceGoodsProduct product = productService.findById(productId);
         if (product == null || product.getNumber() < number) {
             return ResponseUtil.fail("库存不足");
         }
@@ -340,8 +340,8 @@ public class WxCartController {
             return ResponseUtil.ok(0);
         }
         int goodsCount = 0;
-        List<carserviceCart> cartList = cartService.queryByUid(userId);
-        for (carserviceCart cart : cartList) {
+        List<CarServiceCart> cartList = cartService.queryByUid(userId);
+        for (CarServiceCart cart : cartList) {
             goodsCount += cart.getNumber();
         }
         return ResponseUtil.ok(goodsCount);
@@ -360,7 +360,7 @@ public class WxCartController {
         String grouponRulesId = body.getGrouponRulesId();
 
         // 收货地址
-        carserviceAddress checkedAddress = null;
+        CarServiceAddress checkedAddress = null;
         if (addressId != null && !addressId.equals("0")) {
             checkedAddress = addressService.query(userId, addressId);
         }
@@ -369,7 +369,7 @@ public class WxCartController {
             // 如果仍然没有地址，则是没有收货地址
             // 返回一个空的地址id=0，这样前端则会提醒添加地址
             if (checkedAddress == null) {
-                checkedAddress = new carserviceAddress();
+                checkedAddress = new CarServiceAddress();
                 checkedAddress.setId("0");
                 addressId = "0";
             } else {
@@ -378,7 +378,7 @@ public class WxCartController {
         }
 
         //选中的商品
-        List<carserviceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
+        List<CarServiceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
         if (checkedGoodsList == null) {
             return ResponseUtil.badArgument();
         }
@@ -387,9 +387,9 @@ public class WxCartController {
         BigDecimal grouponPrice = new BigDecimal("0.00");
         // 商品总价
         BigDecimal checkedGoodsPrice = new BigDecimal("0.00");
-        for (carserviceCart cart : checkedGoodsList) {
+        for (CarServiceCart cart : checkedGoodsList) {
             checkedGoodsPrice = checkedGoodsPrice.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
-            carserviceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
+            CarServiceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
             if (grouponRules != null) {
                 grouponPrice = grouponPrice.add(grouponRules.getDiscount().multiply(BigDecimal.valueOf(cart.getNumber())));
             }
@@ -400,9 +400,9 @@ public class WxCartController {
         String tmpCouponId = "0";
         String tmpUserCouponId = "0";
         int tmpCouponLength = 0;
-        List<carserviceCouponUser> couponUserList = couponUserService.queryAll(userId);
-        for (carserviceCouponUser couponUser : couponUserList) {
-            carserviceCoupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), couponUser.getId(), checkedGoodsList);
+        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId);
+        for (CarServiceCouponUser couponUser : couponUserList) {
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), couponUser.getId(), checkedGoodsList);
             if (coupon == null) {
                 continue;
             }
@@ -428,7 +428,7 @@ public class WxCartController {
             couponId = tmpCouponId;
             userCouponId = tmpUserCouponId;
         } else {
-            carserviceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
             // 用户选择的优惠券有问题，则选择合适优惠券，否则使用用户选择的优惠券
             if (coupon == null) {
                 couponPrice = tmpCouponPrice;
@@ -453,7 +453,7 @@ public class WxCartController {
 
         // 余额减免
         BigDecimal integralPrice = new BigDecimal("0.00");
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }

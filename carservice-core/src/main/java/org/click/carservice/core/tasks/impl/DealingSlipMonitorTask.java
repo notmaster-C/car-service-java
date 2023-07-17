@@ -20,8 +20,8 @@ import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
 import org.click.carservice.core.weixin.enums.TransferStatus;
 import org.click.carservice.core.weixin.service.WxPayTransferService;
-import org.click.carservice.db.domain.carserviceDealingSlip;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceDealingSlip;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.service.IDealingSlipService;
 import org.click.carservice.db.service.IUserService;
 
@@ -48,14 +48,14 @@ public class DealingSlipMonitorTask extends TaskRunnable {
     private static final long DEFAULT_SECONDS = 5 * 60 * 1000;
 
 
-    public DealingSlipMonitorTask(carserviceDealingSlip dealingSlip) {
+    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip) {
         super(ID_PREFIX + dealingSlip.getId(), DEFAULT_SECONDS, dealingSlip.getTenantId(), TASK_NAME);
         this.dealingSlipId = dealingSlip.getId();
         this.outBatchNo = dealingSlip.getOutBatchNo();
         this.batchId = dealingSlip.getBatchId();
     }
 
-    public DealingSlipMonitorTask(carserviceDealingSlip dealingSlip, long delayInMilliseconds) {
+    public DealingSlipMonitorTask(CarServiceDealingSlip dealingSlip, long delayInMilliseconds) {
         super(ID_PREFIX + dealingSlip.getId(), delayInMilliseconds, dealingSlip.getTenantId(), TASK_NAME);
         this.dealingSlipId = dealingSlip.getId();
         this.outBatchNo = dealingSlip.getOutBatchNo();
@@ -69,7 +69,7 @@ public class DealingSlipMonitorTask extends TaskRunnable {
         IDealingSlipService dealingSlipService = BeanUtil.getBean(IDealingSlipService.class);
         WxPayTransferService wxPayTransferService = BeanUtil.getBean(WxPayTransferService.class);
         DealingSlipCoreService dealingSlipCoreService = BeanUtil.getBean(DealingSlipCoreService.class);
-        carserviceDealingSlip dealingSlip = dealingSlipService.findById(this.dealingSlipId);
+        CarServiceDealingSlip dealingSlip = dealingSlipService.findById(this.dealingSlipId);
         if (dealingSlip == null || !this.outBatchNo.equals(dealingSlip.getOutBatchNo())) {
             return;
         }
@@ -85,7 +85,7 @@ public class DealingSlipMonitorTask extends TaskRunnable {
             }
             //返还提现金额
             if (TransferStatus.isFail(detailStatus)) {
-                carserviceUser user = userService.findById(dealingSlip.getUserId());
+                CarServiceUser user = userService.findById(dealingSlip.getUserId());
                 BatchDetailsResult detailsResult = wxPayTransferService.queryBatchDetailByMch(outBatchNo, outDetailNo);
                 BigDecimal award = dealingSlip.getAward().negate();
                 dealingSlip.setAward(award);

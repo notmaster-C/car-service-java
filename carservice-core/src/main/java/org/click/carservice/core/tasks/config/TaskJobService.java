@@ -1,10 +1,10 @@
 package org.click.carservice.core.tasks.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceCoupon;
-import org.click.carservice.db.domain.carserviceCouponUser;
-import org.click.carservice.db.domain.carserviceGrouponRules;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceCoupon;
+import org.click.carservice.db.domain.CarServiceCouponUser;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.*;
 import org.click.carservice.db.service.ICouponService;
 import org.click.carservice.db.service.ICouponUserService;
@@ -32,28 +32,28 @@ public class TaskJobService {
     private ICouponUserService couponUserService;
 
 
-    public List<carserviceOrder> queryUnconfirmed() {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.ORDER_STATUS, OrderStatus.STATUS_SHIP.getStatus());
+    public List<CarServiceOrder> queryUnconfirmed() {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.ORDER_STATUS, OrderStatus.STATUS_SHIP.getStatus());
         return orderService.queryAll(wrapper);
     }
 
-    public List<carserviceOrder> queryComment() {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.ORDER_STATUS, OrderStatus.STATUS_AUTO_CONFIRM.getStatus());
-        wrapper.gt(carserviceOrder.COMMENTS, 0);
+    public List<CarServiceOrder> queryComment() {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.ORDER_STATUS, OrderStatus.STATUS_AUTO_CONFIRM.getStatus());
+        wrapper.gt(CarServiceOrder.COMMENTS, 0);
         return orderService.queryAll(wrapper);
     }
 
-    public List<carserviceOrder> queryUnpaid() {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.ORDER_STATUS, OrderStatus.STATUS_CREATE.getStatus());
+    public List<CarServiceOrder> queryUnpaid() {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.ORDER_STATUS, OrderStatus.STATUS_CREATE.getStatus());
         return orderService.queryAll(wrapper);
     }
 
-    public List<carserviceGrouponRules> queryGrouponRulesExpired() {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+    public List<CarServiceGrouponRules> queryGrouponRulesExpired() {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
         return grouponRulesService.queryAll(wrapper);
     }
 
@@ -61,18 +61,18 @@ public class TaskJobService {
      * 查询过期的优惠券:
      * 注意：如果timeType=0, 即基于领取时间有效期的优惠券，则优惠券不会过期
      */
-    public List<carserviceCoupon> queryCouponExpired() {
-        QueryWrapper<carserviceCoupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCoupon.TIME_TYPE, CouponTimeType.TIME_TYPE_TIME);
-        wrapper.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL);
-        wrapper.lt(carserviceCoupon.END_TIME, LocalDateTime.now());
+    public List<CarServiceCoupon> queryCouponExpired() {
+        QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCoupon.TIME_TYPE, CouponTimeType.TIME_TYPE_TIME);
+        wrapper.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL);
+        wrapper.lt(CarServiceCoupon.END_TIME, LocalDateTime.now());
         return couponService.queryAll(wrapper);
     }
 
-    public List<carserviceCouponUser> queryCouponUserExpired() {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.STATUS, CouponUserStatus.STATUS_USABLE);
-        wrapper.lt(carserviceCouponUser.END_TIME, LocalDateTime.now());
+    public List<CarServiceCouponUser> queryCouponUserExpired() {
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.STATUS, CouponUserStatus.STATUS_USABLE);
+        wrapper.lt(CarServiceCouponUser.END_TIME, LocalDateTime.now());
         return couponUserService.queryAll(wrapper);
     }
 

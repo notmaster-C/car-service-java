@@ -1,7 +1,7 @@
 package org.click.carservice.db.entity;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGoodsSpecification;
+import org.click.carservice.db.domain.CarServiceGoodsSpecification;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +19,7 @@ public class GoodsSpecificationVo implements Serializable {
     /**
      * 规格列表
      */
-    private List<carserviceGoodsSpecification> valueList;
+    private List<CarServiceGoodsSpecification> valueList;
 
 
 }

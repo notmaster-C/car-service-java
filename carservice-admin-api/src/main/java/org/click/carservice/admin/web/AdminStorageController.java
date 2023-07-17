@@ -20,7 +20,7 @@ import org.click.carservice.admin.service.AdminStorageService;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceStorage;
+import org.click.carservice.db.domain.CarServiceStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -84,7 +84,7 @@ public class AdminStorageController {
     @SaCheckPermission("admin:storage:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "对象编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceStorage storage) {
+    public Object update(@Valid @RequestBody CarServiceStorage storage) {
         if (adminStorageService.updateVersionSelective(storage) == 0) {
             return ResponseUtil.updatedDataFailed();
         }
@@ -115,7 +115,7 @@ public class AdminStorageController {
     public Object uploadFile(@RequestParam("upfile") MultipartFile file) {
         StorageUploadFileResult result = new StorageUploadFileResult();
         try {
-            carserviceStorage storage = storageService.store(file);
+            CarServiceStorage storage = storageService.store(file);
             result.setState("SUCCESS");
             result.setOriginal(file.getName());
             result.setSize(storage.getSize());

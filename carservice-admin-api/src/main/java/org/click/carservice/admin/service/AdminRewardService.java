@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.reward.body.RewardJoinBody;
-import org.click.carservice.db.domain.carserviceReward;
+import org.click.carservice.db.domain.CarServiceReward;
 import org.click.carservice.db.service.impl.RewardServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,19 +32,19 @@ public class AdminRewardService extends RewardServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceReward> querySelective(RewardJoinBody body) {
-        QueryWrapper<carserviceReward> wrapper = startPage(body);
+    public List<CarServiceReward> querySelective(RewardJoinBody body) {
+        QueryWrapper<CarServiceReward> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceReward.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceReward.USER_ID, body.getUserId());
         }
         if (body.getTaskId() != null) {
-            wrapper.eq(carserviceReward.TASK_ID, body.getTaskId());
+            wrapper.eq(CarServiceReward.TASK_ID, body.getTaskId());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceReward.STATUS, body.getStatus());
+            wrapper.eq(CarServiceReward.STATUS, body.getStatus());
         }
         if (body.getRewardId() != null) {
-            wrapper.eq(carserviceReward.REWARD_ID, body.getRewardId());
+            wrapper.eq(CarServiceReward.REWARD_ID, body.getRewardId());
         }
         return queryAll(wrapper);
     }

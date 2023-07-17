@@ -12,9 +12,9 @@ package org.click.carservice.core.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IOrderGoodsService;
 import org.click.carservice.db.service.IOrderService;
@@ -45,7 +45,7 @@ public class StatCoreService {
      * 统计用户数据
      */
     public List<Map<String, Object>> statUser() {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.select("SUBSTR(add_time, 1, 10) AS day", "COUNT(DISTINCT id) AS users");
         wrapper.groupBy("SUBSTR(add_time, 1, 10)");
         return userService.listMaps(wrapper);
@@ -55,7 +55,7 @@ public class StatCoreService {
      * 统计订单数据
      */
     public List<Map<String, Object>> statOrder() {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.select("SUBSTR(add_time, 1, 10) AS day"
                 , "COUNT(DISTINCT id) AS orders"
                 , "COUNT(DISTINCT user_id) AS customers"
@@ -66,7 +66,7 @@ public class StatCoreService {
         ArrayList<Short> status = new ArrayList<>();
         status.add(OrderStatus.STATUS_SHIP.getStatus());
         status.add(OrderStatus.STATUS_CONFIRM.getStatus());
-        wrapper.in(carserviceOrder.ORDER_STATUS, status);
+        wrapper.in(CarServiceOrder.ORDER_STATUS, status);
         return orderService.listMaps(wrapper);
     }
 
@@ -74,7 +74,7 @@ public class StatCoreService {
      * 统计订单商品数据
      */
     public List<Map<String, Object>> statGoods() {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.select("SUBSTR(add_time, 1, 10) AS day"
                 , "COUNT(DISTINCT order_id) AS orders"
                 , "SUM(number) AS products"

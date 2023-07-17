@@ -2,7 +2,7 @@ package org.click.carservice.core.satoken.handler;
 
 import cn.dev33.satoken.stp.StpInterface;
 import org.click.carservice.core.service.CommonService;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        carserviceAdmin admin = adminService.findById(loginId.toString());
+        CarServiceAdmin admin = adminService.findById(loginId.toString());
         if (admin == null) {
             return new ArrayList<>();
         }
@@ -42,7 +42,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        carserviceAdmin admin = adminService.findById(loginId.toString());
+        CarServiceAdmin admin = adminService.findById(loginId.toString());
         if (admin == null) {
             return new ArrayList<>();
         }

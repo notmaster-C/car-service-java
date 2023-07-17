@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.http.GlobalWebUtil;
 import org.click.carservice.core.utils.ip.IpInfo;
 import org.click.carservice.core.utils.ip.IpUtil;
-import org.click.carservice.db.domain.carserviceLog;
+import org.click.carservice.db.domain.CarServiceLog;
 import org.click.carservice.db.service.ILogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -319,7 +319,7 @@ public class ActionLogService {
      * @param comment 补充信息
      */
     public void logAdmin(Short type, String action, Boolean succeed, String result, String comment) {
-        carserviceLog log = new carserviceLog();
+        CarServiceLog log = new CarServiceLog();
         try {
             log.setAdmin(StpUtil.getLoginIdAsString());
         } catch (Exception e) {

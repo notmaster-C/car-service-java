@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceLike;
+import org.click.carservice.db.domain.CarServiceLike;
 import org.click.carservice.db.enums.LikeType;
 import org.click.carservice.db.service.impl.LikeServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -31,10 +31,10 @@ public class WxLikeService extends LikeServiceImpl {
 
     @Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
-        QueryWrapper<carserviceLike> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceLike.VALUE_ID, valueId);
-        wrapper.eq(carserviceLike.TYPE, type);
-        wrapper.eq(carserviceLike.CANCEL, false);
+        QueryWrapper<CarServiceLike> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceLike.VALUE_ID, valueId);
+        wrapper.eq(CarServiceLike.TYPE, type);
+        wrapper.eq(CarServiceLike.CANCEL, false);
         return Math.toIntExact(count(wrapper));
     }
 
@@ -44,21 +44,21 @@ public class WxLikeService extends LikeServiceImpl {
         if (userId == null) {
             return false;
         }
-        QueryWrapper<carserviceLike> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceLike.TYPE, constant.getStatus());
-        wrapper.eq(carserviceLike.VALUE_ID, valueId);
-        wrapper.eq(carserviceLike.USER_ID, userId);
-        wrapper.eq(carserviceLike.CANCEL, false);
+        QueryWrapper<CarServiceLike> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceLike.TYPE, constant.getStatus());
+        wrapper.eq(CarServiceLike.VALUE_ID, valueId);
+        wrapper.eq(CarServiceLike.USER_ID, userId);
+        wrapper.eq(CarServiceLike.CANCEL, false);
         return exists(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceLike query(Short type, String valueId, String userId) {
-        QueryWrapper<carserviceLike> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceLike.TYPE, type);
-        wrapper.eq(carserviceLike.VALUE_ID, valueId);
-        wrapper.eq(carserviceLike.USER_ID, userId);
+    public CarServiceLike query(Short type, String valueId, String userId) {
+        QueryWrapper<CarServiceLike> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceLike.TYPE, type);
+        wrapper.eq(CarServiceLike.VALUE_ID, valueId);
+        wrapper.eq(CarServiceLike.USER_ID, userId);
         return getOne(wrapper, false);
     }
 

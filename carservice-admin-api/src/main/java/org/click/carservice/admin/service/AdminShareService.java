@@ -11,7 +11,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.share.body.ShareListBody;
-import org.click.carservice.db.domain.carserviceShare;
+import org.click.carservice.db.domain.CarServiceShare;
 import org.click.carservice.db.service.impl.ShareServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,16 +31,16 @@ public class AdminShareService extends ShareServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceShare> querySelective(ShareListBody body) {
-        QueryWrapper<carserviceShare> wrapper = startPage(body);
+    public List<CarServiceShare> querySelective(ShareListBody body) {
+        QueryWrapper<CarServiceShare> wrapper = startPage(body);
         if (body.getInviterId() != null) {
-            wrapper.eq(carserviceShare.INVITER_ID, body.getInviterId());
+            wrapper.eq(CarServiceShare.INVITER_ID, body.getInviterId());
         }
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceShare.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceShare.USER_ID, body.getUserId());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceShare.STATUS, body.getStatus());
+            wrapper.eq(CarServiceShare.STATUS, body.getStatus());
         }
         return queryAll(wrapper);
     }

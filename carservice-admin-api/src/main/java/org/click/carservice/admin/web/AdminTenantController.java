@@ -26,10 +26,10 @@ import org.click.carservice.core.redis.writer.RedisConnectionHolder;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.config.WxStartupRunner;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carservicePermission;
-import org.click.carservice.db.domain.carserviceRole;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServicePermission;
+import org.click.carservice.db.domain.CarServiceRole;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -79,8 +79,8 @@ public class AdminTenantController {
     @RequiresPermissionsDesc(menu = {"系统管理", "租户管理"}, button = "查询")
     @GetMapping("/list")
     public Object list(TenantListBody body) {
-        List<carserviceTenant> tenantList = tenantService.querySelective(body);
-        for (carserviceTenant tenant : tenantList) {
+        List<CarServiceTenant> tenantList = tenantService.querySelective(body);
+        for (CarServiceTenant tenant : tenantList) {
             if (StringUtils.hasText(tenant.getUsername())) {
                 tenant.setUsername(encrypt);
             }
@@ -97,7 +97,7 @@ public class AdminTenantController {
     @SaCheckPermission("admin:tenant:create")
     @RequiresPermissionsDesc(menu = {"系统管理", "租户管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceTenant tenant) {
+    public Object create(@Valid @RequestBody CarServiceTenant tenant) {
         Object validate = tenantService.validate(tenant);
         if (validate != null) {
             return validate;
@@ -132,7 +132,7 @@ public class AdminTenantController {
     private void tenantAdminInit(String tenantId) {
         TenantContextHolder.setLocalTenantId(tenantId);
         //添加角色
-        carserviceRole role = new carserviceRole();
+        CarServiceRole role = new CarServiceRole();
         role.setName("超级管理员");
         role.setDepict("所有模块的权限");
         role.setEnabled(true);
@@ -140,14 +140,14 @@ public class AdminTenantController {
             throw new RuntimeException("角色添加失败");
         }
         //添加角色权限
-        carservicePermission permission = new carservicePermission();
+        CarServicePermission permission = new CarServicePermission();
         permission.setRoleId(role.getId());
         permission.setPermission("*");
         if (permissionService.add(permission) == 0) {
             throw new RuntimeException("权限添加失败");
         }
         //添加管理员并赋予角色
-        carserviceAdmin admin = new carserviceAdmin();
+        CarServiceAdmin admin = new CarServiceAdmin();
         admin.setUsername("admin123");
         admin.setPassword("admin123");
         admin.setRoleIds(new String[]{role.getId()});
@@ -164,7 +164,7 @@ public class AdminTenantController {
     @SaCheckPermission("admin:tenant:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "租户管理"}, button = "修改")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceTenant tenant) {
+    public Object update(@Valid @RequestBody CarServiceTenant tenant) {
         if (StringUtils.hasText(tenant.getUsername())) {
             if (tenant.getUsername().equals(encrypt)) {
                 tenant.setUsername(null);
@@ -198,7 +198,7 @@ public class AdminTenantController {
     @RequiresPermissionsDesc(menu = {"系统管理", "租户管理"}, button = "删除")
     @PostMapping("/delete")
     public Object delete(@NotNull String id) {
-        carserviceTenant tenant = tenantService.findById(id);
+        CarServiceTenant tenant = tenantService.findById(id);
         if (tenant == null) {
             return ResponseUtil.fail("租户不存在");
         }
@@ -213,8 +213,8 @@ public class AdminTenantController {
         //删除租户redis链接
         RedisConnectionHolder.removeRedisFactory(tenant.getId());
         //删除租户下的所有管理员
-        List<carserviceAdmin> adminList = adminService.findByTenantId(tenant.getId());
-        for (carserviceAdmin admin : adminList) {
+        List<CarServiceAdmin> adminList = adminService.findByTenantId(tenant.getId());
+        for (CarServiceAdmin admin : adminList) {
             adminService.deleteById(admin.getId());
         }
         return ResponseUtil.ok();

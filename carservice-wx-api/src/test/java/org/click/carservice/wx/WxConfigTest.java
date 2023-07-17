@@ -1,6 +1,6 @@
 package org.click.carservice.wx;
 
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.service.IOrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,12 +22,12 @@ public class WxConfigTest {
 
     @Test
     public void test() {
-        carserviceOrder order = orderService.findById("438");
+        CarServiceOrder order = orderService.findById("438");
         order.setOrderSn("1213123123123");
         System.out.println(order);
         System.out.println("影响行数：" + orderService.updateVersionSelective(order));
 
-        carserviceOrder order1 = orderService.findById("438");
+        CarServiceOrder order1 = orderService.findById("438");
         order.setOrderSn("1213123123123");
         System.out.println(order1);
         System.out.println("影响行数：" + orderService.updateVersionSelective(order1));

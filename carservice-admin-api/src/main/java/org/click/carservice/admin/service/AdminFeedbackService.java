@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.feedback.body.FeedbackListBody;
-import org.click.carservice.db.domain.carserviceFeedback;
+import org.click.carservice.db.domain.CarServiceFeedback;
 import org.click.carservice.db.service.impl.FeedbackServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,16 +33,16 @@ public class AdminFeedbackService extends FeedbackServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceFeedback> querySelective(FeedbackListBody body) {
-        QueryWrapper<carserviceFeedback> wrapper = startPage(body);
+    public List<CarServiceFeedback> querySelective(FeedbackListBody body) {
+        QueryWrapper<CarServiceFeedback> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceFeedback.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceFeedback.USER_ID, body.getUserId());
         }
         if (StringUtils.hasText(body.getUsername())) {
-            wrapper.like(carserviceFeedback.USERNAME, body.getUsername());
+            wrapper.like(CarServiceFeedback.USERNAME, body.getUsername());
         }
         if (StringUtils.hasText(body.getMobile())) {
-            wrapper.like(carserviceFeedback.MOBILE, body.getMobile());
+            wrapper.like(CarServiceFeedback.MOBILE, body.getMobile());
         }
         return queryAll(wrapper);
     }

@@ -22,8 +22,8 @@ import org.click.carservice.admin.service.AdminGrouponService;
 import org.click.carservice.core.tasks.impl.GrouponRuleExpiredTask;
 import org.click.carservice.core.tasks.service.TaskService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -92,13 +92,13 @@ public class AdminGrouponController {
     @SaCheckPermission("admin:groupon:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "团购管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceGrouponRules grouponRules) {
+    public Object update(@Valid @RequestBody CarServiceGrouponRules grouponRules) {
         Object error = rulesService.validate(grouponRules);
         if (error != null) {
             return error;
         }
 
-        carserviceGrouponRules rules = rulesService.findById(grouponRules.getId());
+        CarServiceGrouponRules rules = rulesService.findById(grouponRules.getId());
         if (rules == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -107,7 +107,7 @@ public class AdminGrouponController {
         }
 
         String goodsId = grouponRules.getGoodsId();
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -126,14 +126,14 @@ public class AdminGrouponController {
     @SaCheckPermission("admin:groupon:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "团购管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceGrouponRules grouponRules) {
+    public Object create(@Valid @RequestBody CarServiceGrouponRules grouponRules) {
         Object error = rulesService.validate(grouponRules);
         if (error != null) {
             return error;
         }
 
         String goodsId = grouponRules.getGoodsId();
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null) {
             return ResponseUtil.fail("团购商品不存在");
         }
@@ -169,7 +169,7 @@ public class AdminGrouponController {
     @RequiresPermissionsDesc(menu = {"推广管理", "团购管理"}, button = "删除")
     @PostMapping("/delete")
     public Object delete(@NotNull String id) {
-        carserviceGrouponRules grouponRules = new carserviceGrouponRules();
+        CarServiceGrouponRules grouponRules = new CarServiceGrouponRules();
         grouponRules.setId(id);
         //删除团购超时任务
         taskService.removeTask(new GrouponRuleExpiredTask(grouponRules));

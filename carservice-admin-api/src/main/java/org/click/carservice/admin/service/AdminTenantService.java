@@ -17,7 +17,7 @@ import org.click.carservice.admin.model.tenant.body.TenantListBody;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.bcrypt.CryptoUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.impl.TenantServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -45,7 +45,7 @@ public class AdminTenantService extends TenantServiceImpl {
      * @param tenant 租户
      * @return null
      */
-    public Object validate(carserviceTenant tenant) {
+    public Object validate(CarServiceTenant tenant) {
         if (tenant == null) {
             return ResponseUtil.badArgument();
         }
@@ -81,7 +81,7 @@ public class AdminTenantService extends TenantServiceImpl {
      */
     public void setTenant(String appid) {
         if (StringUtils.hasText(appid)) {
-            carserviceTenant tenant = findAppid(appid);
+            CarServiceTenant tenant = findAppid(appid);
             if (tenant != null) {
                 // 切换微信配置
                 wxService.switchoverTo(tenant.getAppId());
@@ -91,25 +91,25 @@ public class AdminTenantService extends TenantServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public carserviceTenant findAppid(String appid) {
-        QueryWrapper<carserviceTenant> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceTenant.APP_ID, appid);
+    public CarServiceTenant findAppid(String appid) {
+        QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceTenant.APP_ID, appid);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceTenant findAddress(String address) {
-        QueryWrapper<carserviceTenant> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceTenant.ADDRESS, address);
+    public CarServiceTenant findAddress(String address) {
+        QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceTenant.ADDRESS, address);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceTenant> querySelective(TenantListBody body) {
-        QueryWrapper<carserviceTenant> wrapper = startPage(body);
+    public List<CarServiceTenant> querySelective(TenantListBody body) {
+        QueryWrapper<CarServiceTenant> wrapper = startPage(body);
         if (body.getAddress() != null) {
-            wrapper.eq(carserviceTenant.ADDRESS, body.getAddress());
+            wrapper.eq(CarServiceTenant.ADDRESS, body.getAddress());
         }
         return queryAll(wrapper);
     }

@@ -20,7 +20,7 @@ import org.click.carservice.admin.service.AdminGoodsService;
 import org.click.carservice.admin.service.AdminTopicService;
 import org.click.carservice.core.service.StorageCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceTopic;
 import org.click.carservice.db.entity.IdsBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -62,7 +62,7 @@ public class AdminTopicController {
     @SaCheckPermission("admin:topic:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "专题管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceTopic topic) {
+    public Object create(@Valid @RequestBody CarServiceTopic topic) {
         Object error = topicService.validate(topic);
         if (error != null) {
             return error;
@@ -82,7 +82,7 @@ public class AdminTopicController {
     @RequiresPermissionsDesc(menu = {"推广管理", "专题管理"}, button = "详情")
     @GetMapping("/read")
     public Object read(@NotNull String id) {
-        carserviceTopic topic = topicService.findById(id);
+        CarServiceTopic topic = topicService.findById(id);
         TopicReadResult result = new TopicReadResult();
         result.setTopic(topic);
         result.setGoodsList(goodsService.queryByIds(topic.getGoodsIds()));
@@ -95,7 +95,7 @@ public class AdminTopicController {
     @SaCheckPermission("admin:topic:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "专题管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceTopic topic) {
+    public Object update(@Valid @RequestBody CarServiceTopic topic) {
         Object error = topicService.validate(topic);
         if (error != null) {
             return error;

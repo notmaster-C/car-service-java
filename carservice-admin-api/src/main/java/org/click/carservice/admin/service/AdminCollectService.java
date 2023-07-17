@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.collect.body.CollectListBody;
-import org.click.carservice.db.domain.carserviceCollect;
+import org.click.carservice.db.domain.CarServiceCollect;
 import org.click.carservice.db.service.impl.CollectServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,14 +32,14 @@ public class AdminCollectService extends CollectServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceCollect> querySelective(CollectListBody body) {
-        QueryWrapper<carserviceCollect> wrapper = startPage(body);
-        wrapper.eq(carserviceCollect.CANCEL, false);
+    public List<CarServiceCollect> querySelective(CollectListBody body) {
+        QueryWrapper<CarServiceCollect> wrapper = startPage(body);
+        wrapper.eq(CarServiceCollect.CANCEL, false);
         if (StringUtils.hasText(body.getUserId())) {
-            wrapper.eq(carserviceCollect.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceCollect.USER_ID, body.getUserId());
         }
         if (StringUtils.hasText(body.getGoodsId())) {
-            wrapper.eq(carserviceCollect.VALUE_ID, body.getGoodsId());
+            wrapper.eq(CarServiceCollect.VALUE_ID, body.getGoodsId());
         }
         return queryAll(wrapper);
     }

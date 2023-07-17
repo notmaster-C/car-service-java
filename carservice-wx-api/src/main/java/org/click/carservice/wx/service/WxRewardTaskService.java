@@ -1,7 +1,7 @@
 package org.click.carservice.wx.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.RewardTaskStatus;
 import org.click.carservice.db.service.impl.RewardTaskServiceImpl;
@@ -44,27 +44,27 @@ public class WxRewardTaskService extends RewardTaskServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceRewardTask> querySelective(String goodsId, PageBody body) {
-        QueryWrapper<carserviceRewardTask> wrapper = startPage(body);
+    public List<CarServiceRewardTask> querySelective(String goodsId, PageBody body) {
+        QueryWrapper<CarServiceRewardTask> wrapper = startPage(body);
         if (StringUtils.hasText(goodsId)) {
-            wrapper.eq(carserviceRewardTask.GOODS_ID, goodsId);
+            wrapper.eq(CarServiceRewardTask.GOODS_ID, goodsId);
         }
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceRewardTask> queryByReward(Integer limit) {
-        QueryWrapper<carserviceRewardTask> wrapper = startPage(new PageBody(limit));
-        wrapper.eq(carserviceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());
+    public List<CarServiceRewardTask> queryByReward(Integer limit) {
+        QueryWrapper<CarServiceRewardTask> wrapper = startPage(new PageBody(limit));
+        wrapper.eq(CarServiceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceRewardTask> querySelective(PageBody body) {
-        QueryWrapper<carserviceRewardTask> wrapper = startPage(body);
-        wrapper.eq(carserviceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());
+    public List<CarServiceRewardTask> querySelective(PageBody body) {
+        QueryWrapper<CarServiceRewardTask> wrapper = startPage(body);
+        wrapper.eq(CarServiceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());
         return queryAll(wrapper);
     }
 

@@ -1,8 +1,8 @@
 package org.click.carservice.admin.model.order.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.entity.UserInfo;
 
 import java.io.Serializable;
@@ -27,11 +27,11 @@ public class OrderDetailResult implements Serializable {
     /**
      * 订单信息
      */
-    private carserviceOrder order;
+    private CarServiceOrder order;
     /**
      * 商品信息
      */
-    private List<carserviceOrderGoods> orderGoods;
+    private List<CarServiceOrderGoods> orderGoods;
 
 
 }

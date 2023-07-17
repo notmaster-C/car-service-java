@@ -1,6 +1,6 @@
 package org.click.carservice.db.service;
 
-import org.click.carservice.db.domain.carservicePermission;
+import org.click.carservice.db.domain.CarServicePermission;
 import org.click.carservice.db.mybatis.IBaseService;
 
 /**
@@ -10,6 +10,6 @@ import org.click.carservice.db.mybatis.IBaseService;
  *
  * @author click
  */
-public interface IPermissionService extends IBaseService<carservicePermission> {
+public interface IPermissionService extends IBaseService<CarServicePermission> {
 
 }

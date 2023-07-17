@@ -3,7 +3,7 @@ package org.click.carservice.core.service;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.utils.RegexUtil;
-import org.click.carservice.db.domain.carserviceStorage;
+import org.click.carservice.db.domain.CarServiceStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,7 +109,7 @@ public class StorageCoreService {
             int contentLength = conn.getContentLength();
             //文件类型
             String contentType = path.substring(path.lastIndexOf(".") + 1);
-            carserviceStorage storage = storageService.store(inputStream, contentLength, contentType, fileName);
+            CarServiceStorage storage = storageService.store(inputStream, contentLength, contentType, fileName);
             return storage.getUrl();
         } catch (Exception e) {
             log.info(e.getMessage());

@@ -12,8 +12,8 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceFootprint;
-import org.click.carservice.db.domain.carserviceGoods;
+import org.click.carservice.db.domain.CarServiceFootprint;
+import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.service.impl.FootprintServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,36 +33,36 @@ public class WxFootprintService extends FootprintServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceFootprint> queryByAddTime(String userId, PageBody body) {
-        QueryWrapper<carserviceFootprint> wrapper = startPage(body);
-        wrapper.eq(carserviceFootprint.USER_ID, userId);
+    public List<CarServiceFootprint> queryByAddTime(String userId, PageBody body) {
+        QueryWrapper<CarServiceFootprint> wrapper = startPage(body);
+        wrapper.eq(CarServiceFootprint.USER_ID, userId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceFootprint findById(String userId, String id) {
-        QueryWrapper<carserviceFootprint> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceFootprint.USER_ID, userId);
-        wrapper.eq(carserviceFootprint.ID, id);
+    public CarServiceFootprint findById(String userId, String id) {
+        QueryWrapper<CarServiceFootprint> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceFootprint.USER_ID, userId);
+        wrapper.eq(CarServiceFootprint.ID, id);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceFootprint findByGoodId(String userId, String goodId) {
-        QueryWrapper<carserviceFootprint> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceFootprint.USER_ID, userId);
-        wrapper.eq(carserviceFootprint.GOODS_ID, goodId);
+    public CarServiceFootprint findByGoodId(String userId, String goodId) {
+        QueryWrapper<CarServiceFootprint> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceFootprint.USER_ID, userId);
+        wrapper.eq(CarServiceFootprint.GOODS_ID, goodId);
         return getOne(wrapper, false);
     }
 
 
     @CacheEvict(allEntries = true)
-    public void createFootprint(String userId, carserviceGoods goods) {
+    public void createFootprint(String userId, CarServiceGoods goods) {
         if (userId == null) {
             return;
         }
-        carserviceFootprint footprint = findByGoodId(userId, goods.getId());
+        CarServiceFootprint footprint = findByGoodId(userId, goods.getId());
         if (footprint != null) {
             footprint.setName(goods.getName());
             footprint.setBrief(goods.getBrief());
@@ -70,7 +70,7 @@ public class WxFootprintService extends FootprintServiceImpl {
             footprint.setRetailPrice(goods.getRetailPrice());
             updateVersionSelective(footprint);
         } else {
-            footprint = new carserviceFootprint();
+            footprint = new CarServiceFootprint();
             footprint.setUserId(userId);
             footprint.setGoodsId(goods.getId());
             footprint.setName(goods.getName());

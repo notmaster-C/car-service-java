@@ -17,9 +17,9 @@ import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.service.CouponAssignService;
 import org.click.carservice.core.service.CouponVerifyService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCart;
-import org.click.carservice.db.domain.carserviceCoupon;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCart;
+import org.click.carservice.db.domain.CarServiceCoupon;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.CouponStatus;
 import org.click.carservice.db.enums.CouponType;
@@ -75,7 +75,7 @@ public class WxCouponController {
      */
     @GetMapping("user")
     public Object myList(@LoginUser String userId, CouponListBody body) {
-        List<carserviceCouponUser> couponUserList = couponUserService.queryList(userId, body);
+        List<CarServiceCouponUser> couponUserList = couponUserService.queryList(userId, body);
         List<CouponResult> couponVoList = couponService.change(couponUserList);
         return ResponseUtil.okList(couponVoList, couponUserList);
     }
@@ -89,15 +89,15 @@ public class WxCouponController {
             return ResponseUtil.unlogin();
         }
         //选中的商品
-        List<carserviceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
+        List<CarServiceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
         if (checkedGoodsList == null) {
             return ResponseUtil.badArgument();
         }
         // 计算优惠券可用情况
-        List<carserviceCouponUser> couponUserList = couponUserService.queryAll(userId);
+        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId);
         List<CouponResult> couponVoList = couponService.change(couponUserList);
         for (CouponResult cv : couponVoList) {
-            carserviceCoupon coupon = couponVerifyService.checkCoupon(userId, cv.getCid(), cv.getId(), checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, cv.getCid(), cv.getId(), checkedGoodsList);
             cv.setAvailable(coupon != null);
         }
         return ResponseUtil.okList(couponVoList);
@@ -111,7 +111,7 @@ public class WxCouponController {
      */
     @PostMapping("receive")
     public Object receive(@LoginUser String userId, @JsonBody String couponId) {
-        carserviceCoupon coupon = couponService.findById(couponId);
+        CarServiceCoupon coupon = couponService.findById(couponId);
         if (coupon == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -163,7 +163,7 @@ public class WxCouponController {
      */
     @PostMapping("exchange")
     public Object exchange(@LoginUser String userId, @JsonBody String code) {
-        carserviceCoupon coupon = couponService.findByCode(code);
+        CarServiceCoupon coupon = couponService.findByCode(code);
         if (coupon == null) {
             return ResponseUtil.fail("兑换码不正确");
         }

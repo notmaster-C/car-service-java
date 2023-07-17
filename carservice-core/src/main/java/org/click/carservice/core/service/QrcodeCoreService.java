@@ -16,10 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.system.SystemConfig;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceGrouponRules;
-import org.click.carservice.db.domain.carserviceRewardTask;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
+import org.click.carservice.db.domain.CarServiceRewardTask;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
@@ -76,7 +76,7 @@ public class QrcodeCoreService {
      * @param user  二维码参数 ： "goods,xxx"
      * @return 二维码url
      */
-    public String createUserShareQrcode(carserviceUser user) {
+    public String createUserShareQrcode(CarServiceUser user) {
         try {
             String value = "inviter," + user.getId();
             String imgName = "USER_SHARE_QRCODE_" + user.getId() + ".jpg";
@@ -96,7 +96,7 @@ public class QrcodeCoreService {
      * @param grouponId 参团id
      * @return 二维码url
      */
-    public String createGrouponShareImage(carserviceGrouponRules grouponRules, String grouponId) {
+    public String createGrouponShareImage(CarServiceGrouponRules grouponRules, String grouponId) {
         String value = "grouponId," + grouponId;
         String imgName = "GROUPON_QRCODE_" + grouponId + ".jpg";
         String goodsName = grouponRules.getGoodsName();
@@ -109,7 +109,7 @@ public class QrcodeCoreService {
      * @param goods 商品
      * @return 二维码url
      */
-    public String createGoodShareImage(carserviceGoods goods) {
+    public String createGoodShareImage(CarServiceGoods goods) {
         if (!SystemConfig.isAutoCreateShareImage()) {
             return "";
         }
@@ -127,7 +127,7 @@ public class QrcodeCoreService {
      * @param rewardId 赏金id
      * @return 二维码url
      */
-    public String createRewardShareImage(carserviceRewardTask rewardTask, Integer rewardId) {
+    public String createRewardShareImage(CarServiceRewardTask rewardTask, Integer rewardId) {
         String value = "rewardId," + rewardId;
         String imgName = "REWARD_QRCODE_" + rewardId + ".jpg";
         String goodsName = rewardTask.getGoodsName();

@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.log.body.LogListBody;
-import org.click.carservice.db.domain.carserviceLog;
+import org.click.carservice.db.domain.CarServiceLog;
 import org.click.carservice.db.service.impl.LogServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,16 +32,16 @@ public class AdminLogService extends LogServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceLog> querySelective(LogListBody body) {
-        QueryWrapper<carserviceLog> wrapper = startPage(body);
+    public List<CarServiceLog> querySelective(LogListBody body) {
+        QueryWrapper<CarServiceLog> wrapper = startPage(body);
         if (body.getType() != null) {
-            wrapper.eq(carserviceLog.TYPE, body.getType());
+            wrapper.eq(CarServiceLog.TYPE, body.getType());
         }
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceLog.STATUS, body.getStatus());
+            wrapper.eq(CarServiceLog.STATUS, body.getStatus());
         }
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceLog.ADMIN, body.getName());
+            wrapper.like(CarServiceLog.ADMIN, body.getName());
         }
         return queryAll(wrapper);
     }

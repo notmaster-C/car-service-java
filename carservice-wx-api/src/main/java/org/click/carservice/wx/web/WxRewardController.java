@@ -16,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.service.RewardCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceReward;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceReward;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.RewardStatus;
@@ -73,21 +73,21 @@ public class WxRewardController {
     public Object rewardTaskList(@LoginUser(require = false) String userId, PageBody body) {
         ArrayList<RewardListInfo> rewardMaps = new ArrayList<>();
         //获取所有赏金规则
-        List<carserviceRewardTask> rewardTasks = rewardTaskService.querySelective(body);
-        for (carserviceRewardTask rewardTask : rewardTasks) {
+        List<CarServiceRewardTask> rewardTasks = rewardTaskService.querySelective(body);
+        for (CarServiceRewardTask rewardTask : rewardTasks) {
             RewardListInfo result = new RewardListInfo();
             result.setRewardTask(rewardTask);
             Integer countReward = rewardService.countReward(rewardTask.getId());
             result.setPercentage(rewardTaskService.percentage(countReward, rewardTask.getRewardMember()));
             if (userId != null) {
                 //获取分享记录
-                carserviceReward sharer = rewardService.findSharer(userId, rewardTask.getId());
+                CarServiceReward sharer = rewardService.findSharer(userId, rewardTask.getId());
                 if (sharer != null) {
-                    List<carserviceReward> rewards = rewardService.queryJoinRecord(sharer.getId());
-                    PageInfo<carserviceReward> rewardPageInfo = PageInfo.of(rewards);
+                    List<CarServiceReward> rewards = rewardService.queryJoinRecord(sharer.getId());
+                    PageInfo<CarServiceReward> rewardPageInfo = PageInfo.of(rewards);
                     //获取用户信息
                     ArrayList<UserInfo> joiners = new ArrayList<>();
-                    for (carserviceReward reward : rewards) {
+                    for (CarServiceReward reward : rewards) {
                         joiners.add(userService.findUserVoById(reward.getUserId()));
                     }
                     result.setTotal(rewardPageInfo.getTotal());
@@ -103,8 +103,8 @@ public class WxRewardController {
         BigDecimal balance = BigDecimal.valueOf(0);
 
         if (userId != null) {
-            List<carserviceReward> rewardList = rewardService.querySharerUserId(userId);
-            for (carserviceReward reward : rewardList) {
+            List<CarServiceReward> rewardList = rewardService.querySharerUserId(userId);
+            for (CarServiceReward reward : rewardList) {
                 if (RewardStatus.STATUS_SUCCEED.getStatus().equals(reward.getStatus())) {
                     earnings = earnings.add(reward.getAward());
                 } else {
@@ -113,7 +113,7 @@ public class WxRewardController {
             }
         }
 
-        PageInfo<carserviceRewardTask> pageInfo = PageInfo.of(rewardTasks);
+        PageInfo<CarServiceRewardTask> pageInfo = PageInfo.of(rewardTasks);
         RewardListResult<RewardListInfo> result = new RewardListResult<>();
         result.setEarnings(earnings);
         result.setBalance(balance);
@@ -133,12 +133,12 @@ public class WxRewardController {
      */
     @GetMapping("/join")
     public Object join(@NotNull String rewardId) {
-        carserviceReward reward = rewardService.findById(rewardId);
+        CarServiceReward reward = rewardService.findById(rewardId);
         if (reward == null) {
             return ResponseUtil.badArgumentValue();
         }
 
-        carserviceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
+        CarServiceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
         if (rewardTask == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -148,7 +148,7 @@ public class WxRewardController {
             return serviceReward;
         }
 
-        carserviceGoods goods = goodsService.findById(rewardTask.getGoodsId());
+        CarServiceGoods goods = goodsService.findById(rewardTask.getGoodsId());
         if (goods == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -172,12 +172,12 @@ public class WxRewardController {
             return serviceReward;
         }
 
-        carserviceReward reward = rewardService.findSharer(userId, rewardTaskId);
+        CarServiceReward reward = rewardService.findSharer(userId, rewardTaskId);
         if (reward != null) {
             return ResponseUtil.ok(reward);
         }
 
-        reward = new carserviceReward();
+        reward = new CarServiceReward();
         reward.setUserId(userId);
         reward.setTaskId(rewardTaskId);
         reward.setAward(BigDecimal.valueOf(0));

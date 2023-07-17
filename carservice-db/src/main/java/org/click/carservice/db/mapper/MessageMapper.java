@@ -1,7 +1,7 @@
 package org.click.carservice.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 
 /**
  * <p>
@@ -10,6 +10,6 @@ import org.click.carservice.db.domain.carserviceMessage;
  *
  * @author click
  */
-public interface MessageMapper extends BaseMapper<carserviceMessage> {
+public interface MessageMapper extends BaseMapper<CarServiceMessage> {
 
 }

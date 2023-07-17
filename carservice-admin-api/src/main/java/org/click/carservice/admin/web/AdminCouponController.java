@@ -19,7 +19,7 @@ import org.click.carservice.admin.model.coupon.body.CouponUserListBody;
 import org.click.carservice.admin.service.AdminCouponService;
 import org.click.carservice.admin.service.AdminCouponUserService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCoupon;
+import org.click.carservice.db.domain.CarServiceCoupon;
 import org.click.carservice.db.enums.CouponType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -95,7 +95,7 @@ public class AdminCouponController {
     @SaCheckPermission("admin:coupon:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "优惠券管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceCoupon coupon) {
+    public Object create(@Valid @RequestBody CarServiceCoupon coupon) {
         Object error = couponService.validate(coupon);
         if (error != null) {
             return error;
@@ -114,7 +114,7 @@ public class AdminCouponController {
     @SaCheckPermission("admin:coupon:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "优惠券管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceCoupon coupon) {
+    public Object update(@Valid @RequestBody CarServiceCoupon coupon) {
         Object error = couponService.validate(coupon);
         if (error != null) {
             return error;

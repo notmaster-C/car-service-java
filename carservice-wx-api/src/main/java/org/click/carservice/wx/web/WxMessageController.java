@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.utils.chatgpt.ChatGPTClient;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.message.body.HistoryMessageBody;
 import org.click.carservice.wx.service.WxMessageService;
@@ -51,7 +51,7 @@ public class WxMessageController {
     @GetMapping("list")
     public Object getMessageList(@LoginUser String userId) {
         //chatGPT对话
-        carserviceMessage chatMessage = new carserviceMessage();
+        CarServiceMessage chatMessage = new CarServiceMessage();
         chatMessage.setSendUserId(ChatGPTClient.CHAT_GPT_USERID);
         chatMessage.setNickName(ChatGPTClient.CHAT_GPT_NICKNAME);
         chatMessage.setAvatarUrl(ChatGPTClient.CHAT_GPT_AVATAR);
@@ -61,22 +61,22 @@ public class WxMessageController {
         chatMessage.setReceiveUserId(userId);
 
         //过滤重复数据 TODO 暂时只能获取给自己发过信息的列表
-        HashMap<String, carserviceMessage> receiveMessageMap = new HashMap<>();
+        HashMap<String, CarServiceMessage> receiveMessageMap = new HashMap<>();
         receiveMessageMap.put(chatMessage.getSendUserId(), chatMessage);
-        List<carserviceMessage> receiveList = messageService.queryByReceiveUserId(userId);
-        for (carserviceMessage message : receiveList) {
+        List<CarServiceMessage> receiveList = messageService.queryByReceiveUserId(userId);
+        for (CarServiceMessage message : receiveList) {
             receiveMessageMap.put(message.getSendUserId(), message);
         }
 
         //合并历史消息记录
-        ArrayList<carserviceMessage> messageList = new ArrayList<>(receiveMessageMap.values());
-        for (carserviceMessage message : messageList) {
+        ArrayList<CarServiceMessage> messageList = new ArrayList<>(receiveMessageMap.values());
+        for (CarServiceMessage message : messageList) {
             if (!StringUtils.hasText(message.getContent())) {
                 message.setContent("[图片]...");
             }
         }
         //历史消息排序
-        messageList.sort(Comparator.comparing(carserviceMessage::getAddTime).reversed());
+        messageList.sort(Comparator.comparing(CarServiceMessage::getAddTime).reversed());
         //返回信息列表
         return ResponseUtil.okList(messageList);
     }
@@ -90,9 +90,9 @@ public class WxMessageController {
     @GetMapping("history")
     public Object getHistoryMessageList(@LoginUser String userId, HistoryMessageBody body) {
         //获取聊天记录
-        List<carserviceMessage> historyMessage = messageService.getHistoryMessage(userId, body);
+        List<CarServiceMessage> historyMessage = messageService.getHistoryMessage(userId, body);
         //历史消息排序
-        historyMessage.sort(Comparator.comparing(carserviceMessage::getAddTime));
+        historyMessage.sort(Comparator.comparing(CarServiceMessage::getAddTime));
         return ResponseUtil.okList(historyMessage);
     }
 

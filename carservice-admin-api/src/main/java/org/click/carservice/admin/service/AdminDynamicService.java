@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.dynamic.body.DynamicListBody;
-import org.click.carservice.db.domain.carserviceDynamic;
+import org.click.carservice.db.domain.CarServiceDynamic;
 import org.click.carservice.db.service.impl.DynamicServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,13 +32,13 @@ public class AdminDynamicService extends DynamicServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceDynamic> querySelective(DynamicListBody body) {
-        QueryWrapper<carserviceDynamic> wrapper = startPage(body);
+    public List<CarServiceDynamic> querySelective(DynamicListBody body) {
+        QueryWrapper<CarServiceDynamic> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceDynamic.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceDynamic.USER_ID, body.getUserId());
         }
         if (StringUtils.hasText(body.getContent())) {
-            wrapper.like(carserviceDynamic.CONTENT, body.getContent());
+            wrapper.like(CarServiceDynamic.CONTENT, body.getContent());
         }
         return queryAll(wrapper);
     }

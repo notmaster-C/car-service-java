@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceGoodsAttribute;
+import org.click.carservice.db.domain.CarServiceGoodsAttribute;
 import org.click.carservice.db.service.impl.GoodsAttributeServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,9 +31,9 @@ public class AdminGoodsAttributeService extends GoodsAttributeServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGoodsAttribute> queryByGid(String goodsId) {
-        QueryWrapper<carserviceGoodsAttribute> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsAttribute.GOODS_ID, goodsId);
+    public List<CarServiceGoodsAttribute> queryByGid(String goodsId) {
+        QueryWrapper<CarServiceGoodsAttribute> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsAttribute.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 

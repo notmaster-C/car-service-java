@@ -15,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.utils.RegexUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAddress;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceAddress;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.service.GetRegionService;
 import org.click.carservice.wx.service.WxAddressService;
@@ -67,7 +67,7 @@ public class WxAddressController extends GetRegionService {
      */
     @GetMapping("tenant")
     public Object getAddress(@LoginUser String userId) {
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.fail("用户获取失败，请重新登陆");
         }
@@ -86,7 +86,7 @@ public class WxAddressController extends GetRegionService {
         if (Objects.isNull(userId)) {
             return ResponseUtil.unlogin();
         }
-        carserviceAddress address = addressService.query(userId, id);
+        CarServiceAddress address = addressService.query(userId, id);
         if (address == null) {
             return ResponseUtil.fail("地址获取失败");
         }
@@ -101,7 +101,7 @@ public class WxAddressController extends GetRegionService {
      * @return 添加或更新操作结果
      */
     @PostMapping("save")
-    public Object save(@LoginUser String userId, @Valid @RequestBody carserviceAddress address) {
+    public Object save(@LoginUser String userId, @Valid @RequestBody CarServiceAddress address) {
         if (Objects.isNull(userId)) {
             return ResponseUtil.unlogin();
         }
@@ -118,7 +118,7 @@ public class WxAddressController extends GetRegionService {
             address.setUserId(userId);
             addressService.add(address);
         } else {
-            carserviceAddress carserviceAddress = addressService.query(userId, address.getId());
+            CarServiceAddress carserviceAddress = addressService.query(userId, address.getId());
             if (carserviceAddress == null) {
                 return ResponseUtil.badArgumentValue();
             }
@@ -150,7 +150,7 @@ public class WxAddressController extends GetRegionService {
     }
 
 
-    private Object validate(carserviceAddress address) {
+    private Object validate(CarServiceAddress address) {
         String name = address.getName();
         if (!StringUtils.hasText(name)) {
             return ResponseUtil.badArgument();

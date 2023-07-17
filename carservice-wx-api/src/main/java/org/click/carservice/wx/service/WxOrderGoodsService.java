@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.service.impl.OrderGoodsServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,38 +32,38 @@ public class WxOrderGoodsService extends OrderGoodsServiceImpl {
 
     @Cacheable(sync = true)
     public Integer getComments(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
     public boolean checkExist(String goodsId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.GOODS_ID, goodsId);
         return exists(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceOrderGoods findByOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public CarServiceOrderGoods findByOrderId(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return getOne(wrapper, false);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceOrderGoods> queryByOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public List<CarServiceOrderGoods> queryByOrderId(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return queryAll(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void deleteByOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         remove(wrapper);
     }
 

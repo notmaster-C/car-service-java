@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.service.impl.AdminServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,24 +30,24 @@ public class WxAdminService extends AdminServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceAdmin findByOpenId(String openId) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.OPENID, openId);
+    public CarServiceAdmin findByOpenId(String openId) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.OPENID, openId);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceAdmin> findByTenantId(String tenantId) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.TENANT_ID, tenantId);
+    public List<CarServiceAdmin> findByTenantId(String tenantId) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.TENANT_ID, tenantId);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAdmin> findAdmin(String username) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.USERNAME, username);
+    public List<CarServiceAdmin> findAdmin(String username) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.USERNAME, username);
         return queryAll(wrapper);
     }
 

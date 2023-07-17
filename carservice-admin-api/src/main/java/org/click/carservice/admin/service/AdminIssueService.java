@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.issue.body.IssueListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceIssue;
+import org.click.carservice.db.domain.CarServiceIssue;
 import org.click.carservice.db.service.impl.IssueServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,7 +34,7 @@ import java.util.Objects;
 public class AdminIssueService extends IssueServiceImpl {
 
 
-    public Object validate(carserviceIssue issue) {
+    public Object validate(CarServiceIssue issue) {
         String question = issue.getQuestion();
         if (Objects.isNull(question)) {
             return ResponseUtil.badArgument();
@@ -47,10 +47,10 @@ public class AdminIssueService extends IssueServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceIssue> querySelective(IssueListBody body) {
-        QueryWrapper<carserviceIssue> wrapper = startPage(body);
+    public List<CarServiceIssue> querySelective(IssueListBody body) {
+        QueryWrapper<CarServiceIssue> wrapper = startPage(body);
         if (StringUtils.hasText(body.getQuestion())) {
-            wrapper.like(carserviceIssue.QUESTION, body.getQuestion());
+            wrapper.like(CarServiceIssue.QUESTION, body.getQuestion());
         }
         return queryAll(wrapper);
     }

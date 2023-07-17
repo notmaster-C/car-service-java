@@ -37,7 +37,7 @@ import org.click.carservice.core.utils.captcha.CaptchaManager;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.utils.token.TokenManager;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.entity.AdminInfo;
 import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +86,7 @@ public class AdminAuthController {
 
         tenantService.setTenant(body.getAppid());
 
-        List<carserviceAdmin> adminList = adminService.findAdmin(username);
+        List<CarServiceAdmin> adminList = adminService.findAdmin(username);
         if (adminList.size() != 1) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0110);
         }
@@ -96,7 +96,7 @@ public class AdminAuthController {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0242);
         }
 
-        carserviceAdmin admin = adminList.get(0);
+        CarServiceAdmin admin = adminList.get(0);
         if (mailService.isMailEnable() && !RegexUtil.isQQMail(admin.getMail())) {
             mailService.notifyMail("登录验证码：" + code, "验证码30分钟内有效，如发送错误请您忽略！", admin.getMail());
             return ResponseUtil.ok("验证码发送成功，请注意查收");
@@ -115,7 +115,7 @@ public class AdminAuthController {
         tenantService.setTenant(body.getAppid());
 
         //创建账户实体并登陆
-        carserviceAdmin admin = new carserviceAdmin();
+        CarServiceAdmin admin = new CarServiceAdmin();
         admin.setUsername(username);
         admin.setPassword(password);
         AuthenticationInfo.login(admin, body.getCode());
@@ -168,7 +168,7 @@ public class AdminAuthController {
     @GetMapping("/info")
     public Object info() {
         String adminId = StpUtil.getLoginIdAsString();
-        carserviceAdmin admin = adminService.findById(adminId);
+        CarServiceAdmin admin = adminService.findById(adminId);
         //响应结果
         InfoResult result = new InfoResult();
         result.setName(admin.getUsername());

@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.mapper.GrouponRulesMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IGrouponRulesService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_groupon_rules")
-public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper, carserviceGrouponRules> implements IGrouponRulesService {
+public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper, CarServiceGrouponRules> implements IGrouponRulesService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceGrouponRules findById(String id) {
+    public CarServiceGrouponRules findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryAll(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public List<CarServiceGrouponRules> queryAll(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceGrouponRules record) {
+    public int add(CarServiceGrouponRules record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceGrouponRules> list) {
+    public boolean batchAdd(List<CarServiceGrouponRules> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceGrouponRules record) {
+    public int updateSelective(CarServiceGrouponRules record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceGrouponRules record) {
+    public int updateVersionSelective(CarServiceGrouponRules record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceGrouponRules entity) {
+    public boolean save(CarServiceGrouponRules entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceGrouponRules> entityList) {
+    public boolean saveBatch(Collection<CarServiceGrouponRules> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceGrouponRules entity) {
+    public boolean saveOrUpdate(CarServiceGrouponRules entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceGrouponRules entity, Wrapper<carserviceGrouponRules> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceGrouponRules entity, Wrapper<CarServiceGrouponRules> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceGrouponRules> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceGrouponRules> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceGrouponRules entity) {
+    public boolean removeById(CarServiceGrouponRules entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceGrouponRules entity) {
+    public boolean updateById(CarServiceGrouponRules entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceGrouponRules> updateWrapper) {
+    public boolean update(Wrapper<CarServiceGrouponRules> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceGrouponRules entity, Wrapper<carserviceGrouponRules> updateWrapper) {
+    public boolean update(CarServiceGrouponRules entity, Wrapper<CarServiceGrouponRules> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceGrouponRules> entityList) {
+    public boolean updateBatchById(Collection<CarServiceGrouponRules> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceGrouponRules getById(Serializable id) {
+    public CarServiceGrouponRules getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceGrouponRules> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceGrouponRules> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceGrouponRules getOne(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public CarServiceGrouponRules getOne(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class GrouponRulesServiceImpl extends IBaseServiceImpl<GrouponRulesMapper
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public long count(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> list(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public List<CarServiceGrouponRules> list(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> list() {
+    public List<CarServiceGrouponRules> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceGrouponRules> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceGrouponRules> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.groupon.body.GrouponRuleListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.service.impl.GrouponRulesServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,7 +34,7 @@ import java.util.List;
 public class AdminGrouponRulesService extends GrouponRulesServiceImpl {
 
 
-    public Object validate(carserviceGrouponRules grouponRules) {
+    public Object validate(CarServiceGrouponRules grouponRules) {
         String goodsId = grouponRules.getGoodsId();
         if (goodsId == null) {
             return ResponseUtil.badArgument();
@@ -55,31 +55,31 @@ public class AdminGrouponRulesService extends GrouponRulesServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public carserviceGrouponRules findByGid(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
+    public CarServiceGrouponRules findByGid(String goodsId) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
     public Integer countByGoodsId(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return Math.toIntExact(count(wrapper));
     }
 
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> queryByGoodsId(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
+    public List<CarServiceGrouponRules> queryByGoodsId(String goodsId) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceGrouponRules> querySelective(GrouponRuleListBody body) {
-        QueryWrapper<carserviceGrouponRules> wrapper = startPage(body);
+    public List<CarServiceGrouponRules> querySelective(GrouponRuleListBody body) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = startPage(body);
         if (StringUtils.hasText(body.getGoodsId())) {
-            wrapper.eq(carserviceGrouponRules.GOODS_ID, body.getGoodsId());
+            wrapper.eq(CarServiceGrouponRules.GOODS_ID, body.getGoodsId());
         }
         return queryAll(wrapper);
     }

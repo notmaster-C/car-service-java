@@ -21,7 +21,7 @@ import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.tasks.impl.DealingSlipMonitorTask;
 import org.click.carservice.core.tasks.service.TaskService;
 import org.click.carservice.core.weixin.request.WxPartnerTransferRequest;
-import org.click.carservice.db.domain.carserviceDealingSlip;
+import org.click.carservice.db.domain.CarServiceDealingSlip;
 import org.click.carservice.db.service.IDealingSlipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +95,7 @@ public class WxPayTransferService {
         //返回请求返回参数
         try {
             PartnerTransferResult result = transferService.batchTransfer(transferRequest);
-            carserviceDealingSlip dealingSlip = findByOutBatchNo(openid, outBatchNo);
+            CarServiceDealingSlip dealingSlip = findByOutBatchNo(openid, outBatchNo);
             if (dealingSlip != null) {
                 //加入延时任务五分钟后检查一次
                 dealingSlip.setBatchId(result.getBatchId());
@@ -112,10 +112,10 @@ public class WxPayTransferService {
      * @param outBatchNo 转账单号
      * @return true
      */
-    public carserviceDealingSlip findByOutBatchNo(String openid, String outBatchNo) {
-        QueryWrapper<carserviceDealingSlip> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceDealingSlip.OPENID, openid);
-        wrapper.eq(carserviceDealingSlip.OUT_BATCH_NO, outBatchNo);
+    public CarServiceDealingSlip findByOutBatchNo(String openid, String outBatchNo) {
+        QueryWrapper<CarServiceDealingSlip> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceDealingSlip.OPENID, openid);
+        wrapper.eq(CarServiceDealingSlip.OUT_BATCH_NO, outBatchNo);
         return dealingSlipService.getOne(wrapper);
     }
 

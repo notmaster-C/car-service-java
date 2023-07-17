@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceNoticeAdmin;
+import org.click.carservice.db.domain.CarServiceNoticeAdmin;
 import org.click.carservice.db.mapper.NoticeAdminMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.INoticeAdminService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_notice_admin")
-public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, carserviceNoticeAdmin> implements INoticeAdminService {
+public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, CarServiceNoticeAdmin> implements INoticeAdminService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceNoticeAdmin findById(String id) {
+    public CarServiceNoticeAdmin findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> queryAll(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public List<CarServiceNoticeAdmin> queryAll(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceNoticeAdmin record) {
+    public int add(CarServiceNoticeAdmin record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceNoticeAdmin> list) {
+    public boolean batchAdd(List<CarServiceNoticeAdmin> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceNoticeAdmin record) {
+    public int updateSelective(CarServiceNoticeAdmin record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceNoticeAdmin record) {
+    public int updateVersionSelective(CarServiceNoticeAdmin record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, 
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceNoticeAdmin entity) {
+    public boolean save(CarServiceNoticeAdmin entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceNoticeAdmin> entityList) {
+    public boolean saveBatch(Collection<CarServiceNoticeAdmin> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceNoticeAdmin entity) {
+    public boolean saveOrUpdate(CarServiceNoticeAdmin entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceNoticeAdmin entity, Wrapper<carserviceNoticeAdmin> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceNoticeAdmin entity, Wrapper<CarServiceNoticeAdmin> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceNoticeAdmin> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceNoticeAdmin> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceNoticeAdmin entity) {
+    public boolean removeById(CarServiceNoticeAdmin entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, 
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, 
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceNoticeAdmin entity) {
+    public boolean updateById(CarServiceNoticeAdmin entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceNoticeAdmin> updateWrapper) {
+    public boolean update(Wrapper<CarServiceNoticeAdmin> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceNoticeAdmin entity, Wrapper<carserviceNoticeAdmin> updateWrapper) {
+    public boolean update(CarServiceNoticeAdmin entity, Wrapper<CarServiceNoticeAdmin> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceNoticeAdmin> entityList) {
+    public boolean updateBatchById(Collection<CarServiceNoticeAdmin> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceNoticeAdmin getById(Serializable id) {
+    public CarServiceNoticeAdmin getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceNoticeAdmin> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceNoticeAdmin> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceNoticeAdmin getOne(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public CarServiceNoticeAdmin getOne(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class NoticeAdminServiceImpl extends IBaseServiceImpl<NoticeAdminMapper, 
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public long count(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> list(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public List<CarServiceNoticeAdmin> list(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> list() {
+    public List<CarServiceNoticeAdmin> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceNoticeAdmin> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceNoticeAdmin> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

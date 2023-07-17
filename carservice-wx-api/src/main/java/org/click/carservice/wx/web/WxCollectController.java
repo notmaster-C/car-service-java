@@ -13,9 +13,9 @@ package org.click.carservice.wx.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCollect;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceCollect;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceTopic;
 import org.click.carservice.db.enums.CollectType;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.collect.body.CollectListBody;
@@ -66,15 +66,15 @@ public class WxCollectController {
      */
     @PostMapping("update")
     public Object addOrDelete(@LoginUser String userId, @Valid @RequestBody CollectUpdateBody body) {
-        carserviceCollect collect = collectService.queryByTypeAndValue(userId, body.getType(), body.getValueId());
+        CarServiceCollect collect = collectService.queryByTypeAndValue(userId, body.getType(), body.getValueId());
         if (collect != null) {
             collect.setCancel(!collect.getCancel());
             collectService.updateSelective(collect);
         } else {
-            collect = new carserviceCollect();
+            collect = new CarServiceCollect();
             if (Objects.equals(body.getType(), CollectType.TYPE_GOODS.getStatus())) {
                 //商品收藏
-                carserviceGoods goods = goodsService.findById(body.getValueId());
+                CarServiceGoods goods = goodsService.findById(body.getValueId());
                 if (goods == null) {
                     return ResponseUtil.badArgument();
                 }
@@ -84,7 +84,7 @@ public class WxCollectController {
                 collect.setPrice(goods.getRetailPrice());
             } else if (Objects.equals(body.getType(), CollectType.TYPE_TOPIC.getStatus())) {
                 //专题收藏
-                carserviceTopic topic = topicService.findById(body.getValueId());
+                CarServiceTopic topic = topicService.findById(body.getValueId());
                 if (topic == null) {
                     return ResponseUtil.badArgument();
                 }

@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.click.carservice.db.service.impl.MessageServiceImpl;
 import org.click.carservice.wx.model.message.body.HistoryMessageBody;
 import org.springframework.cache.annotation.CacheConfig;
@@ -35,13 +35,13 @@ public class WxMessageService extends MessageServiceImpl {
      * 获取历史消息
      */
     @Cacheable(sync = true)
-    public List<carserviceMessage> getHistoryMessage(String sendUserId, HistoryMessageBody body) {
-        QueryWrapper<carserviceMessage> wrapper = startPage(body);
-        wrapper.eq(carserviceMessage.SEND_USER_ID, sendUserId)
-                .eq(carserviceMessage.RECEIVE_USER_ID, body.getReceiveUserId())
+    public List<CarServiceMessage> getHistoryMessage(String sendUserId, HistoryMessageBody body) {
+        QueryWrapper<CarServiceMessage> wrapper = startPage(body);
+        wrapper.eq(CarServiceMessage.SEND_USER_ID, sendUserId)
+                .eq(CarServiceMessage.RECEIVE_USER_ID, body.getReceiveUserId())
                 .or()
-                .eq(carserviceMessage.SEND_USER_ID, body.getReceiveUserId())
-                .eq(carserviceMessage.RECEIVE_USER_ID, sendUserId);
+                .eq(CarServiceMessage.SEND_USER_ID, body.getReceiveUserId())
+                .eq(CarServiceMessage.RECEIVE_USER_ID, sendUserId);
         return queryAll(wrapper);
     }
 
@@ -51,9 +51,9 @@ public class WxMessageService extends MessageServiceImpl {
      * @return 消息集合
      */
     @Cacheable(sync = true)
-    public List<carserviceMessage> queryByReceiveUserId(String receiveUserId) {
-        QueryWrapper<carserviceMessage> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceMessage.RECEIVE_USER_ID, receiveUserId);
+    public List<CarServiceMessage> queryByReceiveUserId(String receiveUserId) {
+        QueryWrapper<CarServiceMessage> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceMessage.RECEIVE_USER_ID, receiveUserId);
         return queryAll(wrapper);
     }
 
@@ -63,9 +63,9 @@ public class WxMessageService extends MessageServiceImpl {
      * @return 消息集合
      */
     @Cacheable(sync = true)
-    public List<carserviceMessage> queryBySendUserId(String sendUserId) {
-        QueryWrapper<carserviceMessage> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceMessage.SEND_USER_ID, sendUserId);
+    public List<CarServiceMessage> queryBySendUserId(String sendUserId) {
+        QueryWrapper<CarServiceMessage> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceMessage.SEND_USER_ID, sendUserId);
         return queryAll(wrapper);
     }
 
@@ -77,9 +77,9 @@ public class WxMessageService extends MessageServiceImpl {
      */
     @CacheEvict(allEntries = true)
     public void deleteMessage(String receiveUserId, String sendUserId) {
-        QueryWrapper<carserviceMessage> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceMessage.SEND_USER_ID, sendUserId);
-        wrapper.eq(carserviceMessage.RECEIVE_USER_ID, receiveUserId);
+        QueryWrapper<CarServiceMessage> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceMessage.SEND_USER_ID, sendUserId);
+        wrapper.eq(CarServiceMessage.RECEIVE_USER_ID, receiveUserId);
         remove(wrapper);
     }
 

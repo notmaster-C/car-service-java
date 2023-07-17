@@ -8,7 +8,7 @@ import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.core.utils.http.GlobalWebUtil;
 import org.click.carservice.core.utils.ip.IpUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,7 +51,7 @@ public class AuthenticationInfo {
      *
      * @param admin 登陆实体
      */
-    public static void login(carserviceAdmin admin) {
+    public static void login(CarServiceAdmin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
         BeanUtil.copyProperties(login(username, password), admin);
@@ -62,7 +62,7 @@ public class AuthenticationInfo {
      *
      * @param admin 登陆实体
      */
-    public static void loginQr(carserviceAdmin admin) {
+    public static void loginQr(CarServiceAdmin admin) {
         //添加登陆记录
         admin.setLastLoginIp(IpUtil.getIpAddr(GlobalWebUtil.getRequest()));
         admin.setLastLoginTime(LocalDateTime.now());
@@ -83,7 +83,7 @@ public class AuthenticationInfo {
      * @param admin 登陆实体
      * @param code  验证码
      */
-    public static void login(carserviceAdmin admin, String code) {
+    public static void login(CarServiceAdmin admin, String code) {
         String username = admin.getUsername();
         String password = admin.getPassword();
         BeanUtil.copyProperties(login(username, password, code), admin);
@@ -95,7 +95,7 @@ public class AuthenticationInfo {
      * @param username 用户名
      * @param password 密码
      */
-    public static carserviceAdmin login(String username, String password) {
+    public static CarServiceAdmin login(String username, String password) {
         return login(username, password, null);
     }
 
@@ -106,7 +106,7 @@ public class AuthenticationInfo {
      * @param password 密码
      * @param code     验证码
      */
-    public static carserviceAdmin login(String username, String password, String code) {
+    public static CarServiceAdmin login(String username, String password, String code) {
         if (!StringUtils.hasText(username)) {
             throw new RuntimeException("用户名不能为空");
         }
@@ -114,13 +114,13 @@ public class AuthenticationInfo {
             throw new RuntimeException("密码不能为空");
         }
         //获取数据库账号消息
-        List<carserviceAdmin> adminList = commonService.findAdmin(username);
+        List<CarServiceAdmin> adminList = commonService.findAdmin(username);
         Assert.state(adminList.size() < 2, "存在两个相同账户");
         if (adminList.size() == 0) {
             throw new RuntimeException("找不到用户（" + username + "）的帐号信息");
         }
         //校验密码
-        carserviceAdmin admin = adminList.get(0);
+        CarServiceAdmin admin = adminList.get(0);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (!encoder.matches(password, admin.getPassword())) {
             throw new RuntimeException("账号或密码错误");

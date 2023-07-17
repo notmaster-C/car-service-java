@@ -63,9 +63,9 @@ public class WxCommentController {
      */
     @GetMapping("list")
     public Object list(@LoginUser String userId, CommentListBody body) {
-        List<carserviceComment> commentList = commentService.querySelective(body);
+        List<CarServiceComment> commentList = commentService.querySelective(body);
         List<CommentListResult> commentVoList = new ArrayList<>(commentList.size());
-        for (carserviceComment comment : commentList) {
+        for (CarServiceComment comment : commentList) {
             CommentListResult result = new CommentListResult();
             result.setCommentId(comment.getId());
             result.setAddTime(comment.getAddTime());
@@ -93,9 +93,9 @@ public class WxCommentController {
      */
     @GetMapping("reply-list")
     public Object replyList(@LoginUser String userId, CommentReplyListBody body) {
-        List<carserviceComment> commentList = commentService.queryReplySelective(body);
+        List<CarServiceComment> commentList = commentService.queryReplySelective(body);
         List<CommentListResult> commentVoList = new ArrayList<>(commentList.size());
-        for (carserviceComment comment : commentList) {
+        for (CarServiceComment comment : commentList) {
             CommentListResult result = new CommentListResult();
             result.setCommentId(comment.getId());
             result.setAddTime(comment.getAddTime());
@@ -157,10 +157,10 @@ public class WxCommentController {
         if (CommentType.parseValue(commentType) == null) {
             return ResponseUtil.fail("评论类型不支持");
         }
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         secCheckService.checkMessage(user.getOpenid(), content);
         //整合信息
-        carserviceComment comment = new carserviceComment();
+        CarServiceComment comment = new CarServiceComment();
         comment.setContent(content);
         comment.setType(commentType);
         comment.setValueId(valueId);
@@ -174,7 +174,7 @@ public class WxCommentController {
         }
 
         if (CommentType.TYPE_TOPIC.getStatus().equals(commentType)) {
-            carserviceTopic topic = topicService.findById(valueId);
+            CarServiceTopic topic = topicService.findById(valueId);
             if (topic != null) {
                 Integer count = commentService.count(commentType, valueId);
                 topic.setCommentCount((long) count);
@@ -183,7 +183,7 @@ public class WxCommentController {
         }
 
         if (CommentType.TYPE_BRAND.getStatus().equals(commentType)) {
-            carserviceBrand brand = brandService.findById(valueId);
+            CarServiceBrand brand = brandService.findById(valueId);
             if (brand != null) {
                 Integer count = commentService.count(commentType, valueId);
                 brand.setCommentCount((long) count);
@@ -192,7 +192,7 @@ public class WxCommentController {
         }
 
         if (CommentType.TYPE_TIMELINE.getStatus().equals(commentType)) {
-            carserviceDynamic dynamic = dynamicService.findById(valueId);
+            CarServiceDynamic dynamic = dynamicService.findById(valueId);
             if (dynamic != null) {
                 Integer count = commentService.count(commentType, valueId);
                 dynamic.setCommentCount((long) count);

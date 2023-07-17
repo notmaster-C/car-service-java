@@ -16,8 +16,8 @@ import org.click.carservice.core.service.DealingSlipCoreService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
-import org.click.carservice.db.domain.carserviceBrand;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceBrand;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IBrandService;
 import org.click.carservice.db.service.IOrderService;
@@ -41,12 +41,12 @@ public class OrderUnconfirmedTask extends TaskRunnable {
     private static final long defaultSeconds = SystemConfig.getOrderUnconfirmed() * 24 * 60 * 60 * 1000;
 
 
-    public OrderUnconfirmedTask(carserviceOrder order, long delayInMilliseconds) {
+    public OrderUnconfirmedTask(CarServiceOrder order, long delayInMilliseconds) {
         super(idPrefix + order.getId(), delayInMilliseconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
 
-    public OrderUnconfirmedTask(carserviceOrder order) {
+    public OrderUnconfirmedTask(CarServiceOrder order) {
         super(idPrefix + order.getId(), defaultSeconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
@@ -57,13 +57,13 @@ public class OrderUnconfirmedTask extends TaskRunnable {
         IBrandService brandService = BeanUtil.getBean(IBrandService.class);
         DealingSlipCoreService slipCoreService = BeanUtil.getBean(DealingSlipCoreService.class);
 
-        carserviceOrder order = orderService.findById(this.orderId);
+        CarServiceOrder order = orderService.findById(this.orderId);
         //判断是否满足收货条件
         if (order == null || !OrderStatus.isShipStatus(order)) {
             return;
         }
         //获取店铺信息
-        carserviceBrand brand = brandService.findById(order.getBrandId());
+        CarServiceBrand brand = brandService.findById(order.getBrandId());
         if (brand == null) {
             throw new RuntimeException("店铺信息获取失败");
         }

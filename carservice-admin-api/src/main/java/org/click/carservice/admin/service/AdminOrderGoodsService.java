@@ -12,7 +12,7 @@ package org.click.carservice.admin.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.service.impl.OrderGoodsServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,16 +30,23 @@ import java.util.List;
 public class AdminOrderGoodsService extends OrderGoodsServiceImpl {
 
     @Cacheable(sync = true)
-    public List<carserviceOrderGoods> queryByOid(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public List<CarServiceOrderGoods> queryByOid(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return queryAll(wrapper);
+    }
+
+    @Cacheable(sync = true)
+    public CarServiceOrderGoods findByOrderId(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID , orderId);
+        return getOne(wrapper , false);
     }
 
     @CacheEvict(allEntries = true)
     public void deleteByOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         remove(wrapper);
     }
 

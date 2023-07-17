@@ -3,7 +3,7 @@ package org.click.carservice.core.utils.chatgpt;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import org.click.carservice.core.service.StorageCoreService;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -70,8 +70,8 @@ public class ChatGPTClient {
      * @param chatResult AI返回值
      * @return 消息体
      */
-    public static carserviceMessage getResultMessage(String userId, ChatResult chatResult) {
-        carserviceMessage resultMessage = new carserviceMessage();
+    public static CarServiceMessage getResultMessage(String userId, ChatResult chatResult) {
+        CarServiceMessage resultMessage = new CarServiceMessage();
         resultMessage.setNickName(CHAT_GPT_NICKNAME);
         resultMessage.setAvatarUrl(CHAT_GPT_AVATAR);
         StringBuilder content = new StringBuilder();
@@ -98,8 +98,8 @@ public class ChatGPTClient {
      * @param userId 用户ID
      * @return 消息体
      */
-    public static carserviceMessage getMessage(String userId, String content) {
-        carserviceMessage resultMessage = new carserviceMessage();
+    public static CarServiceMessage getMessage(String userId, String content) {
+        CarServiceMessage resultMessage = new CarServiceMessage();
         resultMessage.setNickName(CHAT_GPT_NICKNAME);
         resultMessage.setAvatarUrl(CHAT_GPT_AVATAR);
         resultMessage.setContent(ChatGPTUtil.send(content));
@@ -129,9 +129,9 @@ public class ChatGPTClient {
      * @param historyMessage 历史聊天记录
      * @return 回复
      */
-    public static ChatResult chatSendMessage(List<carserviceMessage> historyMessage) {
+    public static ChatResult chatSendMessage(List<CarServiceMessage> historyMessage) {
         List<ChatResult.Message> messages = new ArrayList<>();
-        for (carserviceMessage history : historyMessage) {
+        for (CarServiceMessage history : historyMessage) {
             ChatResult.Message chatMessage = new ChatResult.Message();
             if (history.getSendUserId().equals(CHAT_GPT_USERID)) {
                 chatMessage.setRole(ChatResult.RoleEnum.assistant.name());

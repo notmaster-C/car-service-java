@@ -13,9 +13,9 @@ package org.click.carservice.wx.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.wx.model.groupon.result.GrouponJoinResult;
@@ -56,11 +56,11 @@ public class WxGrouponController {
      */
     @GetMapping("list")
     public Object list(PageBody body) {
-        List<carserviceGrouponRules> grouponRulesList = rulesService.queryList(body);
+        List<CarServiceGrouponRules> grouponRulesList = rulesService.queryList(body);
         ArrayList<GrouponRuleResult> grouponList = new ArrayList<>();
-        for (carserviceGrouponRules rule : grouponRulesList) {
+        for (CarServiceGrouponRules rule : grouponRulesList) {
             String goodsId = rule.getGoodsId();
-            carserviceGoods goods = goodsService.findById(goodsId);
+            CarServiceGoods goods = goodsService.findById(goodsId);
             if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
                 continue;
             }
@@ -87,17 +87,17 @@ public class WxGrouponController {
      */
     @GetMapping("join")
     public Object join(@NotNull String grouponId) {
-        carserviceGroupon groupon = grouponService.findById(grouponId);
+        CarServiceGroupon groupon = grouponService.findById(grouponId);
         if (groupon == null) {
             return ResponseUtil.badArgumentValue();
         }
 
-        carserviceGrouponRules rules = rulesService.findById(groupon.getRulesId());
+        CarServiceGrouponRules rules = rulesService.findById(groupon.getRulesId());
         if (rules == null) {
             return ResponseUtil.badArgumentValue();
         }
 
-        carserviceGoods goods = goodsService.findById(rules.getGoodsId());
+        CarServiceGoods goods = goodsService.findById(rules.getGoodsId());
         if (goods == null) {
             return ResponseUtil.badArgumentValue();
         }

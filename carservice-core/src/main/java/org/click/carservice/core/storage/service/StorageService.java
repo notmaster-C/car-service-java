@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Data;
 import org.click.carservice.core.baidu.service.BaibuAipSecCheckService;
 import org.click.carservice.core.utils.RandomStrUtil;
-import org.click.carservice.db.domain.carserviceStorage;
+import org.click.carservice.db.domain.CarServiceStorage;
 import org.click.carservice.db.service.IStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -50,7 +50,7 @@ public class StorageService {
      * @param contentType   文件类型
      * @param fileName      文件索引名
      */
-    public carserviceStorage store(InputStream inputStream, long size, String contentType, String fileName) {
+    public CarServiceStorage store(InputStream inputStream, long size, String contentType, String fileName) {
         String key = generateKey(fileName);
         storage.store(inputStream, size, contentType, key);
         String url = generateUrl(key);
@@ -62,7 +62,7 @@ public class StorageService {
      * 存储一个文件对象
      * @param file 文件对象
      */
-    public carserviceStorage store(File file) {
+    public CarServiceStorage store(File file) {
         //添加到对象存储
         String key = generateKey(file.getName());
         storage.store(file, key);
@@ -76,7 +76,7 @@ public class StorageService {
      * 存储一个文件对象
      * @param file 文件对象
      */
-    public carserviceStorage store(MultipartFile file) {
+    public CarServiceStorage store(MultipartFile file) {
         //添加到对象存储
         String key = generateKey(Objects.requireNonNull(file.getOriginalFilename()));
         storage.store(file, key);
@@ -88,14 +88,14 @@ public class StorageService {
     /**
      * 将对象存入数据库
      */
-    private carserviceStorage addStorage(String name, Long size, String type, String key, String url) {
+    private CarServiceStorage addStorage(String name, Long size, String type, String key, String url) {
         try {
             BaibuAipSecCheckService.picSecCheck(url);
         } catch (Exception e) {
             delete(key);
             throw new RuntimeException(e.getMessage());
         }
-        carserviceStorage storageInfo = new carserviceStorage();
+        CarServiceStorage storageInfo = new CarServiceStorage();
         storageInfo.setName(name);
         storageInfo.setSize(Math.toIntExact(size));
         storageInfo.setType(type);
@@ -109,9 +109,9 @@ public class StorageService {
      * 查询是否有相同KEY
      * @param key 对象KEY
      */
-    public carserviceStorage findByKey(String key) {
-        QueryWrapper<carserviceStorage> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceStorage.KEY, key);
+    public CarServiceStorage findByKey(String key) {
+        QueryWrapper<CarServiceStorage> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceStorage.KEY, key);
         return storageService.getOne(wrapper);
     }
 
@@ -124,7 +124,7 @@ public class StorageService {
         int index = originalFilename.lastIndexOf('.');
         String suffix = originalFilename.substring(index);
         String key;
-        carserviceStorage storageInfo;
+        CarServiceStorage storageInfo;
         do {
             key = RandomStrUtil.getRandom(20, RandomStrUtil.TYPE.CAPITAL_NUMBER) + suffix;
             storageInfo = findByKey(key);

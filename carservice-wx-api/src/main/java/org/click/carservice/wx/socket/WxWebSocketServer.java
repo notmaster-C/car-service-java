@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.chatgpt.ChatGPTClient;
 import org.click.carservice.core.utils.token.TokenManager;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.click.carservice.db.service.IMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,7 +68,7 @@ public class WxWebSocketServer {
     @OnMessage
     public void onMessage(@RequestBody String body, Session session) {
         String userId = WxWebSocketContext.getUserId(session);
-        carserviceMessage message = WxWebSocketContext.getMessage(body, userId);
+        CarServiceMessage message = WxWebSocketContext.getMessage(body, userId);
         if (message == null) {
             return;
         }
@@ -84,7 +84,7 @@ public class WxWebSocketServer {
             //判断是否是ChatGPT
             if (message.getReceiveUserId().equals(ChatGPTClient.CHAT_GPT_USERID)) {
                 //发送请求并获取消息实体
-                carserviceMessage resultMessage = ChatGPTClient.getMessage(userId, message.getContent());
+                CarServiceMessage resultMessage = ChatGPTClient.getMessage(userId, message.getContent());
                 //保存历史记录
                 messageService.add(resultMessage);
                 //发送消息

@@ -5,7 +5,7 @@ import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.binarywang.wx.miniapp.util.WxMaConfigHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,9 +34,9 @@ public class WxStartupRunner {
         //添加默认小程序配置
         WxMaConfigHolder.remove();
         wxMaService.addConfig(WxMaConfigHolder.get(), wxMaConfig);
-        List<carserviceTenant> tenantList = tenantService.list();
+        List<CarServiceTenant> tenantList = tenantService.list();
         //初始化多租户微信配置
-        for (carserviceTenant tenant : tenantList) {
+        for (CarServiceTenant tenant : tenantList) {
             this.addWxConfig(tenant);
         }
     }
@@ -46,7 +46,7 @@ public class WxStartupRunner {
      *
      * @param tenant 租户
      */
-    public void addWxConfig(carserviceTenant tenant) {
+    public void addWxConfig(CarServiceTenant tenant) {
         WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
         config.setAppid(tenant.getAppId());
         config.setSecret(tenant.getAppSecret());

@@ -11,7 +11,7 @@ package org.click.carservice.db.enums;
  * See the Mulan PSL v2 for more details.
  */
 
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.entity.OrderHandleOption;
 
 import java.io.Serializable;
@@ -164,7 +164,7 @@ public enum OrderStatus implements Serializable {
      * @param order 订单
      * @return 返回描述
      */
-    public static String orderStatusText(carserviceOrder order) {
+    public static String orderStatusText(CarServiceOrder order) {
         if (order != null) {
             Short status = order.getOrderStatus();
             for (OrderStatus item : values()) {
@@ -176,7 +176,7 @@ public enum OrderStatus implements Serializable {
         throw new IllegalStateException("status不支持");
     }
 
-    public static OrderHandleOption build(carserviceOrder order) {
+    public static OrderHandleOption build(CarServiceOrder order) {
         Short status = order.getOrderStatus();
         OrderHandleOption handleOption = new OrderHandleOption();
 
@@ -232,7 +232,7 @@ public enum OrderStatus implements Serializable {
         return handleOption;
     }
 
-    public static Integer orderBasics(carserviceOrder order) {
+    public static Integer orderBasics(CarServiceOrder order) {
         Short status = order.getOrderStatus();
         if (STATUS_CREATE.getStatus().equals(status)) {
             return 0;
@@ -350,21 +350,21 @@ public enum OrderStatus implements Serializable {
     /**
      * 判断是否已支付
      */
-    public static boolean hasPayed(carserviceOrder order) {
+    public static boolean hasPayed(CarServiceOrder order) {
         return OrderStatus.isPayStatus(order) || OrderStatus.isBtlPayStatus(order);
     }
 
     /**
      * 判断是否未支付
      */
-    public static boolean isPayed(carserviceOrder order) {
+    public static boolean isPayed(CarServiceOrder order) {
         return OrderStatus.isCreateStatus(order) || OrderStatus.isGrouponNoneStatus(order);
     }
 
     /**
      * 判断是否可以删除 ， 如果订单不是关闭状态(已取消、系统取消、已退款、用户已确认、系统已确认)，则不能删除
      */
-    public static boolean hasDelete(carserviceOrder order) {
+    public static boolean hasDelete(CarServiceOrder order) {
         return OrderStatus.isCancelStatus(order) || OrderStatus.isAutoCancelStatus(order) ||
                 OrderStatus.isConfirmStatus(order) || OrderStatus.isAutoConfirmStatus(order) ||
                 OrderStatus.isRefundConfirmStatus(order);
@@ -373,7 +373,7 @@ public enum OrderStatus implements Serializable {
     /**
      * 判断是否可以发货
      */
-    public static boolean hasShip(carserviceOrder order) {
+    public static boolean hasShip(CarServiceOrder order) {
         return OrderStatus.isPayStatus(order) || OrderStatus.isBtlPayStatus(order)
                 || OrderStatus.isGrouponSucceedStatus(order);
     }
@@ -381,140 +381,140 @@ public enum OrderStatus implements Serializable {
     /**
      * 未付款
      */
-    public static boolean isCreateStatus(carserviceOrder carserviceOrder) {
+    public static boolean isCreateStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_CREATE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已取消
      */
-    public static boolean isCancelStatus(carserviceOrder carserviceOrder) {
+    public static boolean isCancelStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_USER_CANCEL.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已取消（系统）
      */
-    public static boolean isAutoCancelStatus(carserviceOrder carserviceOrder) {
+    public static boolean isAutoCancelStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_AUTO_CANCEL.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已付款
      */
-    public static boolean isPayStatus(carserviceOrder carserviceOrder) {
+    public static boolean isPayStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_PAY.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 线下付款
      */
-    public static boolean isBtlPayStatus(carserviceOrder carserviceOrder) {
+    public static boolean isBtlPayStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_BTL_PAY.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 订单取消，退款中
      */
-    public static boolean isRefundStatus(carserviceOrder carserviceOrder) {
+    public static boolean isRefundStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_REFUND.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已退款
      */
-    public static boolean isRefundConfirmStatus(carserviceOrder carserviceOrder) {
+    public static boolean isRefundConfirmStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_REFUND_CONFIRM.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 待开团（未支付）
      */
-    public static boolean isGrouponNoneStatus(carserviceOrder carserviceOrder) {
+    public static boolean isGrouponNoneStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_GROUPON_NONE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 团购中（已支付）
      */
-    public static boolean isGrouponOnStatus(carserviceOrder carserviceOrder) {
+    public static boolean isGrouponOnStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_GROUPON_ON.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 团购失败（待退款）
      */
-    public static boolean isGrouponFailStatus(carserviceOrder carserviceOrder) {
+    public static boolean isGrouponFailStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_GROUPON_FAIL.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 团购成功（待发货）
      */
-    public static boolean isGrouponSucceedStatus(carserviceOrder carserviceOrder) {
+    public static boolean isGrouponSucceedStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_GROUPON_SUCCEED.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已发货
      */
-    public static boolean isShipStatus(carserviceOrder carserviceOrder) {
+    public static boolean isShipStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_SHIP.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已收货
      */
-    public static boolean isConfirmStatus(carserviceOrder carserviceOrder) {
+    public static boolean isConfirmStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_CONFIRM.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 已收货（系统）
      */
-    public static boolean isAutoConfirmStatus(carserviceOrder carserviceOrder) {
+    public static boolean isAutoConfirmStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_AUTO_CONFIRM.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 评论已超时
      */
-    public static boolean isCommentOvertimeStatus(carserviceOrder carserviceOrder) {
+    public static boolean isCommentOvertimeStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_COMMENT_OVERTIME.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 交易完成
      */
-    public static boolean isOrderSucceedStatus(carserviceOrder carserviceOrder) {
+    public static boolean isOrderSucceedStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.ORDER_SUCCEED.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 售后申请中
      */
-    public static boolean isPutAftersaleStatus(carserviceOrder carserviceOrder) {
+    public static boolean isPutAftersaleStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_PUT_AFTERSALE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 售后退款中
      */
-    public static boolean isDisposeAftersaleStatus(carserviceOrder carserviceOrder) {
+    public static boolean isDisposeAftersaleStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_DISPOSE_AFTERSALE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 售后已完成
      */
-    public static boolean isFinishAftersaleStatus(carserviceOrder carserviceOrder) {
+    public static boolean isFinishAftersaleStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_FINISH_AFTERSALE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 
     /**
      * 售后已拒绝
      */
-    public static boolean isRejectAftersaleStatus(carserviceOrder carserviceOrder) {
+    public static boolean isRejectAftersaleStatus(CarServiceOrder carserviceOrder) {
         return OrderStatus.STATUS_REJECT_AFTERSALE.getStatus().equals(carserviceOrder.getOrderStatus());
     }
 

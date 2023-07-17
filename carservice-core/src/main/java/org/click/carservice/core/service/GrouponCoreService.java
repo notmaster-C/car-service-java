@@ -12,9 +12,9 @@ package org.click.carservice.core.service;
  */
 
 
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceGrouponRules;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.GrouponStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IGrouponRulesService;
@@ -51,9 +51,9 @@ public class GrouponCoreService {
      * 修改团购状态和订单状态
      * @param groupon 团购
      */
-    public void updateGrouponStatus(carserviceGroupon groupon) {
+    public void updateGrouponStatus(CarServiceGroupon groupon) {
         //获取团购规则信息
-        carserviceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
+        CarServiceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
         //仅当发起者才创建分享图片
         if (groupon.getGrouponId().equals("0")) {
             String url = qCodeService.createGrouponShareImage(grouponRules, groupon.getId());
@@ -61,13 +61,13 @@ public class GrouponCoreService {
         }
 
         //获取团购参与信息
-        List<carserviceGroupon> grouponList = commonService.queryJoinRecord(groupon.getGrouponId());
+        List<CarServiceGroupon> grouponList = commonService.queryJoinRecord(groupon.getGrouponId());
         if (!groupon.getGrouponId().equals("0") && (grouponList.size() >= grouponRules.getDiscountMember() - 1)) {
             //修改当前用户的团购信息
-            carserviceGroupon grouponSource = commonService.queryById(groupon.getGrouponId());
+            CarServiceGroupon grouponSource = commonService.queryById(groupon.getGrouponId());
             this.updateStatus(grouponSource);
             //修改前面已经参与者团购状态
-            for (carserviceGroupon grouponActivity : grouponList) {
+            for (CarServiceGroupon grouponActivity : grouponList) {
                 this.updateStatus(grouponActivity);
             }
         } else {
@@ -78,7 +78,7 @@ public class GrouponCoreService {
             }
 
             //修改订单团购状态
-            carserviceOrder order = orderService.findById(groupon.getOrderId());
+            CarServiceOrder order = orderService.findById(groupon.getOrderId());
             order.setPayTime(LocalDateTime.now());
             order.setOrderStatus(OrderStatus.STATUS_GROUPON_ON.getStatus());
             if (orderService.updateVersionSelective(order) == 0) {
@@ -92,14 +92,14 @@ public class GrouponCoreService {
      * 修改团购和订单状态，并发送通知邮件
      * @param groupon 团购
      */
-    private void updateStatus(carserviceGroupon groupon) {
+    private void updateStatus(CarServiceGroupon groupon) {
         groupon.setStatus(GrouponStatus.STATUS_SUCCEED.getStatus());
         if (grouponService.updateVersionSelective(groupon) == 0) {
             throw new RuntimeException("更新团购信息失败");
         }
 
         //修改订单团购状态
-        carserviceOrder order = orderService.findById(groupon.getOrderId());
+        CarServiceOrder order = orderService.findById(groupon.getOrderId());
         order.setOrderStatus(OrderStatus.STATUS_GROUPON_SUCCEED.getStatus());
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("更新团购订单信息失败");

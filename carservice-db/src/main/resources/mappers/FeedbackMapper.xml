@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.FeedbackMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceFeedback">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceFeedback">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="username" property="username"/>

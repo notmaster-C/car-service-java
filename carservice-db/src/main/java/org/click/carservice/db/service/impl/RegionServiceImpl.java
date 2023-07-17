@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceRegion;
+import org.click.carservice.db.domain.CarServiceRegion;
 import org.click.carservice.db.mapper.RegionMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IRegionService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_region")
-public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, carserviceRegion> implements IRegionService {
+public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, CarServiceRegion> implements IRegionService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceRegion findById(String id) {
+    public CarServiceRegion findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceRegion> queryAll(Wrapper<carserviceRegion> queryWrapper) {
+    public List<CarServiceRegion> queryAll(Wrapper<CarServiceRegion> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceRegion record) {
+    public int add(CarServiceRegion record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceRegion> list) {
+    public boolean batchAdd(List<CarServiceRegion> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceRegion record) {
+    public int updateSelective(CarServiceRegion record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceRegion record) {
+    public int updateVersionSelective(CarServiceRegion record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceRegion> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceRegion> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceRegion entity) {
+    public boolean save(CarServiceRegion entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceRegion> entityList) {
+    public boolean saveBatch(Collection<CarServiceRegion> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceRegion entity) {
+    public boolean saveOrUpdate(CarServiceRegion entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceRegion entity, Wrapper<carserviceRegion> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceRegion entity, Wrapper<CarServiceRegion> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceRegion> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceRegion> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceRegion entity) {
+    public boolean removeById(CarServiceRegion entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceRegion> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceRegion> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, carservice
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceRegion entity) {
+    public boolean updateById(CarServiceRegion entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceRegion> updateWrapper) {
+    public boolean update(Wrapper<CarServiceRegion> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceRegion entity, Wrapper<carserviceRegion> updateWrapper) {
+    public boolean update(CarServiceRegion entity, Wrapper<CarServiceRegion> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceRegion> entityList) {
+    public boolean updateBatchById(Collection<CarServiceRegion> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceRegion getById(Serializable id) {
+    public CarServiceRegion getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceRegion> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceRegion> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceRegion> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceRegion> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceRegion getOne(Wrapper<carserviceRegion> queryWrapper) {
+    public CarServiceRegion getOne(Wrapper<CarServiceRegion> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class RegionServiceImpl extends IBaseServiceImpl<RegionMapper, carservice
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceRegion> queryWrapper) {
+    public long count(Wrapper<CarServiceRegion> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceRegion> list(Wrapper<carserviceRegion> queryWrapper) {
+    public List<CarServiceRegion> list(Wrapper<CarServiceRegion> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceRegion> list() {
+    public List<CarServiceRegion> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceRegion> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceRegion> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

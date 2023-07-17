@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.footprint.body.FootprintListBody;
-import org.click.carservice.db.domain.carserviceFootprint;
+import org.click.carservice.db.domain.CarServiceFootprint;
 import org.click.carservice.db.service.impl.FootprintServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,13 +32,13 @@ public class AdminFootprintService extends FootprintServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceFootprint> querySelective(FootprintListBody body) {
-        QueryWrapper<carserviceFootprint> wrapper = startPage(body);
+    public List<CarServiceFootprint> querySelective(FootprintListBody body) {
+        QueryWrapper<CarServiceFootprint> wrapper = startPage(body);
         if (StringUtils.hasText(body.getUserId())) {
-            wrapper.eq(carserviceFootprint.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceFootprint.USER_ID, body.getUserId());
         }
         if (StringUtils.hasText(body.getGoodsId())) {
-            wrapper.eq(carserviceFootprint.GOODS_ID, body.getGoodsId());
+            wrapper.eq(CarServiceFootprint.GOODS_ID, body.getGoodsId());
         }
         return queryAll(wrapper);
     }

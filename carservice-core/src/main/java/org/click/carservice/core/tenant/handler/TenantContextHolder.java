@@ -29,7 +29,7 @@ public class TenantContextHolder {
     /**租户ID 线程独立，可解决并发问题*/
     private static final ThreadLocal<String> LOCAL_TENANT_ID = new ThreadLocal<>();
     /**租户请求头*/
-    private static final String TENANT_ID_HEADER = "X-carservice-TenantId";
+    private static final String TENANT_ID_HEADER = "X-CarService-TenantId";
     /**默认租户ID*/
     private static final String TENANT_ID_DEFAULT = "0";
 

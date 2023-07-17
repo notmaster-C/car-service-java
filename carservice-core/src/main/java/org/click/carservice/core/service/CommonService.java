@@ -62,16 +62,16 @@ public class CommonService {
     private IPermissionService permissionService;
 
 
-    public carserviceOrder findOrderById(String userId, String orderId) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.ID, orderId);
+    public CarServiceOrder findOrderById(String userId, String orderId) {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.ID, orderId);
         return orderService.getOne(wrapper);
     }
 
-    public List<carserviceAdmin> findAdmin(String username) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.USERNAME, username);
+    public List<CarServiceAdmin> findAdmin(String username) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.USERNAME, username);
         return adminService.list(wrapper);
     }
 
@@ -80,10 +80,10 @@ public class CommonService {
         if (roleIds.length == 0) {
             return roles;
         }
-        QueryWrapper<carserviceRole> wrapper = new QueryWrapper<>();
-        wrapper.in(carserviceRole.ID, Arrays.asList(roleIds));
-        wrapper.eq(carserviceRole.ENABLED, true);
-        for (carserviceRole role : roleService.queryAll(wrapper)) {
+        QueryWrapper<CarServiceRole> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServiceRole.ID, Arrays.asList(roleIds));
+        wrapper.eq(CarServiceRole.ENABLED, true);
+        for (CarServiceRole role : roleService.queryAll(wrapper)) {
             roles.add(role.getName());
         }
         return roles;
@@ -94,49 +94,49 @@ public class CommonService {
         if (roleIds.length == 0) {
             return permissionSet;
         }
-        QueryWrapper<carservicePermission> wrapper = new QueryWrapper<>();
-        wrapper.in(carservicePermission.ROLE_ID, Arrays.asList(roleIds));
-        for (carservicePermission permission : permissionService.queryAll(wrapper)) {
+        QueryWrapper<CarServicePermission> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServicePermission.ROLE_ID, Arrays.asList(roleIds));
+        for (CarServicePermission permission : permissionService.queryAll(wrapper)) {
             permissionSet.add(permission.getPermission());
         }
         return permissionSet;
     }
 
 
-    public carserviceOrder findBySn(String userId, String orderSn) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.ORDER_SN, orderSn);
+    public CarServiceOrder findBySn(String userId, String orderSn) {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.ORDER_SN, orderSn);
         return orderService.getOne(wrapper, false);
     }
 
-    public List<carserviceGroupon> queryByRuleId(String grouponRuleId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.RULES_ID, grouponRuleId);
+    public List<CarServiceGroupon> queryByRuleId(String grouponRuleId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.RULES_ID, grouponRuleId);
         return grouponService.queryAll(wrapper);
     }
 
     /**
      * 查询新用户注册优惠券
      */
-    public List<carserviceCoupon> queryRegister() {
-        QueryWrapper<carserviceCoupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCoupon.TYPE, CouponType.TYPE_REGISTER.getStatus());
-        wrapper.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
+    public List<CarServiceCoupon> queryRegister() {
+        QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCoupon.TYPE, CouponType.TYPE_REGISTER.getStatus());
+        wrapper.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
         return couponService.queryAll(wrapper);
     }
 
 
     public Integer countUserAndCoupon(String userId, String couponId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.USER_ID, userId);
-        wrapper.eq(carserviceCouponUser.COUPON_ID, couponId);
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.USER_ID, userId);
+        wrapper.eq(CarServiceCouponUser.COUPON_ID, couponId);
         return Math.toIntExact(couponUserService.count(wrapper));
     }
 
 
-    public void addCouponUser(String userId, carserviceCoupon coupon, String couponId) {
-        carserviceCouponUser couponUser = new carserviceCouponUser();
+    public void addCouponUser(String userId, CarServiceCoupon coupon, String couponId) {
+        CarServiceCouponUser couponUser = new CarServiceCouponUser();
         couponUser.setUserId(userId);
         couponUser.setCouponId(couponId);
         Short timeType = coupon.getTimeType();
@@ -164,7 +164,7 @@ public class CommonService {
         // 如果couponId=0则没有优惠券，couponId=-1则不使用优惠券
         if (!"0".equals(couponId) && !"-1".equals(couponId)) {
             // 如果使用了优惠券，设置优惠券使用状态
-            carserviceCouponUser couponUser = couponUserService.findById(userCouponId);
+            CarServiceCouponUser couponUser = couponUserService.findById(userCouponId);
             couponUser.setStatus(CouponUserStatus.STATUS_USED.getStatus());
             couponUser.setUsedTime(LocalDateTime.now());
             couponUser.setOrderId(orderId);
@@ -175,11 +175,11 @@ public class CommonService {
     }
 
 
-    public carserviceCouponUser queryOne(String userId, String couponId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.USER_ID, userId);
-        wrapper.eq(carserviceCouponUser.COUPON_ID, couponId);
-        wrapper.eq(carserviceCouponUser.STATUS, CouponUserStatus.STATUS_USABLE.getStatus());
+    public CarServiceCouponUser queryOne(String userId, String couponId) {
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.USER_ID, userId);
+        wrapper.eq(CarServiceCouponUser.COUPON_ID, couponId);
+        wrapper.eq(CarServiceCouponUser.STATUS, CouponUserStatus.STATUS_USABLE.getStatus());
         return couponUserService.getOne(wrapper, false);
     }
 
@@ -190,10 +190,10 @@ public class CommonService {
      * @param openId 用户openId
      * @return 最近十条交易记录
      */
-    public List<carserviceDealingSlip> querySelective(String userId, String openId) {
-        QueryWrapper<carserviceDealingSlip> wrapper = dealingSlipService.startPage(new PageBody(10));
-        wrapper.eq(carserviceDealingSlip.USER_ID, userId);
-        wrapper.eq(carserviceDealingSlip.OPENID, openId);
+    public List<CarServiceDealingSlip> querySelective(String userId, String openId) {
+        QueryWrapper<CarServiceDealingSlip> wrapper = dealingSlipService.startPage(new PageBody(10));
+        wrapper.eq(CarServiceDealingSlip.USER_ID, userId);
+        wrapper.eq(CarServiceDealingSlip.OPENID, openId);
         return dealingSlipService.list(wrapper);
     }
 
@@ -201,131 +201,131 @@ public class CommonService {
      * 判断订单号是否存在
      */
     public Boolean countByOrderSn(String orderSn) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.ORDER_SN, orderSn);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.ORDER_SN, orderSn);
         return orderService.exists(wrapper);
     }
 
-    public carserviceOrderGoods findByGoodsOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public CarServiceOrderGoods findByGoodsOrderId(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return orderGoodsService.getOne(wrapper, false);
     }
 
-    public carserviceReward findByRewardOrderId(String orderId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.ORDER_ID, orderId);
+    public CarServiceReward findByRewardOrderId(String orderId) {
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.ORDER_ID, orderId);
         return rewardService.getOne(wrapper, false);
     }
 
-    public carserviceShare findByShareOrderId(String orderId) {
-        QueryWrapper<carserviceShare> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceShare.ORDER_ID, orderId);
+    public CarServiceShare findByShareOrderId(String orderId) {
+        QueryWrapper<CarServiceShare> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceShare.ORDER_ID, orderId);
         return shareService.getOne(wrapper, false);
     }
 
     public boolean checkExistByName(String name) {
-        QueryWrapper<carserviceGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoods.NAME, name);
-        wrapper.eq(carserviceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
+        QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoods.NAME, name);
+        wrapper.eq(CarServiceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
         return goodsService.exists(wrapper);
     }
 
 
-    public carserviceRewardTask findByRewardTaskGid(String goodsId) {
-        QueryWrapper<carserviceRewardTask> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceRewardTask.GOODS_ID, goodsId);
+    public CarServiceRewardTask findByRewardTaskGid(String goodsId) {
+        QueryWrapper<CarServiceRewardTask> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceRewardTask.GOODS_ID, goodsId);
         return rewardTaskService.getOne(wrapper, false);
     }
 
 
     public void deleteByRewardTaskGid(String goodsId) {
-        QueryWrapper<carserviceRewardTask> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceRewardTask.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceRewardTask> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceRewardTask.GOODS_ID, goodsId);
         rewardTaskService.remove(wrapper);
     }
 
     public void deleteBySpecificationGid(String goodsId) {
-        QueryWrapper<carserviceGoodsSpecification> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsSpecification.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceGoodsSpecification> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsSpecification.GOODS_ID, goodsId);
         specificationService.remove(wrapper);
     }
 
     public void deleteByAttributeGid(String goodsId) {
-        QueryWrapper<carserviceGoodsAttribute> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsAttribute.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceGoodsAttribute> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsAttribute.GOODS_ID, goodsId);
         attributeService.remove(wrapper);
     }
 
     public void deleteByProductGid(String goodsId) {
-        QueryWrapper<carserviceGoodsProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsProduct.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsProduct.GOODS_ID, goodsId);
         productService.remove(wrapper);
     }
 
     public void updateProduct(String productId, String goodsSn, String goodsName, BigDecimal price, String url) {
-        carserviceCart cart = new carserviceCart();
+        CarServiceCart cart = new CarServiceCart();
         cart.setPrice(price);
         cart.setPicUrl(url);
         cart.setGoodsSn(goodsSn);
         cart.setGoodsName(goodsName);
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.PRODUCT_ID, productId);
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.PRODUCT_ID, productId);
         cartService.update(cart, wrapper);
     }
 
-    public carserviceGrouponRules findByGrouponRulesGid(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
+    public CarServiceGrouponRules findByGrouponRulesGid(String goodsId) {
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return grouponRulesService.getOne(wrapper, false);
     }
 
     public Integer countByGoodsId(String goodsId) {
-        QueryWrapper<carserviceGrouponRules> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGrouponRules.GOODS_ID, goodsId);
-        wrapper.eq(carserviceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
+        QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
+        wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
         return Math.toIntExact(grouponRulesService.count(wrapper));
     }
 
-    public carserviceGroupon queryById(String grouponId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.GROUPON_ID, grouponId);
+    public CarServiceGroupon queryById(String grouponId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
         return grouponService.getOne(wrapper, false);
     }
 
-    public List<carserviceGroupon> queryJoinRecord(String grouponId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.GROUPON_ID, grouponId);
+    public List<CarServiceGroupon> queryJoinRecord(String grouponId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
         return grouponService.queryAll(wrapper);
     }
 
-    public List<carserviceOrderGoods> queryByOid(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public List<CarServiceOrderGoods> queryByOid(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return orderGoodsService.queryAll(wrapper);
     }
 
-    public carserviceOrderGoods findByOrderId(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public CarServiceOrderGoods findByOrderId(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return orderGoodsService.getOne(wrapper, false);
     }
 
-    public carserviceGroupon findByGrouponOrderId(String orderId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.ORDER_ID, orderId);
+    public CarServiceGroupon findByGrouponOrderId(String orderId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.ORDER_ID, orderId);
         return grouponService.getOne(wrapper, false);
     }
 
-    public List<carserviceOrderGoods> queryByOrderGoodsOid(String orderId) {
-        QueryWrapper<carserviceOrderGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrderGoods.ORDER_ID, orderId);
+    public List<CarServiceOrderGoods> queryByOrderGoodsOid(String orderId) {
+        QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return orderGoodsService.queryAll(wrapper);
     }
 
-    public List<carserviceCouponUser> queryByCouponUserOid(String orderId) {
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.ORDER_ID, orderId);
+    public List<CarServiceCouponUser> queryByCouponUserOid(String orderId) {
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.ORDER_ID, orderId);
         return couponUserService.queryAll(wrapper);
     }
 
@@ -336,7 +336,7 @@ public class CommonService {
      * @param status  状态
      */
     public Integer updateGoodsStatus(String goodsId, Short status) {
-        carserviceGoods goods = new carserviceGoods();
+        CarServiceGoods goods = new CarServiceGoods();
         goods.setId(goodsId);
         goods.setStatus(status);
         goods.setUpdateTime(LocalDateTime.now());
@@ -352,10 +352,10 @@ public class CommonService {
      * @return true
      */
     public Boolean isDealingSlip(String userId, String orderSn, DealType dealType) {
-        QueryWrapper<carserviceDealingSlip> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceDealingSlip.USER_ID, userId);
-        wrapper.eq(carserviceDealingSlip.ORDER_SN, orderSn);
-        wrapper.eq(carserviceDealingSlip.DEAL_TYPE, dealType.getType());
+        QueryWrapper<CarServiceDealingSlip> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceDealingSlip.USER_ID, userId);
+        wrapper.eq(CarServiceDealingSlip.ORDER_SN, orderSn);
+        wrapper.eq(CarServiceDealingSlip.DEAL_TYPE, dealType.getType());
         return dealingSlipService.exists(wrapper);
     }
 
@@ -365,19 +365,19 @@ public class CommonService {
      * @param goodsId 商品ID
      */
     public Boolean isGoodsNoStock(String goodsId) {
-        QueryWrapper<carserviceGoodsProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsProduct.GOODS_ID, goodsId);
-        List<carserviceGoodsProduct> goodsProducts = goodsProductService.queryAll(wrapper);
+        QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsProduct.GOODS_ID, goodsId);
+        List<CarServiceGoodsProduct> goodsProducts = goodsProductService.queryAll(wrapper);
         Integer number = 0;
-        for (carserviceGoodsProduct product : goodsProducts) {
+        for (CarServiceGoodsProduct product : goodsProducts) {
             number += product.getNumber();
         }
         return number <= 0;
     }
 
     public Integer countReward(String taskId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.TASK_ID, taskId);
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.TASK_ID, taskId);
         return Math.toIntExact(rewardService.count(wrapper));
     }
 

@@ -12,10 +12,10 @@ package org.click.carservice.core.service;
  */
 
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceReward;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceReward;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 import org.click.carservice.db.enums.RewardStatus;
 import org.click.carservice.db.enums.RewardTaskStatus;
 import org.click.carservice.db.service.IGoodsService;
@@ -45,12 +45,12 @@ public class RewardCoreService {
     /**
      * 修改赏金状态和订单状态
      */
-    public void updateRewardStatus(carserviceReward reward) {
+    public void updateRewardStatus(CarServiceReward reward) {
         reward.setStatus(RewardStatus.STATUS_SUCCEED.getStatus());
         if (rewardService.updateVersionSelective(reward) <= 0) {
             throw new RuntimeException("赏金更新数据失败");
         }
-        carserviceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
+        CarServiceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
         if (commonService.countReward(reward.getTaskId()) >= rewardTask.getRewardMember()) {
             rewardTask.setStatus(RewardTaskStatus.TASK_STATUS_SUCCEED.getStatus());
         }
@@ -70,7 +70,7 @@ public class RewardCoreService {
         if (rewardTaskId == null) {
             return ResponseUtil.badArgumentValue();
         }
-        carserviceRewardTask rewardTask = rewardTaskService.findById(rewardTaskId);
+        CarServiceRewardTask rewardTask = rewardTaskService.findById(rewardTaskId);
         if (rewardTask == null) {
             return ResponseUtil.fail(800, "活动不存在");
         }
@@ -82,7 +82,7 @@ public class RewardCoreService {
         if (commonService.countReward(rewardTask.getId()) >= rewardTask.getRewardMember()) {
             return ResponseUtil.fail(800, "活动已结束");
         }
-        carserviceGoods goods = goodsService.findById(rewardTask.getGoodsId());
+        CarServiceGoods goods = goodsService.findById(rewardTask.getGoodsId());
         if (goods == null) {
             return ResponseUtil.fail(800, "商品不存在");
         }
@@ -97,12 +97,12 @@ public class RewardCoreService {
      * @param userId 用户id
      * @param order 订单
      */
-    public void addReward(String rewardLinkId, String userId, carserviceOrder order) {
+    public void addReward(String rewardLinkId, String userId, CarServiceOrder order) {
         //添加赏金活动
         if (rewardLinkId != null && !"0".equals(rewardLinkId)) {
-            carserviceReward reward = rewardService.findById(rewardLinkId);
-            carserviceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
-            carserviceReward newReward = new carserviceReward();
+            CarServiceReward reward = rewardService.findById(rewardLinkId);
+            CarServiceRewardTask rewardTask = rewardTaskService.findById(reward.getTaskId());
+            CarServiceReward newReward = new CarServiceReward();
             newReward.setUserId(userId);
             newReward.setOrderId(order.getId());
             newReward.setRewardId(reward.getId());

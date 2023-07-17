@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.user.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceBrand;
+import org.click.carservice.db.domain.CarServiceBrand;
 import org.click.carservice.wx.model.order.result.UserOrderInfo;
 
 import java.io.Serializable;
@@ -29,6 +29,6 @@ public class UserIndexResult implements Serializable {
     /**
      * 用户店铺信息
      */
-    private carserviceBrand brand;
+    private CarServiceBrand brand;
 
 }

@@ -8,7 +8,7 @@ import org.click.carservice.core.redis.cache.RedisCacheService;
 import org.click.carservice.core.redis.util.Message;
 import org.click.carservice.core.utils.JacksonUtil;
 import org.click.carservice.core.utils.token.TokenManager;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.springframework.util.StringUtils;
 
 import javax.websocket.RemoteEndpoint;
@@ -87,7 +87,7 @@ public class WxWebSocketContext {
      * @param content 提示信息
      */
     public static void sendHintTo(Session session, String content) {
-        carserviceMessage message = new carserviceMessage();
+        CarServiceMessage message = new CarServiceMessage();
         message.setContent(content);
         sendMessage(session, message);
     }
@@ -99,7 +99,7 @@ public class WxWebSocketContext {
      * @param content 提示信息
      */
     public static void sendHintTo(String userId, String content) {
-        carserviceMessage message = new carserviceMessage();
+        CarServiceMessage message = new CarServiceMessage();
         message.setContent(content);
         sendMessage(userId, message);
     }
@@ -111,7 +111,7 @@ public class WxWebSocketContext {
      * @param message 消息体
      * @param me      当前消息的发送者，不会将消息发送给自己
      */
-    public static void broadcast(carserviceMessage message, Session me) {
+    public static void broadcast(CarServiceMessage message, Session me) {
         // 创建消息
         String messageText = buildTextMessage(message);
         // 遍历 SESSION_USER_MAP ，进行逐个发送
@@ -128,7 +128,7 @@ public class WxWebSocketContext {
      * @param session Session
      * @param message 消息体
      */
-    public static void sendMessage(Session session, carserviceMessage message) {
+    public static void sendMessage(Session session, CarServiceMessage message) {
         if (message == null) {
             log.error("==> message消息不能为null");
             return;
@@ -145,7 +145,7 @@ public class WxWebSocketContext {
      * @param userId  指定用户
      * @param message 消息体
      */
-    public static void sendMessage(String userId, carserviceMessage message) {
+    public static void sendMessage(String userId, CarServiceMessage message) {
         // 获得用户对应的 Session
         Session session = USER_SESSION_MAP.get(userId);
         if (session == null) {
@@ -163,7 +163,7 @@ public class WxWebSocketContext {
      * @param message     消息体
      * @param convertSend 未找到session是否广播
      */
-    public static void sendMessage(String userId, carserviceMessage message, boolean convertSend) {
+    public static void sendMessage(String userId, CarServiceMessage message, boolean convertSend) {
         // 获得用户对应的 Session
         Session session = USER_SESSION_MAP.get(userId);
         if (session == null) {
@@ -189,7 +189,7 @@ public class WxWebSocketContext {
      * @param message 消息体
      * @return 消息
      */
-    private static String buildTextMessage(carserviceMessage message) {
+    private static String buildTextMessage(CarServiceMessage message) {
         return JacksonUtil.toJson(Lists.newArrayList(message));
     }
 
@@ -200,7 +200,7 @@ public class WxWebSocketContext {
      * @param session       发送用户
      * @param receiveUserId 接收用户
      */
-    public static void sendMessage(carserviceMessage message, Session session, String receiveUserId) {
+    public static void sendMessage(CarServiceMessage message, Session session, String receiveUserId) {
         sendMessage(session, message);
         sendMessage(receiveUserId, message, true);
     }
@@ -235,16 +235,16 @@ public class WxWebSocketContext {
      * @param userId 发送用户ID
      * @return 消息对象
      */
-    public static carserviceMessage getMessage(String body, String userId) {
+    public static CarServiceMessage getMessage(String body, String userId) {
         //心跳校验
         String token = JacksonUtil.parseString(body, "token");
         if (token != null) {
             return null;
         }
         //解析json
-        carserviceMessage message;
+        CarServiceMessage message;
         try {
-            message = JSONUtil.toBean(body, carserviceMessage.class);
+            message = JSONUtil.toBean(body, CarServiceMessage.class);
             message.setSendUserId(userId);
             //禁止给自己发送信息
             if (userId.equals(message.getReceiveUserId())) {

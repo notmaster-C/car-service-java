@@ -20,9 +20,9 @@ import org.click.carservice.core.utils.JacksonUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.request.GoodsDetail;
 import org.click.carservice.core.weixin.request.WxLogisticsRequest;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class LogisticsPluginService {
             return ResponseUtil.badArgument();
         }
 
-        carserviceOrder order = commonService.findBySn(userId, orderSn);
+        CarServiceOrder order = commonService.findBySn(userId, orderSn);
         if (order == null) {
             return ResponseUtil.fail("未找到订单,请重试");
         }
@@ -80,7 +80,7 @@ public class LogisticsPluginService {
             return ResponseUtil.fail("订单未发货");
         }
 
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.fail("用户信息查找失败请重试");
         }
@@ -94,8 +94,8 @@ public class LogisticsPluginService {
 
         //物流商品信息
         List<GoodsDetail> detailList = new ArrayList<>();
-        List<carserviceOrderGoods> goodsList = commonService.queryByOid(order.getId());
-        for (carserviceOrderGoods orderGoods : goodsList) {
+        List<CarServiceOrderGoods> goodsList = commonService.queryByOid(order.getId());
+        for (CarServiceOrderGoods orderGoods : goodsList) {
             GoodsDetail goodsDetail = new GoodsDetail();
             goodsDetail.setGoodsName(orderGoods.getGoodsName());
             goodsDetail.setGoodsImgUrl(orderGoods.getPicUrl());

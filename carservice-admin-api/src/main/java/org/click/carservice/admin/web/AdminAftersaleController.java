@@ -25,9 +25,9 @@ import org.click.carservice.core.service.OrderCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.service.SubscribeMessageService;
 import org.click.carservice.core.weixin.service.WxPayRefundService;
-import org.click.carservice.db.domain.carserviceAftersale;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceAfterSale;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.IdsBody;
 import org.click.carservice.db.enums.AftersaleStatus;
 import org.click.carservice.db.enums.OrderStatus;
@@ -87,7 +87,7 @@ public class AdminAftersaleController {
     @RequiresPermissionsDesc(menu = {"商场管理", "售后管理"}, button = "审核通过")
     @PostMapping("/recept")
     public Object recept(@NotNull String id) {
-        carserviceAftersale aftersale = aftersaleService.findById(id);
+        CarServiceAfterSale aftersale = aftersaleService.findById(id);
         if (aftersale == null) {
             return ResponseUtil.fail("售后不存在");
         }
@@ -102,7 +102,7 @@ public class AdminAftersaleController {
     @PostMapping("/batch-recept")
     public Object batchRecept(@Valid @RequestBody IdsBody body) {
         for (String id : body.getIds()) {
-            carserviceAftersale aftersale = aftersaleService.findById(id);
+            CarServiceAfterSale aftersale = aftersaleService.findById(id);
             if (aftersale == null) {
                 continue;
             }
@@ -119,7 +119,7 @@ public class AdminAftersaleController {
     @RequiresPermissionsDesc(menu = {"商场管理", "售后管理"}, button = "审核拒绝")
     @PostMapping("/reject")
     public Object reject(@NotNull String id) {
-        carserviceAftersale aftersale = aftersaleService.findById(id);
+        CarServiceAfterSale aftersale = aftersaleService.findById(id);
         if (aftersale == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -135,7 +135,7 @@ public class AdminAftersaleController {
     @PostMapping("/batch-reject")
     public Object batchReject(@Valid @RequestBody IdsBody body) {
         for (String id : body.getIds()) {
-            carserviceAftersale aftersale = aftersaleService.findById(id);
+            CarServiceAfterSale aftersale = aftersaleService.findById(id);
             if (aftersale == null) {
                 continue;
             }
@@ -152,7 +152,7 @@ public class AdminAftersaleController {
     @RequiresPermissionsDesc(menu = {"商场管理", "售后管理"}, button = "退款")
     @PostMapping("/refund")
     public Object refund(@NotNull String id) {
-        carserviceAftersale aftersale = aftersaleService.findById(id);
+        CarServiceAfterSale aftersale = aftersaleService.findById(id);
         if (aftersale == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -161,7 +161,7 @@ public class AdminAftersaleController {
             return ResponseUtil.fail("售后不能进行退款操作");
         }
 
-        carserviceOrder order = orderService.findById(aftersale.getOrderId());
+        CarServiceOrder order = orderService.findById(aftersale.getOrderId());
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -198,7 +198,7 @@ public class AdminAftersaleController {
         orderCoreService.orderRelease(order);
 
         //订单退款订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         //记录操作日志

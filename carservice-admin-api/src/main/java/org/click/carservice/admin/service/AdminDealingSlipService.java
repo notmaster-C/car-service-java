@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.user.body.DealingSlipListBody;
-import org.click.carservice.db.domain.carserviceDealingSlip;
+import org.click.carservice.db.domain.CarServiceDealingSlip;
 import org.click.carservice.db.service.impl.DealingSlipServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,13 +31,13 @@ public class AdminDealingSlipService extends DealingSlipServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceDealingSlip> querySelective(DealingSlipListBody body) {
-        QueryWrapper<carserviceDealingSlip> wrapper = startPage(body);
+    public List<CarServiceDealingSlip> querySelective(DealingSlipListBody body) {
+        QueryWrapper<CarServiceDealingSlip> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceDealingSlip.USER_ID, body.getUserId());
+            wrapper.eq(CarServiceDealingSlip.USER_ID, body.getUserId());
         }
         if (body.getDealType() != null) {
-            wrapper.eq(carserviceDealingSlip.DEAL_TYPE, body.getDealType());
+            wrapper.eq(CarServiceDealingSlip.DEAL_TYPE, body.getDealType());
         }
         return queryAll(wrapper);
     }

@@ -18,8 +18,8 @@ import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.jobs.ApiJob;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.service.WxSecCheckService;
-import org.click.carservice.db.domain.carserviceDynamic;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceDynamic;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.enums.LikeType;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.dynamic.body.DynamicListBody;
@@ -60,9 +60,9 @@ public class WxDynamicController {
      */
     @GetMapping("list")
     public Object dynamicList(@LoginUser(require = false) String userId, DynamicListBody body) {
-        List<carserviceDynamic> dynamicList = dynamicService.querySelective(body);
+        List<CarServiceDynamic> dynamicList = dynamicService.querySelective(body);
         ArrayList<DynamicListResult> resultList = new ArrayList<>();
-        for (carserviceDynamic dynamic : dynamicList) {
+        for (CarServiceDynamic dynamic : dynamicList) {
             //给查寻出来的时间加上浏览量
             dynamic.setLookCount(dynamic.getLookCount() + 1);
             dynamicService.updateSelective(dynamic);
@@ -71,7 +71,7 @@ public class WxDynamicController {
             BeanUtil.copyProperties(dynamic, result);
             result.setDynamicLike(likeService.count(LikeType.TYPE_TIMELINE, dynamic.getId(), userId));
             //用户信息
-            carserviceUser user = userService.findById(dynamic.getUserId());
+            CarServiceUser user = userService.findById(dynamic.getUserId());
             if (user == null) {
                 if (ApiJob.USER_ID.equals(dynamic.getUserId())) {
                     result.setNickName("每日段子");
@@ -97,13 +97,13 @@ public class WxDynamicController {
      * @return 操作结果
      */
     @PostMapping("submit")
-    public Object submit(@LoginUser String userId, @Valid @RequestBody carserviceDynamic dynamic) {
+    public Object submit(@LoginUser String userId, @Valid @RequestBody CarServiceDynamic dynamic) {
         String content = dynamic.getContent();
         if (Objects.isNull(content)) {
             return ResponseUtil.badArgument();
         }
         //文本校验
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         secCheckService.checkMessage(user.getOpenid(), dynamic.toString());
         //添加动态
         dynamic.setUserId(userId);
@@ -120,7 +120,7 @@ public class WxDynamicController {
      */
     @PostMapping("delete")
     public Object submit(@LoginUser String userId, @JsonBody String timeVoId) {
-        carserviceDynamic dynamic = dynamicService.findById(timeVoId);
+        CarServiceDynamic dynamic = dynamicService.findById(timeVoId);
         if (dynamic == null) {
             return ResponseUtil.badArgument();
         }

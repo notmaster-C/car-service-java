@@ -21,8 +21,8 @@ import org.click.carservice.admin.service.AdminDynamicService;
 import org.click.carservice.admin.service.AdminUserService;
 import org.click.carservice.core.jobs.ApiJob;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceDynamic;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceDynamic;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,13 +56,13 @@ public class AdminDynamicController {
     @RequiresPermissionsDesc(menu = {"推广管理", "动态管理"}, button = "查询")
     @GetMapping("/list")
     public Object dynamicList(DynamicListBody body) {
-        List<carserviceDynamic> dynamicList = dynamicService.querySelective(body);
+        List<CarServiceDynamic> dynamicList = dynamicService.querySelective(body);
         ArrayList<DynamicListResult> resultList = new ArrayList<>();
-        for (carserviceDynamic dynamic : dynamicList) {
+        for (CarServiceDynamic dynamic : dynamicList) {
             DynamicListResult result = new DynamicListResult();
             BeanUtil.copyProperties(dynamic, result);
             //给查寻出来的时间加上浏览量
-            carserviceUser user = userService.findById(dynamic.getUserId());
+            CarServiceUser user = userService.findById(dynamic.getUserId());
             if (user == null) {
                 if (ApiJob.USER_ID.equals(dynamic.getUserId())) {
                     result.setNickName("每日段子");
@@ -86,7 +86,7 @@ public class AdminDynamicController {
     @SaCheckPermission("admin:dynamic:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "动态管理"}, button = "修改")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceDynamic dynamic) {
+    public Object update(@Valid @RequestBody CarServiceDynamic dynamic) {
         String content = dynamic.getContent();
         if (Objects.isNull(content)) {
             return ResponseUtil.badArgument();
@@ -101,7 +101,7 @@ public class AdminDynamicController {
     @SaCheckPermission("admin:dynamic:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "动态管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceDynamic dynamic) {
+    public Object create(@Valid @RequestBody CarServiceDynamic dynamic) {
         String content = dynamic.getContent();
         if (Objects.isNull(content)) {
             return ResponseUtil.badArgument();

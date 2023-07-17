@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.goods.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,17 +15,17 @@ public class GoodsCategoryResult implements Serializable {
     /**
      * 当前分类
      */
-    private carserviceCategory currentCategory;
+    private CarServiceCategory currentCategory;
 
     /**
      * 父分类
      */
-    private carserviceCategory parentCategory;
+    private CarServiceCategory parentCategory;
 
     /**
      * 子分类列表
      */
-    private List<carserviceCategory> brotherCategory;
+    private List<CarServiceCategory> brotherCategory;
 
 
 }

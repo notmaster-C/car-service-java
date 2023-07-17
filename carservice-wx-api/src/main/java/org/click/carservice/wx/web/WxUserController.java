@@ -21,8 +21,8 @@ import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.enums.FailReasonStatus;
 import org.click.carservice.core.weixin.enums.TransferStatus;
 import org.click.carservice.core.weixin.service.WxPayTransferService;
-import org.click.carservice.db.domain.carserviceDealingSlip;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceDealingSlip;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.DealType;
@@ -83,7 +83,7 @@ public class WxUserController {
      */
     @GetMapping("index")
     public Object index(@LoginUser String userId) {
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         UserIndexResult result = new UserIndexResult();
         result.setOrder(orderService.orderInfo(userId));
         result.setBrand(brandService.findByUserId(userId));
@@ -97,7 +97,7 @@ public class WxUserController {
      */
     @GetMapping("info")
     public Object info(@LoginUser String userId) {
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         UserInfo info = new UserInfo();
         BeanUtil.copyProperties(user, info);
         return ResponseUtil.ok(info);
@@ -113,14 +113,14 @@ public class WxUserController {
      */
     @GetMapping("share")
     public Object share(@LoginUser String userId) {
-        carserviceUser userShare = userService.findByShare(userId);
+        CarServiceUser userShare = userService.findByShare(userId);
         if (!StringUtils.hasText(userShare.getShareUrl())) {
             userShare.setShareUrl(qCodeService.createUserShareQrcode(userShare));
             userService.updateSelective(userShare);
         }
         ArrayList<UserInfo> inviterList = new ArrayList<>();
-        List<carserviceUser> userList = userService.queryByInviter(userId);
-        for (carserviceUser user : userList) {
+        List<CarServiceUser> userList = userService.queryByInviter(userId);
+        for (CarServiceUser user : userList) {
             if (!StringUtils.hasText(user.getMobile())) {
                 user.setMobile("18500007139");
             }
@@ -149,7 +149,7 @@ public class WxUserController {
             return ResponseUtil.unlogin();
         }
 
-        carserviceUser userShare = userService.findById(userId);
+        CarServiceUser userShare = userService.findById(userId);
         if (userShare == null) {
             return ResponseUtil.fail("用户不存在");
         }
@@ -166,10 +166,10 @@ public class WxUserController {
      */
     @GetMapping("trading-record")
     public Object tradingRecord(@LoginUser String userId, PageBody body) {
-        carserviceUser user = userService.findById(userId);
-        List<carserviceDealingSlip> dealingSlips = dealingSlipService.querySelective(userId, user.getOpenid(), body);
+        CarServiceUser user = userService.findById(userId);
+        List<CarServiceDealingSlip> dealingSlips = dealingSlipService.querySelective(userId, user.getOpenid(), body);
         ArrayList<TradingRecordResult> dataList = new ArrayList<>();
-        for (carserviceDealingSlip dealingSlip : dealingSlips) {
+        for (CarServiceDealingSlip dealingSlip : dealingSlips) {
             TradingRecordResult result = new TradingRecordResult();
             result.setBatchTime(dealingSlip.getAddTime());
             result.setDealTypeText(DealType.parseValue(dealingSlip.getDealType()));
@@ -199,7 +199,7 @@ public class WxUserController {
             return ResponseUtil.unlogin();
         }
 
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.unlogin();
         }

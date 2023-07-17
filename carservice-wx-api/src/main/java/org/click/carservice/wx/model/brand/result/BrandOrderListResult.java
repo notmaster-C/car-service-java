@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.brand.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -49,7 +49,7 @@ public class BrandOrderListResult implements Serializable {
     /**
      * 团购信息
      */
-    private carserviceGroupon groupon;
+    private CarServiceGroupon groupon;
     /**
      * 是否团购
      */
@@ -70,6 +70,6 @@ public class BrandOrderListResult implements Serializable {
     /**
      * 订单商品信息
      */
-    private carserviceOrderGoods goods;
+    private CarServiceOrderGoods goods;
 
 }

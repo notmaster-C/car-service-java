@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceGoodsProduct;
+import org.click.carservice.db.domain.CarServiceGoodsProduct;
 import org.click.carservice.db.service.impl.GoodsProductServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,9 +30,9 @@ public class WxGoodsProductService extends GoodsProductServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGoodsProduct> queryByGid(String goodsId) {
-        QueryWrapper<carserviceGoodsProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsProduct.GOODS_ID, goodsId);
+    public List<CarServiceGoodsProduct> queryByGid(String goodsId) {
+        QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsProduct.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 

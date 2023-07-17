@@ -15,7 +15,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.notice.body.NoticeListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceNotice;
+import org.click.carservice.db.domain.CarServiceNotice;
 import org.click.carservice.db.service.impl.NoticeServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,7 +34,7 @@ import java.util.Objects;
 public class AdminNoticeService extends NoticeServiceImpl {
 
 
-    public Object validate(carserviceNotice notice) {
+    public Object validate(CarServiceNotice notice) {
         String title = notice.getTitle();
         if (Objects.isNull(title)) {
             return ResponseUtil.badArgument();
@@ -43,13 +43,13 @@ public class AdminNoticeService extends NoticeServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceNotice> querySelective(NoticeListBody body) {
-        QueryWrapper<carserviceNotice> wrapper = startPage(body);
+    public List<CarServiceNotice> querySelective(NoticeListBody body) {
+        QueryWrapper<CarServiceNotice> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {
-            wrapper.like(carserviceNotice.TITLE, body.getTitle());
+            wrapper.like(CarServiceNotice.TITLE, body.getTitle());
         }
         if (StringUtils.hasText(body.getContent())) {
-            wrapper.like(carserviceNotice.CONTENT, body.getContent());
+            wrapper.like(CarServiceNotice.CONTENT, body.getContent());
         }
         return queryAll(wrapper);
     }

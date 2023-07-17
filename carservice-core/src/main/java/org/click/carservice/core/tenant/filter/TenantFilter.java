@@ -6,7 +6,7 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.http.GlobalWebUtil;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.ITenantService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class TenantFilter extends OncePerRequestFilter {
         }
 
         //获取当前租户
-        carserviceTenant tenant = tenantService.findById(tenantId);
+        CarServiceTenant tenant = tenantService.findById(tenantId);
         if (tenant == null) {
             throw new RuntimeException("未找到授权租户");
         }

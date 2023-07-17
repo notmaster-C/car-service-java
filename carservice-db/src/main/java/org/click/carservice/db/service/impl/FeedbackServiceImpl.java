@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceFeedback;
+import org.click.carservice.db.domain.CarServiceFeedback;
 import org.click.carservice.db.mapper.FeedbackMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IFeedbackService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_feedback")
-public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, carserviceFeedback> implements IFeedbackService {
+public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, CarServiceFeedback> implements IFeedbackService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFeedback findById(String id) {
+    public CarServiceFeedback findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFeedback> queryAll(Wrapper<carserviceFeedback> queryWrapper) {
+    public List<CarServiceFeedback> queryAll(Wrapper<CarServiceFeedback> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceFeedback record) {
+    public int add(CarServiceFeedback record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceFeedback> list) {
+    public boolean batchAdd(List<CarServiceFeedback> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceFeedback record) {
+    public int updateSelective(CarServiceFeedback record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceFeedback record) {
+    public int updateVersionSelective(CarServiceFeedback record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, carser
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceFeedback> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceFeedback> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceFeedback entity) {
+    public boolean save(CarServiceFeedback entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceFeedback> entityList) {
+    public boolean saveBatch(Collection<CarServiceFeedback> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceFeedback entity) {
+    public boolean saveOrUpdate(CarServiceFeedback entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceFeedback entity, Wrapper<carserviceFeedback> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceFeedback entity, Wrapper<CarServiceFeedback> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceFeedback> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceFeedback> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceFeedback entity) {
+    public boolean removeById(CarServiceFeedback entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, carser
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceFeedback> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceFeedback> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, carser
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceFeedback entity) {
+    public boolean updateById(CarServiceFeedback entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceFeedback> updateWrapper) {
+    public boolean update(Wrapper<CarServiceFeedback> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceFeedback entity, Wrapper<carserviceFeedback> updateWrapper) {
+    public boolean update(CarServiceFeedback entity, Wrapper<CarServiceFeedback> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceFeedback> entityList) {
+    public boolean updateBatchById(Collection<CarServiceFeedback> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFeedback getById(Serializable id) {
+    public CarServiceFeedback getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFeedback> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceFeedback> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFeedback> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceFeedback> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceFeedback getOne(Wrapper<carserviceFeedback> queryWrapper) {
+    public CarServiceFeedback getOne(Wrapper<CarServiceFeedback> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class FeedbackServiceImpl extends IBaseServiceImpl<FeedbackMapper, carser
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceFeedback> queryWrapper) {
+    public long count(Wrapper<CarServiceFeedback> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFeedback> list(Wrapper<carserviceFeedback> queryWrapper) {
+    public List<CarServiceFeedback> list(Wrapper<CarServiceFeedback> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceFeedback> list() {
+    public List<CarServiceFeedback> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceFeedback> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceFeedback> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

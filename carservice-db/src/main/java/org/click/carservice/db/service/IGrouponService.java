@@ -1,6 +1,6 @@
 package org.click.carservice.db.service;
 
-import org.click.carservice.db.domain.carserviceGroupon;
+import org.click.carservice.db.domain.CarServiceGroupon;
 import org.click.carservice.db.mybatis.IBaseService;
 
 /**
@@ -10,6 +10,6 @@ import org.click.carservice.db.mybatis.IBaseService;
  *
  * @author click
  */
-public interface IGrouponService extends IBaseService<carserviceGroupon> {
+public interface IGrouponService extends IBaseService<CarServiceGroupon> {
 
 }

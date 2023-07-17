@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.catalog.body;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,22 +16,22 @@ public class CatalogIndexResult implements Serializable {
     /**
      * 当前一级分类目录
      */
-    private carserviceCategory currentCategory;
+    private CarServiceCategory currentCategory;
 
     /**
      * 所有一级分类目录
      */
-    private List<carserviceCategory> categoryList;
+    private List<CarServiceCategory> categoryList;
 
     /**
      * 子分类列表
      */
-    private List<carserviceCategory> currentSubCategory;
+    private List<CarServiceCategory> currentSubCategory;
 
     /**
      * 所有子分类列表
      */
-    private Map<String, List<carserviceCategory>> allList;
+    private Map<String, List<CarServiceCategory>> allList;
 
 
 }

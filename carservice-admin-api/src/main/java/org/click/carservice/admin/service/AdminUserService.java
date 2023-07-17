@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.user.body.UserListBody;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.service.impl.UserServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -36,7 +36,7 @@ public class AdminUserService extends UserServiceImpl {
 
     @Cacheable(sync = true)
     public UserInfo findUserVoById(String userId) {
-        carserviceUser user = getById(userId);
+        CarServiceUser user = getById(userId);
         UserInfo userInfo = new UserInfo();
         if (user != null) {
             BeanUtil.copyProperties(user, userInfo);
@@ -49,22 +49,22 @@ public class AdminUserService extends UserServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceUser> querySelective(UserListBody body) {
-        QueryWrapper<carserviceUser> wrapper = startPage(body);
+    public List<CarServiceUser> querySelective(UserListBody body) {
+        QueryWrapper<CarServiceUser> wrapper = startPage(body);
         if (body.getUserId() != null) {
-            wrapper.eq(carserviceUser.ID, body.getUserId());
+            wrapper.eq(CarServiceUser.ID, body.getUserId());
         }
         if (body.getLevel() != null) {
-            wrapper.eq(carserviceUser.USER_LEVEL, body.getLevel());
+            wrapper.eq(CarServiceUser.USER_LEVEL, body.getLevel());
         }
         if (body.getInviter() != null) {
-            wrapper.eq(carserviceUser.INVITER, body.getInviter());
+            wrapper.eq(CarServiceUser.INVITER, body.getInviter());
         }
         if (StringUtils.hasText(body.getMobile())) {
-            wrapper.like(carserviceUser.MOBILE, body.getMobile());
+            wrapper.like(CarServiceUser.MOBILE, body.getMobile());
         }
         if (StringUtils.hasText(body.getUsername())) {
-            wrapper.like(carserviceUser.USERNAME, body.getUsername());
+            wrapper.like(CarServiceUser.USERNAME, body.getUsername());
         }
         return queryAll(wrapper);
     }

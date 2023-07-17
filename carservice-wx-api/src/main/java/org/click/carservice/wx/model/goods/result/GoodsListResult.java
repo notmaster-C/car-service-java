@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.goods.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,6 +40,6 @@ public class GoodsListResult implements Serializable {
     /**
      * 分类列表
      */
-    private List<carserviceCategory> filterCategoryList;
+    private List<CarServiceCategory> filterCategoryList;
 
 }

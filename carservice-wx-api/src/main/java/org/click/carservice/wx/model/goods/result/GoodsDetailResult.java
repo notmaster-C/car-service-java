@@ -16,7 +16,7 @@ public class GoodsDetailResult implements Serializable {
     /**
      * 商品信息
      */
-    private carserviceGoods info;
+    private CarServiceGoods info;
     /**
      * 分享图片
      */
@@ -28,7 +28,7 @@ public class GoodsDetailResult implements Serializable {
     /**
      * 通用问题
      */
-    private List<carserviceIssue> issue;
+    private List<CarServiceIssue> issue;
     /**
      * 商品评论
      */
@@ -40,19 +40,19 @@ public class GoodsDetailResult implements Serializable {
     /**
      * 商品货品信息
      */
-    private List<carserviceGoodsProduct> productList;
+    private List<CarServiceGoodsProduct> productList;
     /**
      * 商品参数
      */
-    private List<carserviceGoodsAttribute> attribute;
+    private List<CarServiceGoodsAttribute> attribute;
     /**
      * 店铺信息
      */
-    private carserviceBrand brand;
+    private CarServiceBrand brand;
     /**
      * 团购信息
      */
-    private List<carserviceGrouponRules> groupon;
+    private List<CarServiceGrouponRules> groupon;
     /**
      * 是否可以分享
      */

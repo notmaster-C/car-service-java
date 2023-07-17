@@ -31,10 +31,10 @@ import org.click.carservice.core.tasks.service.TaskService;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.service.SubscribeMessageService;
 import org.click.carservice.core.weixin.service.WxPayRefundService;
-import org.click.carservice.db.domain.carserviceGoodsComment;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceGoodsComment;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -98,25 +98,25 @@ public class AdminOrderController {
             }
         }
         //查询订单列表
-        List<carserviceOrder> orderList = orderService.querySelective(body);
+        List<CarServiceOrder> orderList = orderService.querySelective(body);
         //拼接订单信息
         List<OrderListResult> data = new ArrayList<>();
-        for (carserviceOrder order : orderList) {
+        for (CarServiceOrder order : orderList) {
             OrderListResult result = new OrderListResult();
             BeanUtil.copyProperties(order, result);
             result.setOrderStatusText(OrderStatus.orderStatusText(order));
             result.setShipChannel(expressService.getVendorName(order.getShipChannel()));
             //用户信息
-            carserviceUser user = userService.findById(order.getUserId());
+            CarServiceUser user = userService.findById(order.getUserId());
             if (user != null) {
                 result.setUserName(user.getNickName());
                 result.setUserAvatar(user.getAvatarUrl());
                 result.setUserMobile(user.getMobile());
             }
             //商品信息
-            List<carserviceOrderGoods> goodsList = orderGoodsService.queryByOid(order.getId());
+            List<CarServiceOrderGoods> goodsList = orderGoodsService.queryByOid(order.getId());
             Integer goodsNumber = 0;
-            for (carserviceOrderGoods goods : goodsList) {
+            for (CarServiceOrderGoods goods : goodsList) {
                 goodsNumber += goods.getNumber();
             }
             result.setGoodsNumber(goodsNumber);
@@ -158,7 +158,7 @@ public class AdminOrderController {
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "详情")
     @GetMapping("/detail")
     public Object detail(@NotNull String id) {
-        carserviceOrder order = orderService.findById(id);
+        CarServiceOrder order = orderService.findById(id);
         OrderDetailResult result = new OrderDetailResult();
         result.setOrder(order);
         result.setUser(userService.findUserVoById(order.getUserId()));
@@ -174,7 +174,7 @@ public class AdminOrderController {
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单取消")
     @PostMapping("/cancel")
     public Object cancel(@NotNull String id) {
-        carserviceOrder order = orderService.findById(id);
+        CarServiceOrder order = orderService.findById(id);
         if (order == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -204,7 +204,7 @@ public class AdminOrderController {
     public Object refund(@Valid @RequestBody OrderRefundBody body) {
         String orderId = body.getOrderId();
         String refundMoney = body.getRefundMoney();
-        carserviceOrder order = orderService.findById(orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -242,7 +242,7 @@ public class AdminOrderController {
         orderCoreService.orderRelease(order);
 
         //订单退款订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         logHelper.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
@@ -260,7 +260,7 @@ public class AdminOrderController {
         String shipSn = body.getShipSn();
         String shipChannel = body.getShipChannel();
 
-        carserviceOrder order = orderService.findById(orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -279,7 +279,7 @@ public class AdminOrderController {
         }
 
         //订单发货订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.shipSubscribe(user.getOpenid(), order);
 
         //添加确认收货定时任务
@@ -298,7 +298,7 @@ public class AdminOrderController {
     public Object pay(@Valid @RequestBody OrderPayBody body) {
         String orderId = body.getOrderId();
         String newMoney = body.getNewMoney();
-        carserviceOrder order = orderService.findById(orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -318,7 +318,7 @@ public class AdminOrderController {
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单删除")
     @PostMapping("/delete")
     public Object delete(@NotNull String orderId) {
-        carserviceOrder order = orderService.findById(orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -344,7 +344,7 @@ public class AdminOrderController {
     public Object reply(@Valid @RequestBody OrderReplyBody body) {
         String commentId = body.getCommentId();
         // 目前只支持回复一次
-        carserviceGoodsComment comment = goodsCommentService.findById(commentId);
+        CarServiceGoodsComment comment = goodsCommentService.findById(commentId);
         if (comment == null) {
             return ResponseUtil.badArgument();
         }

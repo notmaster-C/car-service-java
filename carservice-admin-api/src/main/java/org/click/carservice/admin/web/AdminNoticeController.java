@@ -21,9 +21,9 @@ import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.admin.service.AdminNoticeAdminService;
 import org.click.carservice.admin.service.AdminNoticeService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carserviceNotice;
-import org.click.carservice.db.domain.carserviceNoticeAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServiceNotice;
+import org.click.carservice.db.domain.CarServiceNoticeAdmin;
 import org.click.carservice.db.entity.IdsBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -67,7 +67,7 @@ public class AdminNoticeController {
     @SaCheckPermission("admin:notice:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "通知管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceNotice notice) {
+    public Object create(@Valid @RequestBody CarServiceNotice notice) {
         Object error = noticeService.validate(notice);
         if (error != null) {
             return error;
@@ -76,12 +76,12 @@ public class AdminNoticeController {
         notice.setAdminId(StpUtil.getLoginIdAsString());
         noticeService.add(notice);
         // 2. 添加管理员通知记录
-        List<carserviceAdmin> adminList = adminService.list();
-        carserviceNoticeAdmin noticeAdmin = new carserviceNoticeAdmin();
+        List<CarServiceAdmin> adminList = adminService.list();
+        CarServiceNoticeAdmin noticeAdmin = new CarServiceNoticeAdmin();
         noticeAdmin.setNoticeId(notice.getId());
         noticeAdmin.setNoticeTitle(notice.getTitle());
         noticeAdmin.setNoticeContent(notice.getContent());
-        for (carserviceAdmin admin : adminList) {
+        for (CarServiceAdmin admin : adminList) {
             noticeAdmin.setAdminId(admin.getId());
             noticeAdminService.add(noticeAdmin);
         }
@@ -108,12 +108,12 @@ public class AdminNoticeController {
     @SaCheckPermission("admin:notice:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "通知管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceNotice notice) {
+    public Object update(@Valid @RequestBody CarServiceNotice notice) {
         Object error = noticeService.validate(notice);
         if (error != null) {
             return error;
         }
-        carserviceNotice originalNotice = noticeService.findById(notice.getId());
+        CarServiceNotice originalNotice = noticeService.findById(notice.getId());
         if (originalNotice == null) {
             return ResponseUtil.badArgument();
         }
@@ -128,7 +128,7 @@ public class AdminNoticeController {
         }
         // 2. 更新管理员通知记录
         if (!originalNotice.getTitle().equals(notice.getTitle())) {
-            carserviceNoticeAdmin noticeAdmin = new carserviceNoticeAdmin();
+            CarServiceNoticeAdmin noticeAdmin = new CarServiceNoticeAdmin();
             noticeAdmin.setNoticeTitle(notice.getTitle());
             noticeAdmin.setNoticeContent(notice.getContent());
             noticeAdminService.updateByNoticeId(noticeAdmin, notice.getId());

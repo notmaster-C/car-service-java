@@ -6,7 +6,7 @@ import org.click.carservice.core.express.model.ExpressInfo;
 import org.click.carservice.core.express.service.ExpressService;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.service.LogisticsPluginService;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.service.WxOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class WxExpressController {
             return ResponseUtil.unlogin();
         }
         // 订单信息
-        carserviceOrder order = orderService.findBySn(userId, orderSn);
+        CarServiceOrder order = orderService.findBySn(userId, orderSn);
         if (order == null) {
             return ResponseUtil.fail("订单不存在");
         }

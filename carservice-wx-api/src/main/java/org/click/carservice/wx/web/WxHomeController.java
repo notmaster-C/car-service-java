@@ -78,80 +78,80 @@ public class WxHomeController {
     public Object index(@LoginUser(require = false) String userId, @JsonBody String appid) {
         String tenant = tenantService.getTenant(appid);
         // 广告列表
-        FutureTask<List<carserviceAd>> bannerTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceAd>>() {
+        FutureTask<List<CarServiceAd>> bannerTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceAd>>() {
                     @Override
-                    public List<carserviceAd> runTask() {
+                    public List<CarServiceAd> runTask() {
                         return adService.queryIndex();
                     }
                 }
         );
 
         // 分类列表
-        FutureTask<List<carserviceCategory>> channelTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceCategory>>() {
+        FutureTask<List<CarServiceCategory>> channelTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceCategory>>() {
                     @Override
-                    public List<carserviceCategory> runTask() {
+                    public List<CarServiceCategory> runTask() {
                         return categoryService.queryChannel();
                     }
                 }
         );
 
         // 优惠券列表
-        FutureTask<List<carserviceCoupon>> couponListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceCoupon>>() {
+        FutureTask<List<CarServiceCoupon>> couponListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceCoupon>>() {
                     @Override
-                    public List<carserviceCoupon> runTask() {
+                    public List<CarServiceCoupon> runTask() {
                         return couponService.queryAvailableList(userId, SystemConfig.getCouponLimit());
                     }
                 }
         );
 
         // 新品首发
-        FutureTask<List<carserviceGoods>> newGoodsListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGoods>>() {
+        FutureTask<List<CarServiceGoods>> newGoodsListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGoods>>() {
                     @Override
-                    public List<carserviceGoods> runTask() {
+                    public List<CarServiceGoods> runTask() {
                         return goodsService.queryByNew(SystemConfig.getNewLimit());
                     }
                 }
         );
 
         // 热卖专区
-        FutureTask<List<carserviceGoods>> hotGoodsListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGoods>>() {
+        FutureTask<List<CarServiceGoods>> hotGoodsListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGoods>>() {
                     @Override
-                    public List<carserviceGoods> runTask() {
+                    public List<CarServiceGoods> runTask() {
                         return goodsService.queryByHot(SystemConfig.getHotLimit());
                     }
                 }
         );
 
         // 赏金任务
-        FutureTask<List<carserviceRewardTask>> rewardTaskListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceRewardTask>>() {
+        FutureTask<List<CarServiceRewardTask>> rewardTaskListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceRewardTask>>() {
                     @Override
-                    public List<carserviceRewardTask> runTask() {
+                    public List<CarServiceRewardTask> runTask() {
                         return rewardTaskService.queryByReward(SystemConfig.getRewardLimit());
                     }
                 }
         );
 
         // 团购专区
-        FutureTask<List<carserviceGrouponRules>> grouponRuleListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGrouponRules>>() {
+        FutureTask<List<CarServiceGrouponRules>> grouponRuleListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGrouponRules>>() {
                     @Override
-                    public List<carserviceGrouponRules> runTask() {
+                    public List<CarServiceGrouponRules> runTask() {
                         return grouponRulesService.queryByGroupon(SystemConfig.getGrouponLimit());
                     }
                 }
         );
 
         // 首页商品分页
-        FutureTask<PageInfo<carserviceGoods>> allGoodsListTask = new FutureTask<>(
-                new InheritableCallable<PageInfo<carserviceGoods>>() {
+        FutureTask<PageInfo<CarServiceGoods>> allGoodsListTask = new FutureTask<>(
+                new InheritableCallable<PageInfo<CarServiceGoods>>() {
                     @Override
-                    public PageInfo<carserviceGoods> runTask() {
+                    public PageInfo<CarServiceGoods> runTask() {
                         return PageInfo.of(goodsService.queryByAll(SystemConfig.getAllLimit()));
                     }
                 }
@@ -195,7 +195,7 @@ public class WxHomeController {
             return ResponseUtil.fail(800, "分享获取失败");
         }
         if (Objects.equals(sceneType, "goodsId")) {
-            carserviceGoods goods = goodsService.findById(sceneId);
+            CarServiceGoods goods = goodsService.findById(sceneId);
             if (goods == null) {
                 return ResponseUtil.fail(800, "商品不存在");
             }
@@ -207,7 +207,7 @@ public class WxHomeController {
             }
         }
         if (Objects.equals(sceneType, "rewardId")) {
-            carserviceReward reward = rewardService.findById(sceneId);
+            CarServiceReward reward = rewardService.findById(sceneId);
             if (reward == null) {
                 return ResponseUtil.fail(800, "活动不存在");
             }
@@ -233,7 +233,7 @@ public class WxHomeController {
         result.setLongitude(SystemConfig.getMallLongitude());
         result.setLatitude(SystemConfig.getMallLatitude());
         String tenantId = TenantContextHolder.getLocalTenantId();
-        carserviceTenant tenant = tenantService.findById(tenantId);
+        CarServiceTenant tenant = tenantService.findById(tenantId);
         if (tenant != null) {
             result.setAddress(tenant.getAddress());
         }

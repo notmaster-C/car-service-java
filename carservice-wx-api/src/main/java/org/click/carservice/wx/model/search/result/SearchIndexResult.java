@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.search.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceKeyword;
-import org.click.carservice.db.domain.carserviceSearchHistory;
+import org.click.carservice.db.domain.CarServiceKeyword;
+import org.click.carservice.db.domain.CarServiceSearchHistory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,15 +17,15 @@ public class SearchIndexResult implements Serializable {
     /**
      * 取出输入框默认的关键词
      */
-    private carserviceKeyword defaultKeyword;
+    private CarServiceKeyword defaultKeyword;
     /**
      * 取出热闹关键词
      */
-    private List<carserviceKeyword> hotKeywordList;
+    private List<CarServiceKeyword> hotKeywordList;
     /**
      * 用户历史搜索
      */
-    private List<carserviceSearchHistory> historyKeywordList;
+    private List<CarServiceSearchHistory> historyKeywordList;
 
 
 }

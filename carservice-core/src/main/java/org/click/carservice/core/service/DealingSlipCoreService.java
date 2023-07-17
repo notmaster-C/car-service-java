@@ -46,8 +46,8 @@ public class DealingSlipCoreService {
      * @param userDeal 用户信息
      * @return null --> true
      */
-    public Object isDeduction(carserviceUser userDeal) {
-        carserviceUser user = userService.findById(userDeal.getId());
+    public Object isDeduction(CarServiceUser userDeal) {
+        CarServiceUser user = userService.findById(userDeal.getId());
         if (user == null) {
             return ResponseUtil.fail("用户不存在");
         }
@@ -57,7 +57,7 @@ public class DealingSlipCoreService {
         }
 
         //最近十次交易记录
-        List<carserviceDealingSlip> dealingSlipList = commonService.querySelective(user.getId(), user.getOpenid());
+        List<CarServiceDealingSlip> dealingSlipList = commonService.querySelective(user.getId(), user.getOpenid());
         if (dealingSlipList.size() <= 0) {
             return ResponseUtil.fail("资金异常");
         }
@@ -68,7 +68,7 @@ public class DealingSlipCoreService {
         }
 
         //判断最近十次交易记录是否正常
-        for (carserviceDealingSlip dealingSlip : dealingSlipList) {
+        for (CarServiceDealingSlip dealingSlip : dealingSlipList) {
             BigDecimal balance = dealingSlip.getBalance();
             if (lastBalance.compareTo(balance) != 0) {
                 return ResponseUtil.fail("资金异常");
@@ -93,14 +93,14 @@ public class DealingSlipCoreService {
      *
      * @param user 用户
      */
-    public void systemIntegralUpdate(carserviceUser user) {
-        carserviceUser dealUser = userService.findById(user.getId());
+    public void systemIntegralUpdate(CarServiceUser user) {
+        CarServiceUser dealUser = userService.findById(user.getId());
         BigDecimal integral = user.getIntegral();
         BigDecimal dealIntegral = dealUser.getIntegral();
         if (integral.compareTo(dealIntegral) == 0) {
             return;
         }
-        carserviceDealingSlip dealingSlip = new carserviceDealingSlip();
+        CarServiceDealingSlip dealingSlip = new CarServiceDealingSlip();
         dealingSlip.setBalance(integral);
         dealingSlip.setAward(integral.subtract(dealIntegral));
         dealingSlip.setStatus(TransferStatus.SUCCESS.getStatus());
@@ -117,13 +117,13 @@ public class DealingSlipCoreService {
      * @param order 订单
      * @param brand 店铺
      */
-    public void addOrderIntegral(carserviceOrder order, carserviceBrand brand) {
-        carserviceUser brandUser = this.isAddOrderIntegral(order, brand);
+    public void addOrderIntegral(CarServiceOrder order, CarServiceBrand brand) {
+        CarServiceUser brandUser = this.isAddOrderIntegral(order, brand);
         if (brandUser == null) {
             return;
         }
         // 获取订单商品信息
-        carserviceOrderGoods orderGoods = commonService.findByGoodsOrderId(order.getId());
+        CarServiceOrderGoods orderGoods = commonService.findByGoodsOrderId(order.getId());
         if (orderGoods == null) {
             return;
         }
@@ -137,9 +137,9 @@ public class DealingSlipCoreService {
         BigDecimal orderPrice = actualPrice.add(couponPrice).add(integralPrice);
 
         //添加赏金余额
-        carserviceReward reward = commonService.findByRewardOrderId(order.getId());
+        CarServiceReward reward = commonService.findByRewardOrderId(order.getId());
         if (reward != null) {
-            carserviceUser creatorUser = userService.findById(reward.getCreatorUserId());
+            CarServiceUser creatorUser = userService.findById(reward.getCreatorUserId());
             // 赏金奖励 * 商品数量
             BigDecimal award = reward.getAward().multiply(BigDecimal.valueOf(orderGoods.getNumber()));
             // 添加余额
@@ -149,14 +149,14 @@ public class DealingSlipCoreService {
         }
 
         //添加分享余额
-        carserviceShare share = commonService.findByShareOrderId(order.getId());
+        CarServiceShare share = commonService.findByShareOrderId(order.getId());
         if (share != null) {
-            carserviceUser inviterUser = userService.findById(share.getInviterId());
+            CarServiceUser inviterUser = userService.findById(share.getInviterId());
             // 添加余额
             this.addIntegral(inviterUser, order.getOrderSn(), share.getAward(), DealType.TYPE_SHARE);
         }
 
-        carserviceUser user = userService.findById(brandUser.getId());
+        CarServiceUser user = userService.findById(brandUser.getId());
         //获取系统服务费比例 1%
         BigDecimal orderBrokerage = SystemConfig.getOrderBrokerage();
         //将比例转为小数 0.01
@@ -175,7 +175,7 @@ public class DealingSlipCoreService {
      * @param award    添加金额
      * @param dealType 交易类型
      */
-    public void addIntegral(carserviceUser user, BigDecimal award, DealType dealType) {
+    public void addIntegral(CarServiceUser user, BigDecimal award, DealType dealType) {
         this.addIntegral(user, null, award, dealType);
     }
 
@@ -187,9 +187,9 @@ public class DealingSlipCoreService {
      * @param award    添加金额
      * @param dealType 交易类型
      */
-    public void addIntegral(carserviceUser user, String orderSn, BigDecimal award, DealType dealType) {
+    public void addIntegral(CarServiceUser user, String orderSn, BigDecimal award, DealType dealType) {
         //用户积分加上金额
-        carserviceDealingSlip dealingSlip = new carserviceDealingSlip();
+        CarServiceDealingSlip dealingSlip = new CarServiceDealingSlip();
         dealingSlip.setAward(award);
         dealingSlip.setOrderSn(orderSn);
         dealingSlip.setBalance(user.getIntegral().add(award));
@@ -206,9 +206,9 @@ public class DealingSlipCoreService {
      * @param award    减少金额
      * @param dealType 交易类型
      */
-    public void subtractIntegral(carserviceUser user, String orderSn, BigDecimal award, DealType dealType) {
+    public void subtractIntegral(CarServiceUser user, String orderSn, BigDecimal award, DealType dealType) {
         //用户积分减去金额
-        carserviceDealingSlip dealingSlip = new carserviceDealingSlip();
+        CarServiceDealingSlip dealingSlip = new CarServiceDealingSlip();
         dealingSlip.setAward(award.negate());
         dealingSlip.setOrderSn(orderSn);
         dealingSlip.setBalance(user.getIntegral().subtract(award));
@@ -224,9 +224,9 @@ public class DealingSlipCoreService {
      * @param award      交易金额
      * @param outTradeNo 交易类型
      */
-    public void subtractIntegral(carserviceUser user, BigDecimal award, String outTradeNo) {
+    public void subtractIntegral(CarServiceUser user, BigDecimal award, String outTradeNo) {
         //用户积分减去金额
-        carserviceDealingSlip dealingSlip = new carserviceDealingSlip();
+        CarServiceDealingSlip dealingSlip = new CarServiceDealingSlip();
         dealingSlip.setAward(award.negate());
         dealingSlip.setOutBatchNo(outTradeNo);
         dealingSlip.setBalance(user.getIntegral().subtract(award));
@@ -242,7 +242,7 @@ public class DealingSlipCoreService {
      * @param user        用户信息
      * @param dealingSlip 交易记录
      */
-    public void updateIntegral(carserviceUser user, carserviceDealingSlip dealingSlip) {
+    public void updateIntegral(CarServiceUser user, CarServiceDealingSlip dealingSlip) {
         if (dealingSlip.getBalance() == null) {
             throw new RuntimeException("交易后余额不能为空");
         }
@@ -270,7 +270,7 @@ public class DealingSlipCoreService {
      * @param order 订单信息
      * @return 店铺用户
      */
-    private carserviceUser isAddOrderIntegral(carserviceOrder order, carserviceBrand brand) {
+    private CarServiceUser isAddOrderIntegral(CarServiceOrder order, CarServiceBrand brand) {
         //获取店铺所有者向店家打款
         if (brand == null || brand.getUserId() == null || brand.getUserId().equals("0")) {
             log.info("{发放交易余额}{未找到店铺--订单id:" + order.getId() + "}");
@@ -286,7 +286,7 @@ public class DealingSlipCoreService {
         }
 
         //获取店铺用户
-        carserviceUser user = userService.findById(brand.getUserId());
+        CarServiceUser user = userService.findById(brand.getUserId());
         if (!ObjectUtils.allNotNull(user, user.getTrueName(), user.getOpenid())) {
             log.info("{发放交易余额}{店家信息不正确:" + brand.getId() + "}");
             logService.logOrderFail("发放交易余额", "店家信息不正确:" + brand.getId());

@@ -20,27 +20,27 @@ public class BrandGoodsDetailResult implements Serializable {
     /**
      * 商品信息
      */
-    private carserviceGoods goods;
+    private CarServiceGoods goods;
 
     /**
      * 团购规则
      */
-    private carserviceGrouponRules grouponRules;
+    private CarServiceGrouponRules grouponRules;
 
     /**
      * 商品货品信息
      */
-    private List<carserviceGoodsProduct> products;
+    private List<CarServiceGoodsProduct> products;
 
     /**
      * 商品参数信息
      */
-    private List<carserviceGoodsAttribute> attributes;
+    private List<CarServiceGoodsAttribute> attributes;
 
     /**
      * 商品规格信息
      */
-    private List<carserviceGoodsSpecification> specifications;
+    private List<CarServiceGoodsSpecification> specifications;
 
 
 }

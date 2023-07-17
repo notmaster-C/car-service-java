@@ -11,15 +11,15 @@ package org.click.carservice.core.utils;
  * See the Mulan PSL v2 for more details.
  */
 
-import org.click.carservice.db.domain.carserviceAftersale;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceAfterSale;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 
 import java.time.LocalDateTime;
 
 public class NotifyMessageUtil {
 
-    public static String orderMessage(carserviceOrder order, carserviceOrderGoods orderGoods) {
+    public static String orderMessage(CarServiceOrder order, CarServiceOrderGoods orderGoods) {
         StringBuilder inform = new StringBuilder("<html><head></head><body>");
         inform.append("<table border='1' style='font-size:15px;width:100%;'>");
         inform.append("<thead>");
@@ -87,7 +87,7 @@ public class NotifyMessageUtil {
     }
 
 
-    public static String refundMessage(carserviceOrder order, carserviceOrderGoods orderGoods) {
+    public static String refundMessage(CarServiceOrder order, CarServiceOrderGoods orderGoods) {
         StringBuilder inform = new StringBuilder("<html><head></head><body>");
         inform.append("<table border='1' style='font-size:15px;width:100%;'>");
         inform.append("<thead>");
@@ -151,7 +151,7 @@ public class NotifyMessageUtil {
      * @param aftersale
      * @return
      */
-    public static String aftersaleMessage(carserviceOrder order, carserviceOrderGoods orderGoods, carserviceAftersale aftersale) {
+    public static String aftersaleMessage(CarServiceOrder order, CarServiceOrderGoods orderGoods, CarServiceAfterSale aftersale) {
         StringBuilder inform = new StringBuilder("<html><head></head><body>");
         inform.append("<table border='1' style='font-size:15px;width:100%;'>");
         inform.append("<thead>");

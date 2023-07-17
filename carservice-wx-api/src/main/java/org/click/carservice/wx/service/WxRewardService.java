@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceReward;
+import org.click.carservice.db.domain.CarServiceReward;
 import org.click.carservice.db.enums.RewardStatus;
 import org.click.carservice.db.service.impl.RewardServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -32,17 +32,17 @@ public class WxRewardService extends RewardServiceImpl {
 
     @Cacheable(sync = true)
     public Integer countReward(String taskId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.TASK_ID, taskId);
-        wrapper.eq(carserviceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.TASK_ID, taskId);
+        wrapper.eq(CarServiceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
         return Math.toIntExact(count(wrapper));
     }
 
     @Cacheable(sync = true)
     public Integer countAndReward(String userId, String taskId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.USER_ID, userId);
-        wrapper.eq(carserviceReward.TASK_ID, taskId);
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.USER_ID, userId);
+        wrapper.eq(CarServiceReward.TASK_ID, taskId);
         return Math.toIntExact(count(wrapper));
     }
 
@@ -50,11 +50,11 @@ public class WxRewardService extends RewardServiceImpl {
      * 获取分享者记录
      */
     @Cacheable(sync = true)
-    public carserviceReward findSharer(String userId, String taskId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.USER_ID, userId);
-        wrapper.eq(carserviceReward.TASK_ID, taskId);
-        wrapper.eq(carserviceReward.REWARD_ID, "0");
+    public CarServiceReward findSharer(String userId, String taskId) {
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.USER_ID, userId);
+        wrapper.eq(CarServiceReward.TASK_ID, taskId);
+        wrapper.eq(CarServiceReward.REWARD_ID, "0");
         return getOne(wrapper);
     }
 
@@ -62,10 +62,10 @@ public class WxRewardService extends RewardServiceImpl {
      * 获取用户所有分享记录
      */
     @Cacheable(sync = true)
-    public List<carserviceReward> querySharerUserId(String userId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.USER_ID, userId);
-        wrapper.eq(carserviceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
+    public List<CarServiceReward> querySharerUserId(String userId) {
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.USER_ID, userId);
+        wrapper.eq(CarServiceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
         return queryAll(wrapper);
     }
 
@@ -73,11 +73,11 @@ public class WxRewardService extends RewardServiceImpl {
      * 获取某个赏金活动参与的记录
      */
     @Cacheable(sync = true)
-    public List<carserviceReward> queryJoinRecord(String rewardId) {
-        QueryWrapper<carserviceReward> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceReward.REWARD_ID, rewardId);
-        wrapper.eq(carserviceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
-        wrapper.orderByDesc(carserviceReward.ADD_TIME);
+    public List<CarServiceReward> queryJoinRecord(String rewardId) {
+        QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceReward.REWARD_ID, rewardId);
+        wrapper.eq(CarServiceReward.STATUS, RewardStatus.STATUS_SUCCEED.getStatus());
+        wrapper.orderByDesc(CarServiceReward.ADD_TIME);
         return queryAll(wrapper);
     }
 

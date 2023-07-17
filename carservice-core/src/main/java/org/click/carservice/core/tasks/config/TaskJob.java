@@ -49,9 +49,9 @@ public class TaskJob {
      * 获取租户ID列表
      */
     private ArrayList<String> getTenantIds() {
-        List<carserviceTenant> tenantList = tenantService.list();
+        List<CarServiceTenant> tenantList = tenantService.list();
         ArrayList<String> idList = new ArrayList<>();
-        for (carserviceTenant tenant : tenantList) {
+        for (CarServiceTenant tenant : tenantList) {
             idList.add(tenant.getId());
         }
         idList.add(TenantContextHolder.getDefaultId());
@@ -69,8 +69,8 @@ public class TaskJob {
         TaskHandler taskHandler = new TaskHandler("订单自动确认收货", getTenantIds()) {
             @Override
             public Integer runTask() {
-                List<carserviceOrder> orderList = taskJobService.queryUnconfirmed();
-                for (carserviceOrder order : orderList) {
+                List<CarServiceOrder> orderList = taskJobService.queryUnconfirmed();
+                for (CarServiceOrder order : orderList) {
                     LocalDateTime ship = order.getShipTime();
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime expire = ship.plusDays(SystemConfig.getOrderUnconfirmed());
@@ -99,8 +99,8 @@ public class TaskJob {
         TaskHandler taskHandler = new TaskHandler("团购规则过期", getTenantIds()) {
             @Override
             public Integer runTask() {
-                List<carserviceGrouponRules> grouponRulesList = taskJobService.queryGrouponRulesExpired();
-                for (carserviceGrouponRules grouponRules : grouponRulesList) {
+                List<CarServiceGrouponRules> grouponRulesList = taskJobService.queryGrouponRulesExpired();
+                for (CarServiceGrouponRules grouponRules : grouponRulesList) {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime expire = grouponRules.getExpireTime();
                     if (expire.isBefore(now)) {
@@ -128,8 +128,8 @@ public class TaskJob {
         TaskHandler taskHandler = new TaskHandler("订单支付超时", getTenantIds()) {
             @Override
             public Integer runTask() {
-                List<carserviceOrder> orderList = taskJobService.queryUnpaid();
-                for (carserviceOrder order : orderList) {
+                List<CarServiceOrder> orderList = taskJobService.queryUnpaid();
+                for (CarServiceOrder order : orderList) {
                     LocalDateTime add = order.getAddTime();
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime expire = add.plusMinutes(SystemConfig.getOrderUnpaid());
@@ -158,8 +158,8 @@ public class TaskJob {
         TaskHandler taskHandler = new TaskHandler("订单评论超时", getTenantIds()) {
             @Override
             public Integer runTask() {
-                List<carserviceOrder> orderList = taskJobService.queryComment();
-                for (carserviceOrder order : orderList) {
+                List<CarServiceOrder> orderList = taskJobService.queryComment();
+                for (CarServiceOrder order : orderList) {
                     LocalDateTime add = order.getConfirmTime();
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime expire = add.plusDays(SystemConfig.getOrderComment());
@@ -189,8 +189,8 @@ public class TaskJob {
             @Override
             public Integer runTask() {
                 //查询所有已经过期优惠券
-                List<carserviceCoupon> couponList = taskJobService.queryCouponExpired();
-                for (carserviceCoupon coupon : couponList) {
+                List<CarServiceCoupon> couponList = taskJobService.queryCouponExpired();
+                for (CarServiceCoupon coupon : couponList) {
                     LocalDateTime expire = coupon.getEndTime();
                     LocalDateTime now = LocalDateTime.now();
                     if (expire.isBefore(now)) {
@@ -220,8 +220,8 @@ public class TaskJob {
             @Override
             public Integer runTask() {
                 //查询所有已经过期优惠券
-                List<carserviceCouponUser> couponList = taskJobService.queryCouponUserExpired();
-                for (carserviceCouponUser couponUser : couponList) {
+                List<CarServiceCouponUser> couponList = taskJobService.queryCouponUserExpired();
+                for (CarServiceCouponUser couponUser : couponList) {
                     LocalDateTime expire = couponUser.getEndTime();
                     LocalDateTime now = LocalDateTime.now();
                     if (expire.isBefore(now)) {

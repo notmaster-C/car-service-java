@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.redis.annotation.MessageConsumer;
 import org.click.carservice.core.redis.annotation.MessageListener;
 import org.click.carservice.core.redis.util.Message;
-import org.click.carservice.db.domain.carserviceMessage;
+import org.click.carservice.db.domain.CarServiceMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -30,7 +30,7 @@ public class WxWebSocketConsumer {
         executorService.submit(() -> {
             String body = message.getContent().toString();
             String userId = message.getId();
-            carserviceMessage toMessage = JSONUtil.toBean(body, carserviceMessage.class);
+            CarServiceMessage toMessage = JSONUtil.toBean(body, CarServiceMessage.class);
             if (toMessage == null) {
                 return;
             }

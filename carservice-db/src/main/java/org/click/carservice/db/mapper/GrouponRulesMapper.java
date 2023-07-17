@@ -1,7 +1,7 @@
 package org.click.carservice.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 
 /**
  * <p>
@@ -10,6 +10,6 @@ import org.click.carservice.db.domain.carserviceGrouponRules;
  *
  * @author click
  */
-public interface GrouponRulesMapper extends BaseMapper<carserviceGrouponRules> {
+public interface GrouponRulesMapper extends BaseMapper<CarServiceGrouponRules> {
 
 }

@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceDealingSlip;
+import org.click.carservice.db.domain.CarServiceDealingSlip;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.service.impl.DealingSlipServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -38,21 +38,21 @@ public class WxDealingSlipService extends DealingSlipServiceImpl {
      */
     @Cacheable(sync = true)
     public Boolean isByOutBatchNo(String userId, String outBatchNo) {
-        QueryWrapper<carserviceDealingSlip> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceDealingSlip.USER_ID, userId);
-        wrapper.eq(carserviceDealingSlip.OUT_BATCH_NO, outBatchNo);
+        QueryWrapper<CarServiceDealingSlip> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceDealingSlip.USER_ID, userId);
+        wrapper.eq(CarServiceDealingSlip.OUT_BATCH_NO, outBatchNo);
         return exists(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceDealingSlip> querySelective(String userId, String openId, PageBody body) {
-        QueryWrapper<carserviceDealingSlip> wrapper = startPage(body);
+    public List<CarServiceDealingSlip> querySelective(String userId, String openId, PageBody body) {
+        QueryWrapper<CarServiceDealingSlip> wrapper = startPage(body);
         if (userId != null) {
-            wrapper.eq(carserviceDealingSlip.USER_ID, userId);
+            wrapper.eq(CarServiceDealingSlip.USER_ID, userId);
         }
         if (openId != null) {
-            wrapper.eq(carserviceDealingSlip.OPENID, openId);
+            wrapper.eq(CarServiceDealingSlip.OPENID, openId);
         }
         return queryAll(wrapper);
     }

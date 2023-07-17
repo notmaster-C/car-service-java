@@ -1,6 +1,6 @@
 package org.click.carservice.db.enums;
 
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceUser;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -77,7 +77,7 @@ public enum UserStatus implements Serializable {
     /**
      * 判断用户是否正常
      */
-    public static Boolean isNormal(carserviceUser user) {
+    public static Boolean isNormal(CarServiceUser user) {
         return Objects.equals(user.getStatus(), UserStatus.STATUS_NORMAL.getStatus());
     }
 

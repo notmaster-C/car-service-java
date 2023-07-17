@@ -12,8 +12,8 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceCoupon;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCoupon;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.CouponStatus;
 import org.click.carservice.db.enums.CouponType;
@@ -42,11 +42,11 @@ public class WxCouponService extends CouponServiceImpl {
     private ICouponUserService couponUserService;
 
 
-    public List<CouponResult> change(List<carserviceCouponUser> couponList) {
+    public List<CouponResult> change(List<CarServiceCouponUser> couponList) {
         List<CouponResult> couponVoList = new ArrayList<>(couponList.size());
-        for (carserviceCouponUser couponUser : couponList) {
+        for (CarServiceCouponUser couponUser : couponList) {
             String couponId = couponUser.getCouponId();
-            carserviceCoupon coupon = findById(couponId);
+            CarServiceCoupon coupon = findById(couponId);
             CouponResult couponVo = new CouponResult();
             couponVo.setId(couponUser.getId());
             couponVo.setCid(coupon.getId());
@@ -66,46 +66,46 @@ public class WxCouponService extends CouponServiceImpl {
      * 查询
      */
     @Cacheable(sync = true)
-    public List<carserviceCoupon> queryList(PageBody body) {
-        QueryWrapper<carserviceCoupon> wrapper = startPage(body);
-        wrapper.eq(carserviceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
-        wrapper.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
+    public List<CarServiceCoupon> queryList(PageBody body) {
+        QueryWrapper<CarServiceCoupon> wrapper = startPage(body);
+        wrapper.eq(CarServiceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
+        wrapper.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCoupon> queryAvailableList(String userId, Integer limit) {
+    public List<CarServiceCoupon> queryAvailableList(String userId, Integer limit) {
         //分页
         PageBody body = new PageBody(limit);
         if (userId == null) {
             return queryList(body);
         }
 
-        QueryWrapper<carserviceCouponUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCouponUser.USER_ID, userId);
-        List<carserviceCouponUser> userList = couponUserService.queryAll(wrapper);
+        QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCouponUser.USER_ID, userId);
+        List<CarServiceCouponUser> userList = couponUserService.queryAll(wrapper);
 
         //查询优惠券
-        QueryWrapper<carserviceCoupon> startPage = startPage(body);
+        QueryWrapper<CarServiceCoupon> startPage = startPage(body);
         // 过滤掉登录账号已经领取过的coupon
         if (userList != null && !userList.isEmpty()) {
-            startPage.notIn(carserviceCoupon.ID, userList.stream().map(carserviceCouponUser::getCouponId).collect(Collectors.toList()));
+            startPage.notIn(CarServiceCoupon.ID, userList.stream().map(CarServiceCouponUser::getCouponId).collect(Collectors.toList()));
         }
         //查询条件
-        startPage.eq(carserviceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
-        startPage.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
+        startPage.eq(CarServiceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
+        startPage.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
         return queryAll(startPage);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceCoupon findByCode(String code) {
-        QueryWrapper<carserviceCoupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCoupon.CODE, code);
-        wrapper.eq(carserviceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
-        wrapper.eq(carserviceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
-        List<carserviceCoupon> couponList = queryAll(wrapper);
+    public CarServiceCoupon findByCode(String code) {
+        QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCoupon.CODE, code);
+        wrapper.eq(CarServiceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
+        wrapper.eq(CarServiceCoupon.STATUS, CouponStatus.STATUS_NORMAL.getStatus());
+        List<CarServiceCoupon> couponList = queryAll(wrapper);
         if (couponList.size() > 1) {
             return null;
         } else if (couponList.size() == 0) {

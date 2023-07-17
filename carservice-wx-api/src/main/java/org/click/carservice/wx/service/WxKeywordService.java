@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceKeyword;
+import org.click.carservice.db.domain.CarServiceKeyword;
 import org.click.carservice.db.service.impl.KeywordServiceImpl;
 import org.click.carservice.wx.model.search.body.SearchListBody;
 import org.springframework.cache.annotation.CacheConfig;
@@ -31,27 +31,27 @@ public class WxKeywordService extends KeywordServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceKeyword queryDefault() {
-        QueryWrapper<carserviceKeyword> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceKeyword.IS_DEFAULT, true);
+    public CarServiceKeyword queryDefault() {
+        QueryWrapper<CarServiceKeyword> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceKeyword.IS_DEFAULT, true);
         return getOne(wrapper, false);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceKeyword> queryHots() {
-        QueryWrapper<carserviceKeyword> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceKeyword.IS_HOT, true);
-        wrapper.orderByDesc(carserviceKeyword.WEIGHT);
+    public List<CarServiceKeyword> queryHots() {
+        QueryWrapper<CarServiceKeyword> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceKeyword.IS_HOT, true);
+        wrapper.orderByDesc(CarServiceKeyword.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceKeyword> queryByKeyword(SearchListBody body) {
-        QueryWrapper<carserviceKeyword> wrapper = startPage(body);
-        wrapper.like(carserviceKeyword.KEYWORD, body.getKeyword());
-        wrapper.orderByDesc(carserviceKeyword.WEIGHT);
+    public List<CarServiceKeyword> queryByKeyword(SearchListBody body) {
+        QueryWrapper<CarServiceKeyword> wrapper = startPage(body);
+        wrapper.like(CarServiceKeyword.KEYWORD, body.getKeyword());
+        wrapper.orderByDesc(CarServiceKeyword.WEIGHT);
         return queryAll(wrapper);
     }
 

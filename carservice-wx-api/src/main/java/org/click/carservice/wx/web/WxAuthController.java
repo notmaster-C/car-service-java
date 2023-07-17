@@ -30,8 +30,8 @@ import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.utils.token.TokenManager;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.AdminInfo;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.UserGender;
@@ -93,11 +93,11 @@ public class WxAuthController {
      */
     @PostMapping("login_by_qr")
     public Object loginByQr(@LoginUser String userId, @Valid @RequestBody AuthLoginByQrBody body) {
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.fail("授权失败1");
         }
-        carserviceAdmin admin = adminService.findByOpenId(user.getOpenid());
+        CarServiceAdmin admin = adminService.findByOpenId(user.getOpenid());
         if (admin == null) {
             return ResponseUtil.fail("授权失败2");
         }
@@ -127,25 +127,25 @@ public class WxAuthController {
         String password = body.getPassword();
 
         //创建账户实体并登陆
-        carserviceAdmin admin = new carserviceAdmin();
+        CarServiceAdmin admin = new CarServiceAdmin();
         admin.setUsername(username);
         admin.setPassword(password);
         AuthenticationInfo.login(admin, body.getCode());
         //登陆成功
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (StringUtils.hasText(admin.getOpenid())) {
             if (!admin.getOpenid().equals(user.getOpenid())) {
                 throw new RuntimeException("该管理员账户已绑定其他用户");
             }
         } else {
-            carserviceAdmin service = adminService.findById(admin.getId());
+            CarServiceAdmin service = adminService.findById(admin.getId());
             service.setOpenid(user.getOpenid());
             if (adminService.updateVersionSelective(service) == 0) {
                 throw new RuntimeException("网络繁忙,请重试");
             }
         }
         //绑定新的管理员账户后，解除原有账户的绑定
-        carserviceAdmin originalAdmin = adminService.findByOpenId(user.getOpenid());
+        CarServiceAdmin originalAdmin = adminService.findByOpenId(user.getOpenid());
         if (originalAdmin != null && !originalAdmin.getId().equals(admin.getId())) {
             originalAdmin.setOpenid("");
             if (adminService.updateVersionSelective(originalAdmin) == 0) {
@@ -202,7 +202,7 @@ public class WxAuthController {
     @PostMapping("captcha/mail")
     @RequestRateLimiter(rate = 10, rateInterval = 1, timeUnit = RateIntervalUnit.DAYS, errMsg = "验证码申请超过单日限制")
     public Object mailCaptcha(@JsonBody String username) {
-        List<carserviceAdmin> adminList = adminService.findAdmin(username);
+        List<CarServiceAdmin> adminList = adminService.findAdmin(username);
         if (adminList.size() != 1) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0110);
         }
@@ -212,7 +212,7 @@ public class WxAuthController {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0242);
         }
 
-        carserviceAdmin admin = adminList.get(0);
+        CarServiceAdmin admin = adminList.get(0);
         if (mailService.isMailEnable() && !RegexUtil.isQQMail(admin.getMail())) {
             mailService.notifyMail("登录验证码：" + code, "验证码30分钟内有效，如发送错误请您忽略！", admin.getMail());
             return ResponseUtil.ok("验证码发送成功，请注意查收");
@@ -237,9 +237,9 @@ public class WxAuthController {
         String mobile = "17396228815";
         userInfo.setOpenId(openId);
         //获取用户信息
-        carserviceUser user = userService.queryByOid(openId);
+        CarServiceUser user = userService.queryByOid(openId);
         if (user == null) {
-            user = new carserviceUser();
+            user = new CarServiceUser();
             user.setUsername(mobile);
             user.setPassword(mobile);
             user.setOpenid(openId);
@@ -275,7 +275,7 @@ public class WxAuthController {
         }
 
         if (StringUtils.hasText(inviter)) {
-            carserviceUser inviterUser = userService.findById(inviter);
+            CarServiceUser inviterUser = userService.findById(inviter);
             if (inviterUser != null) {
                 Integer count = userService.countUser(inviter);
                 inviterUser.setStatus(UserLevel.parseCount(count));
@@ -307,7 +307,7 @@ public class WxAuthController {
         String code = body.getCode();
         String wxCode = body.getWxCode();
 
-        List<carserviceUser> userList = userService.queryByMobile(mobile);
+        List<CarServiceUser> userList = userService.queryByMobile(mobile);
         if (userList.size() > 0) {
             return ResponseUtil.fail("用户名已注册");
         }
@@ -339,7 +339,7 @@ public class WxAuthController {
                 return ResponseUtil.serious();
             }
             if (userList.size() == 1) {
-                carserviceUser checkUser = userList.get(0);
+                CarServiceUser checkUser = userList.get(0);
                 String checkPassword = checkUser.getPassword();
                 if (!checkPassword.equals(openId)) {
                     return ResponseUtil.fail("openid已绑定账号");
@@ -347,7 +347,7 @@ public class WxAuthController {
             }
         }
 
-        carserviceUser user = new carserviceUser();
+        CarServiceUser user = new CarServiceUser();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
         user.setUsername(openId);
@@ -392,14 +392,14 @@ public class WxAuthController {
             return ResponseUtil.fail("验证码错误");
         }
 
-        List<carserviceUser> userList = userService.queryByMobile(mobile);
+        List<CarServiceUser> userList = userService.queryByMobile(mobile);
         if (userList.size() > 1) {
             return ResponseUtil.serious();
         } else if (userList.size() == 0) {
             return ResponseUtil.fail("手机号未注册");
         }
 
-        carserviceUser user = userList.get(0);
+        CarServiceUser user = userList.get(0);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
         user.setPassword(encodedPassword);
@@ -425,12 +425,12 @@ public class WxAuthController {
             return ResponseUtil.fail("验证码错误");
         }
 
-        List<carserviceUser> userList = userService.queryByMobile(mobile);
+        List<CarServiceUser> userList = userService.queryByMobile(mobile);
         if (userList.size() > 1) {
             return ResponseUtil.fail("手机号已注册");
         }
 
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (!encoder.matches(password, user.getPassword())) {
             return ResponseUtil.fail("账号密码不对");
@@ -450,7 +450,7 @@ public class WxAuthController {
      */
     @PostMapping("profile")
     public Object profile(@LoginUser String userId, @Valid @RequestBody UserInfo body, HttpServletRequest request) {
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         BeanUtil.copyProperties(body, user);
         user.setLastLoginTime(LocalDateTime.now());
         user.setLastLoginIp(IpUtil.getIpAddr(request));
@@ -469,7 +469,7 @@ public class WxAuthController {
     public Object bindPhone(@LoginUser String userId, @Valid @RequestBody AuthBindPhoneBody body) {
         String iv = body.getIv();
         String encryptedData = body.getEncryptedData();
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         user.setMobile(wxAuthService.getPhoneNumber(user.getSessionKey(), encryptedData, iv));
         if (userService.updateVersionSelective(user) == 0) {
             return ResponseUtil.updatedDataFailed();

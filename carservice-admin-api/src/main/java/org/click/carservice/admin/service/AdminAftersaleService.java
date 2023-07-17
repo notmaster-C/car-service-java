@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.aftersale.body.AftersaleListBody;
-import org.click.carservice.db.domain.carserviceAftersale;
+import org.click.carservice.db.domain.CarServiceAfterSale;
 import org.click.carservice.db.service.impl.AftersaleServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,24 +33,24 @@ public class AdminAftersaleService extends AftersaleServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceAftersale findById(String userId, String id) {
-        QueryWrapper<carserviceAftersale> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAftersale.ID, id);
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
+    public CarServiceAfterSale findById(String userId, String id) {
+        QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAfterSale.ID, id);
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAftersale> querySelective(AftersaleListBody body) {
-        QueryWrapper<carserviceAftersale> wrapper = startPage(body);
+    public List<CarServiceAfterSale> querySelective(AftersaleListBody body) {
+        QueryWrapper<CarServiceAfterSale> wrapper = startPage(body);
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceAftersale.STATUS, body.getStatus());
+            wrapper.eq(CarServiceAfterSale.STATUS, body.getStatus());
         }
         if (body.getOrderId() != null) {
-            wrapper.eq(carserviceAftersale.ORDER_ID, body.getOrderId());
+            wrapper.eq(CarServiceAfterSale.ORDER_ID, body.getOrderId());
         }
         if (StringUtils.hasText(body.getAftersaleSn())) {
-            wrapper.eq(carserviceAftersale.AFTERSALE_SN, body.getAftersaleSn());
+            wrapper.eq(CarServiceAfterSale.AFTERSALE_SN, body.getAftersaleSn());
         }
         return queryAll(wrapper);
     }

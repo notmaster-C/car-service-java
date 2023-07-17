@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.goods.body.GoodsListBody;
-import org.click.carservice.db.domain.carserviceGoods;
+import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.db.service.impl.GoodsServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -38,10 +38,10 @@ public class AdminGoodsService extends GoodsServiceImpl {
      * 获取店铺下的所有商品
      */
     @Cacheable(sync = true)
-    public List<carserviceGoods> queryByBrand(String brandId) {
-        QueryWrapper<carserviceGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoods.BRAND_ID, brandId);
-        wrapper.orderByDesc(carserviceGoods.WEIGHT);
+    public List<CarServiceGoods> queryByBrand(String brandId) {
+        QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoods.BRAND_ID, brandId);
+        wrapper.orderByDesc(CarServiceGoods.WEIGHT);
         return queryAll(wrapper);
     }
 
@@ -51,24 +51,24 @@ public class AdminGoodsService extends GoodsServiceImpl {
      */
 
     @Cacheable(sync = true)
-    public List<carserviceGoods> querySelective(GoodsListBody body) {
-        QueryWrapper<carserviceGoods> wrapper = startPage(body);
+    public List<CarServiceGoods> querySelective(GoodsListBody body) {
+        QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceGoods.STATUS, body.getStatus());
+            wrapper.eq(CarServiceGoods.STATUS, body.getStatus());
         }
         if (body.getGoodsId() != null) {
-            wrapper.eq(carserviceGoods.ID, body.getGoodsId());
+            wrapper.eq(CarServiceGoods.ID, body.getGoodsId());
         }
         if (body.getBrandId() != null) {
-            wrapper.eq(carserviceGoods.BRAND_ID, body.getBrandId());
+            wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
         }
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceGoods.NAME, body.getName());
+            wrapper.like(CarServiceGoods.NAME, body.getName());
         }
         if (StringUtils.hasText(body.getGoodsSn())) {
-            wrapper.like(carserviceGoods.GOODS_SN, body.getGoodsSn());
+            wrapper.like(CarServiceGoods.GOODS_SN, body.getGoodsSn());
         }
-        wrapper.orderByDesc(carserviceGoods.WEIGHT);
+        wrapper.orderByDesc(CarServiceGoods.WEIGHT);
         return queryAll(wrapper);
     }
 
@@ -77,11 +77,11 @@ public class AdminGoodsService extends GoodsServiceImpl {
      * 更具商品ID列表查询商品
      */
     @Cacheable(sync = true)
-    public List<carserviceGoods> queryByIds(String[] ids) {
-        QueryWrapper<carserviceGoods> wrapper = new QueryWrapper<>();
-        wrapper.in(carserviceGoods.ID, Arrays.asList(ids));
-        wrapper.eq(carserviceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
-        wrapper.orderByDesc(carserviceGoods.WEIGHT);
+    public List<CarServiceGoods> queryByIds(String[] ids) {
+        QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServiceGoods.ID, Arrays.asList(ids));
+        wrapper.eq(CarServiceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
+        wrapper.orderByDesc(CarServiceGoods.WEIGHT);
         return queryAll(wrapper);
     }
 

@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.brand.body.BrandListBody;
 import org.click.carservice.core.utils.RegexUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceBrand;
+import org.click.carservice.db.domain.CarServiceBrand;
 import org.click.carservice.db.enums.BrandStatus;
 import org.click.carservice.db.service.impl.BrandServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -36,7 +36,7 @@ import java.util.Objects;
 public class AdminBrandService extends BrandServiceImpl {
 
 
-    public Object validate(carserviceBrand brand) {
+    public Object validate(CarServiceBrand brand) {
         if (brand == null) {
             return ResponseUtil.badArgument();
         }
@@ -50,7 +50,7 @@ public class AdminBrandService extends BrandServiceImpl {
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
             return ResponseUtil.fail("店铺最低金额不能小于零");
         }
-        carserviceBrand byBrandName = findByBrandName(brand.getName());
+        CarServiceBrand byBrandName = findByBrandName(brand.getName());
         if (byBrandName != null && !Objects.equals(brand.getUserId(), byBrandName.getUserId())) {
             return ResponseUtil.fail("店铺名称已存在");
         }
@@ -59,31 +59,31 @@ public class AdminBrandService extends BrandServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceBrand> all() {
-        QueryWrapper<carserviceBrand> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceBrand.STATUS, BrandStatus.STATUS_NORMAL.getStatus());
-        wrapper.orderByDesc(carserviceBrand.WEIGHT);
+    public List<CarServiceBrand> all() {
+        QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceBrand.STATUS, BrandStatus.STATUS_NORMAL.getStatus());
+        wrapper.orderByDesc(CarServiceBrand.WEIGHT);
         return list(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceBrand> querySelective(BrandListBody body) {
-        QueryWrapper<carserviceBrand> wrapper = startPage(body);
+    public List<CarServiceBrand> querySelective(BrandListBody body) {
+        QueryWrapper<CarServiceBrand> wrapper = startPage(body);
         if (!Objects.isNull(body.getId())) {
-            wrapper.eq(carserviceBrand.ID, body.getId());
+            wrapper.eq(CarServiceBrand.ID, body.getId());
         }
         if (!Objects.isNull(body.getName())) {
-            wrapper.like(carserviceBrand.NAME, body.getName());
+            wrapper.like(CarServiceBrand.NAME, body.getName());
         }
-        wrapper.orderByDesc(carserviceBrand.WEIGHT);
+        wrapper.orderByDesc(CarServiceBrand.WEIGHT);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceBrand findByBrandName(String name) {
-        QueryWrapper<carserviceBrand> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceBrand.NAME, name);
+    public CarServiceBrand findByBrandName(String name) {
+        QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceBrand.NAME, name);
         return getOne(wrapper, false);
     }
 

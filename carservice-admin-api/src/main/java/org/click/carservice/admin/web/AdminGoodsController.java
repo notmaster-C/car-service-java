@@ -84,17 +84,17 @@ public class AdminGoodsController {
     @GetMapping("/catAndBrand")
     public Object catAndBrand() {
         // 管理员设置“所属分类”
-        List<carserviceCategory> l1CatList = categoryService.queryL1();
+        List<CarServiceCategory> l1CatList = categoryService.queryL1();
         List<BaseOption> categoryList = new ArrayList<>(l1CatList.size());
         //一级分类
-        for (carserviceCategory l1 : l1CatList) {
+        for (CarServiceCategory l1 : l1CatList) {
             BaseOption l1CatVo = new BaseOption();
             l1CatVo.setValue(l1.getId());
             l1CatVo.setLabel(l1.getName());
             //二级分类
-            List<carserviceCategory> l2CatList = categoryService.queryByPid(l1.getId());
+            List<CarServiceCategory> l2CatList = categoryService.queryByPid(l1.getId());
             List<BaseOption> children = new ArrayList<>(l2CatList.size());
-            for (carserviceCategory l2 : l2CatList) {
+            for (CarServiceCategory l2 : l2CatList) {
                 BaseOption l2CatVo = new BaseOption();
                 l2CatVo.setValue(l2.getId());
                 l2CatVo.setLabel(l2.getName());
@@ -104,9 +104,9 @@ public class AdminGoodsController {
             categoryList.add(l1CatVo);
         }
         // 管理员设置“所属品牌商”
-        List<carserviceBrand> list = brandService.all();
+        List<CarServiceBrand> list = brandService.all();
         List<BaseOption> brandList = new ArrayList<>(l1CatList.size());
-        for (carserviceBrand brand : list) {
+        for (CarServiceBrand brand : list) {
             BaseOption option = new BaseOption();
             option.setValue(brand.getId());
             option.setLabel(brand.getName());
@@ -135,7 +135,7 @@ public class AdminGoodsController {
     @SaCheckPermission("admin:goods:delete")
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "删除商品")
     @PostMapping("/delete")
-    public Object delete(@Valid @RequestBody carserviceGoods goods) {
+    public Object delete(@Valid @RequestBody CarServiceGoods goods) {
         return goodsCoreService.goodsDelete(goods);
     }
 
@@ -145,9 +145,9 @@ public class AdminGoodsController {
     @SaCheckPermission("admin:goods:on-sale")
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "商品上下架")
     @PostMapping("/on-sale")
-    public Object updateStatus(@Valid @RequestBody carserviceGoods goods) {
+    public Object updateStatus(@Valid @RequestBody CarServiceGoods goods) {
         String gid = goods.getId();
-        carserviceGoods carserviceGoods = goodsService.findById(gid);
+        CarServiceGoods carserviceGoods = goodsService.findById(gid);
         if (gid == null || carserviceGoods == null) {
             return ResponseUtil.badArgument();
         }
@@ -155,7 +155,7 @@ public class AdminGoodsController {
             return ResponseUtil.updatedDataFailed();
         }
 
-        carserviceGrouponRules grouponRules = rulesService.findByGid(gid);
+        CarServiceGrouponRules grouponRules = rulesService.findByGid(gid);
         if (grouponRules != null) {
             if (!GoodsStatus.getIsOnSale(goods)) {
                 //删除团购超时任务
@@ -173,7 +173,7 @@ public class AdminGoodsController {
         //如果是下架删除团购任务取消赏金
         if (!GoodsStatus.getIsOnSale(goods)) {
             //删除赏金
-            carserviceRewardTask rewardTask = rewardTaskService.findByGid(goods.getId());
+            CarServiceRewardTask rewardTask = rewardTaskService.findByGid(goods.getId());
             if (rewardTask != null) {
                 rewardTaskService.deleteByGid(goods.getId());
             }
@@ -198,18 +198,18 @@ public class AdminGoodsController {
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "商品详情")
     @GetMapping("/detail")
     public Object detail(@NotNull String id) {
-        carserviceGoods goods = goodsService.findById(id);
+        CarServiceGoods goods = goodsService.findById(id);
         if (goods == null) {
             return ResponseUtil.fail(600, "商品不存在");
         }
-        List<carserviceGoodsProduct> products = productService.queryByGid(id);
-        List<carserviceGrouponRules> grouponRules = rulesService.queryByGoodsId(id);
-        List<carserviceGoodsSpecification> specifications = specificationService.queryByGid(id);
-        List<carserviceGoodsAttribute> attributes = attributeService.queryByGid(id);
+        List<CarServiceGoodsProduct> products = productService.queryByGid(id);
+        List<CarServiceGrouponRules> grouponRules = rulesService.queryByGoodsId(id);
+        List<CarServiceGoodsSpecification> specifications = specificationService.queryByGid(id);
+        List<CarServiceGoodsAttribute> attributes = attributeService.queryByGid(id);
 
         //商品分类信息
         String categoryId = goods.getCategoryId();
-        carserviceCategory category = categoryService.findById(categoryId);
+        CarServiceCategory category = categoryService.findById(categoryId);
         String[] categoryIds = new String[]{};
         if (category != null) {
             categoryIds = new String[]{category.getPid(), categoryId};

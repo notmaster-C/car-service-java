@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.topic.body.TopicListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceTopic;
 import org.click.carservice.db.service.impl.TopicServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,7 +33,7 @@ import java.util.Objects;
 @CacheConfig(cacheNames = "carservice_topic")
 public class AdminTopicService extends TopicServiceImpl {
 
-    public Object validate(carserviceTopic topic) {
+    public Object validate(CarServiceTopic topic) {
         String title = topic.getTitle();
         if (Objects.isNull(title)) {
             return ResponseUtil.fail("标题不能为空");
@@ -62,15 +62,15 @@ public class AdminTopicService extends TopicServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceTopic> querySelective(TopicListBody body) {
-        QueryWrapper<carserviceTopic> wrapper = startPage(body);
+    public List<CarServiceTopic> querySelective(TopicListBody body) {
+        QueryWrapper<CarServiceTopic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {
-            wrapper.like(carserviceTopic.TITLE, body.getTitle());
+            wrapper.like(CarServiceTopic.TITLE, body.getTitle());
         }
         if (StringUtils.hasText(body.getSubtitle())) {
-            wrapper.like(carserviceTopic.SUBTITLE, body.getSubtitle());
+            wrapper.like(CarServiceTopic.SUBTITLE, body.getSubtitle());
         }
-        wrapper.orderByDesc(carserviceTopic.WEIGHT);
+        wrapper.orderByDesc(CarServiceTopic.WEIGHT);
         return queryAll(wrapper);
     }
 

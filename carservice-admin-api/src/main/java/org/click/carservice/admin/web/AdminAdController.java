@@ -17,7 +17,7 @@ import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.ad.body.AdListBody;
 import org.click.carservice.admin.service.AdminAdService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAd;
+import org.click.carservice.db.domain.CarServiceAd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +55,7 @@ public class AdminAdController {
     @SaCheckPermission("admin:ad:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "广告管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceAd ad) {
+    public Object create(@Valid @RequestBody CarServiceAd ad) {
         Object error = adService.validate(ad);
         if (error != null) {
             return error;
@@ -80,7 +80,7 @@ public class AdminAdController {
     @SaCheckPermission("admin:ad:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "广告管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceAd ad) {
+    public Object update(@Valid @RequestBody CarServiceAd ad) {
         Object error = adService.validate(ad);
         if (error != null) {
             return error;

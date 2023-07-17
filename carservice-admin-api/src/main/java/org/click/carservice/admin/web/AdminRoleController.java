@@ -23,9 +23,9 @@ import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.admin.service.AdminPermissionService;
 import org.click.carservice.admin.service.AdminRoleService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
-import org.click.carservice.db.domain.carservicePermission;
-import org.click.carservice.db.domain.carserviceRole;
+import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServicePermission;
+import org.click.carservice.db.domain.CarServiceRole;
 import org.click.carservice.db.entity.BaseOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -69,9 +69,9 @@ public class AdminRoleController {
      */
     @GetMapping("/options")
     public Object options() {
-        List<carserviceRole> roleList = roleService.queryAll();
+        List<CarServiceRole> roleList = roleService.queryAll();
         List<BaseOption> options = new ArrayList<>(roleList.size());
-        for (carserviceRole role : roleList) {
+        for (CarServiceRole role : roleList) {
             BaseOption option = new BaseOption();
             option.setValue(role.getId());
             option.setLabel(role.getName());
@@ -99,7 +99,7 @@ public class AdminRoleController {
     @SaCheckPermission("admin:role:create")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "角色添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceRole role) {
+    public Object create(@Valid @RequestBody CarServiceRole role) {
         Object error = roleService.validate(role);
         if (error != null) {
             return error;
@@ -120,7 +120,7 @@ public class AdminRoleController {
     @SaCheckPermission("admin:role:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "角色管理"}, button = "角色编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceRole role) {
+    public Object update(@Valid @RequestBody CarServiceRole role) {
         Object error = roleService.validate(role);
         if (error != null) {
             return error;
@@ -143,8 +143,8 @@ public class AdminRoleController {
             return ResponseUtil.fail("当前角色的超级权限不能删除");
         }
         // 如果当前角色所对应管理员仍存在，则拒绝删除角色。
-        List<carserviceAdmin> adminList = adminService.list();
-        for (carserviceAdmin admin : adminList) {
+        List<CarServiceAdmin> adminList = adminService.list();
+        for (CarServiceAdmin admin : adminList) {
             String[] roleIds = admin.getRoleIds();
             for (String roleId : roleIds) {
                 if (id.equals(roleId)) {
@@ -175,7 +175,7 @@ public class AdminRoleController {
             assignedPermissions = permissionService.queryByRoleId(roleId);
         }
         String adminId = StpUtil.getLoginIdAsString();
-        carserviceAdmin admin = adminService.findById(adminId);
+        CarServiceAdmin admin = adminService.findById(adminId);
         String[] roles = admin.getRoleIds();
         List<String> roleIds = Arrays.asList(roles);
         Set<String> curPermissions = new HashSet<>();
@@ -204,9 +204,9 @@ public class AdminRoleController {
         // 先删除旧的权限，再更新新的权限
         permissionService.deleteByRoleId(body.getRoleId());
         // 整合权限
-        HashSet<carservicePermission> permissionSet = new HashSet<>();
+        HashSet<CarServicePermission> permissionSet = new HashSet<>();
         for (String permission : body.getPermissions()) {
-            carservicePermission carservicePermission = new carservicePermission();
+            CarServicePermission carservicePermission = new CarServicePermission();
             carservicePermission.setRoleId(body.getRoleId());
             carservicePermission.setPermission(permission);
             permissionSet.add(carservicePermission);

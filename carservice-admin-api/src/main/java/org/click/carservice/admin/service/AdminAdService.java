@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.ad.body.AdListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAd;
+import org.click.carservice.db.domain.CarServiceAd;
 import org.click.carservice.db.service.impl.AdServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,7 +33,7 @@ import java.util.Objects;
 public class AdminAdService extends AdServiceImpl {
 
 
-    public Object validate(carserviceAd ad) {
+    public Object validate(CarServiceAd ad) {
         String name = ad.getName();
         if (Objects.isNull(name)) {
             return ResponseUtil.badArgument();
@@ -47,15 +47,15 @@ public class AdminAdService extends AdServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceAd> querySelective(AdListBody body) {
-        QueryWrapper<carserviceAd> wrapper = startPage(body);
+    public List<CarServiceAd> querySelective(AdListBody body) {
+        QueryWrapper<CarServiceAd> wrapper = startPage(body);
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceAd.NAME, body.getName());
+            wrapper.like(CarServiceAd.NAME, body.getName());
         }
         if (StringUtils.hasText(body.getContent())) {
-            wrapper.like(carserviceAd.CONTENT, body.getContent());
+            wrapper.like(CarServiceAd.CONTENT, body.getContent());
         }
-        wrapper.orderByDesc(carserviceAd.WEIGHT);
+        wrapper.orderByDesc(CarServiceAd.WEIGHT);
         return list(wrapper);
     }
 

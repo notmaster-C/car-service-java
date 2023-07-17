@@ -17,7 +17,7 @@ import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.keyword.body.KeywordListBody;
 import org.click.carservice.admin.service.AdminKeywordService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceKeyword;
+import org.click.carservice.db.domain.CarServiceKeyword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +65,7 @@ public class AdminKeywordController {
     @SaCheckPermission("admin:keyword:create")
     @RequiresPermissionsDesc(menu = {"商场管理", "关键词"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceKeyword keyword) {
+    public Object create(@Valid @RequestBody CarServiceKeyword keyword) {
         Object error = keywordService.validate(keyword);
         if (error != null) {
             return error;
@@ -80,7 +80,7 @@ public class AdminKeywordController {
     @SaCheckPermission("admin:keyword:update")
     @RequiresPermissionsDesc(menu = {"商场管理", "关键词"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceKeyword keyword) {
+    public Object update(@Valid @RequestBody CarServiceKeyword keyword) {
         Object error = keywordService.validate(keyword);
         if (error != null) {
             return error;

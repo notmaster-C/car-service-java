@@ -91,7 +91,7 @@ public class WxGoodsController {
     @GetMapping("detail")
     public Object detail(@LoginUser(require = false) String userId, @NotNull String goodId) {
         // 商品信息
-        carserviceGoods info = goodsService.findById(goodId);
+        CarServiceGoods info = goodsService.findById(goodId);
         if (info == null || info.getBrandId() == null || !GoodsStatus.getIsOnSale(info)) {
             return ResponseUtil.fail(600, "商品已下架");
         }
@@ -107,10 +107,10 @@ public class WxGoodsController {
         );
 
         // 商品属性
-        FutureTask<List<carserviceGoodsAttribute>> goodsAttributeListTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGoodsAttribute>>() {
+        FutureTask<List<CarServiceGoodsAttribute>> goodsAttributeListTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGoodsAttribute>>() {
                     @Override
-                    public List<carserviceGoodsAttribute> runTask() {
+                    public List<CarServiceGoodsAttribute> runTask() {
                         return goodsAttributeService.queryByGid(goodId);
                     }
                 }
@@ -127,40 +127,40 @@ public class WxGoodsController {
         );
 
         // 商品规格对应的数量和价格
-        FutureTask<List<carserviceGoodsProduct>> productListCallableTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGoodsProduct>>() {
+        FutureTask<List<CarServiceGoodsProduct>> productListCallableTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGoodsProduct>>() {
                     @Override
-                    public List<carserviceGoodsProduct> runTask() {
+                    public List<CarServiceGoodsProduct> runTask() {
                         return productService.queryByGid(goodId);
                     }
                 }
         );
 
         // 商品问题，这里是一些通用问题
-        FutureTask<List<carserviceIssue>> issueCallableTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceIssue>>() {
+        FutureTask<List<CarServiceIssue>> issueCallableTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceIssue>>() {
                     @Override
-                    public List<carserviceIssue> runTask() {
+                    public List<CarServiceIssue> runTask() {
                         return goodsIssueService.getGoodsIssue();
                     }
                 }
         );
 
         // 商品品牌商
-        FutureTask<carserviceBrand> brandCallableTask = new FutureTask<>(
-                new InheritableCallable<carserviceBrand>() {
+        FutureTask<CarServiceBrand> brandCallableTask = new FutureTask<>(
+                new InheritableCallable<CarServiceBrand>() {
                     @Override
-                    public carserviceBrand runTask() {
+                    public CarServiceBrand runTask() {
                         return brandService.findById(info.getBrandId());
                     }
                 }
         );
 
         //团购信息
-        FutureTask<List<carserviceGrouponRules>> grouponRulesCallableTask = new FutureTask<>(
-                new InheritableCallable<List<carserviceGrouponRules>>() {
+        FutureTask<List<CarServiceGrouponRules>> grouponRulesCallableTask = new FutureTask<>(
+                new InheritableCallable<List<CarServiceGrouponRules>>() {
                     @Override
-                    public List<carserviceGrouponRules> runTask() {
+                    public List<CarServiceGrouponRules> runTask() {
                         return grouponRulesService.queryOnByGoodsId(goodId);
                     }
                 }
@@ -216,9 +216,9 @@ public class WxGoodsController {
      */
     @GetMapping("category")
     public Object category(@NotNull String id) {
-        carserviceCategory currentCategory = categoryService.findById(id);
-        carserviceCategory parentCategory;
-        List<carserviceCategory> brotherCategory;
+        CarServiceCategory currentCategory = categoryService.findById(id);
+        CarServiceCategory parentCategory;
+        List<CarServiceCategory> brotherCategory;
         if (Objects.equals(currentCategory.getPid(), "0")) {
             parentCategory = currentCategory;
             brotherCategory = categoryService.queryByPid(currentCategory.getId());
@@ -242,11 +242,11 @@ public class WxGoodsController {
     public Object list(@LoginUser(require = false) String userId, GoodsListBody body) {
         //添加到搜索历史
         if (userId != null && !Objects.isNull(body.getKeyword())) {
-            carserviceSearchHistory searchHistory = searchHistoryService.findByKeyword(userId, body.getKeyword());
+            CarServiceSearchHistory searchHistory = searchHistoryService.findByKeyword(userId, body.getKeyword());
             if (searchHistory != null) {
                 searchHistoryService.updateVersionSelective(searchHistory);
             } else {
-                carserviceSearchHistory searchHistoryVo = new carserviceSearchHistory();
+                CarServiceSearchHistory searchHistoryVo = new CarServiceSearchHistory();
                 searchHistoryVo.setKeyword(body.getKeyword());
                 searchHistoryVo.setUserId(userId);
                 searchHistoryVo.setFrom("wx");
@@ -256,18 +256,18 @@ public class WxGoodsController {
         }
 
         //查询列表数据
-        List<carserviceGoods> goodsList = goodsService.querySelective(body);
+        List<CarServiceGoods> goodsList = goodsService.querySelective(body);
 
         // 查询商品所属类目列表。
         List<String> goodsCatIds = goodsService.getCatIds(body.getBrandId(), body.getKeyword(), body.getIsHot(), body.getIsNew());
-        List<carserviceCategory> categoryList;
+        List<CarServiceCategory> categoryList;
         if (goodsCatIds.size() != 0) {
             categoryList = categoryService.queryL2ByIds(goodsCatIds);
         } else {
             categoryList = new ArrayList<>(0);
         }
 
-        PageInfo<carserviceGoods> pagedList = PageInfo.of(goodsList);
+        PageInfo<CarServiceGoods> pagedList = PageInfo.of(goodsList);
         GoodsListResult result = new GoodsListResult();
         result.setList(goodsList);
         result.setTotal(pagedList.getTotal());
@@ -287,30 +287,30 @@ public class WxGoodsController {
      */
     @GetMapping("related")
     public Object related(@NotNull String goodId) {
-        carserviceGoods goods = goodsService.findById(goodId);
+        CarServiceGoods goods = goodsService.findById(goodId);
         if (goods == null) {
             return ResponseUtil.badArgumentValue();
         }
         // 查找六个相关商品,优先级 分类 -> 店铺 -> 新品
-        HashMap<String, carserviceGoods> goodsMap = new HashMap<>();
+        HashMap<String, CarServiceGoods> goodsMap = new HashMap<>();
         int related = 6;
-        List<carserviceGoods> goodsCategoryList = goodsService.queryByCategory(goods.getCategoryId(), related);
-        for (carserviceGoods g : goodsCategoryList) {
+        List<CarServiceGoods> goodsCategoryList = goodsService.queryByCategory(goods.getCategoryId(), related);
+        for (CarServiceGoods g : goodsCategoryList) {
             if (goodsMap.size() < related) {
                 goodsMap.put(g.getId(), g);
             }
         }
         if (goodsMap.size() < related) {
-            List<carserviceGoods> goodsBrandList = goodsService.queryByBrand(goods.getBrandId(), 10);
-            for (carserviceGoods g : goodsBrandList) {
+            List<CarServiceGoods> goodsBrandList = goodsService.queryByBrand(goods.getBrandId(), 10);
+            for (CarServiceGoods g : goodsBrandList) {
                 if (goodsMap.size() < related) {
                     goodsMap.put(g.getId(), g);
                 }
             }
         }
         if (goodsMap.size() < related) {
-            List<carserviceGoods> goodsNewList = goodsService.queryByNew(10);
-            for (carserviceGoods g : goodsNewList) {
+            List<CarServiceGoods> goodsNewList = goodsService.queryByNew(10);
+            for (CarServiceGoods g : goodsNewList) {
                 if (goodsMap.size() < related) {
                     goodsMap.put(g.getId(), g);
                 }

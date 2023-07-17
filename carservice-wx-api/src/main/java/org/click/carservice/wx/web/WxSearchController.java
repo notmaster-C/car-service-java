@@ -13,8 +13,8 @@ package org.click.carservice.wx.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceKeyword;
-import org.click.carservice.db.domain.carserviceSearchHistory;
+import org.click.carservice.db.domain.CarServiceKeyword;
+import org.click.carservice.db.domain.CarServiceSearchHistory;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.search.body.SearchListBody;
 import org.click.carservice.wx.model.search.result.SearchIndexResult;
@@ -56,11 +56,11 @@ public class WxSearchController {
     @GetMapping("index")
     public Object index(@LoginUser(require = false) String userId) {
         //取出输入框默认的关键词
-        carserviceKeyword defaultKeyword = keywordsService.queryDefault();
+        CarServiceKeyword defaultKeyword = keywordsService.queryDefault();
         //取出热闹关键词
-        List<carserviceKeyword> hotKeywordList = keywordsService.queryHots();
+        List<CarServiceKeyword> hotKeywordList = keywordsService.queryHots();
         //用户历史搜索
-        List<carserviceSearchHistory> historyList = searchHistoryService.queryByUid(userId);
+        List<CarServiceSearchHistory> historyList = searchHistoryService.queryByUid(userId);
         //结果
         SearchIndexResult result = new SearchIndexResult();
         result.setDefaultKeyword(defaultKeyword);
@@ -76,10 +76,10 @@ public class WxSearchController {
      */
     @GetMapping("helper")
     public Object helper(SearchListBody body) {
-        List<carserviceKeyword> keywordsList = keywordsService.queryByKeyword(body);
+        List<CarServiceKeyword> keywordsList = keywordsService.queryByKeyword(body);
         String[] keys = new String[keywordsList.size()];
         int index = 0;
-        for (carserviceKeyword key : keywordsList) {
+        for (CarServiceKeyword key : keywordsList) {
             keys[index++] = key.getKeyword();
         }
         return ResponseUtil.ok(keys);

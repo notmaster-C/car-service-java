@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceSearchHistory;
+import org.click.carservice.db.domain.CarServiceSearchHistory;
 import org.click.carservice.db.service.impl.SearchHistoryServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,29 +32,29 @@ public class WxSearchHistoryService extends SearchHistoryServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceSearchHistory findByKeyword(String userId, String keyword) {
-        QueryWrapper<carserviceSearchHistory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceSearchHistory.USER_ID, userId);
-        wrapper.eq(carserviceSearchHistory.KEYWORD, keyword);
+    public CarServiceSearchHistory findByKeyword(String userId, String keyword) {
+        QueryWrapper<CarServiceSearchHistory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceSearchHistory.USER_ID, userId);
+        wrapper.eq(CarServiceSearchHistory.KEYWORD, keyword);
         return getOne(wrapper, false);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceSearchHistory> queryByUid(String userId) {
+    public List<CarServiceSearchHistory> queryByUid(String userId) {
         if (userId == null) {
             return new ArrayList<>();
         }
-        QueryWrapper<carserviceSearchHistory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceSearchHistory.USER_ID, userId);
+        QueryWrapper<CarServiceSearchHistory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceSearchHistory.USER_ID, userId);
         return queryAll(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void deleteByUid(String userId) {
-        QueryWrapper<carserviceSearchHistory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceSearchHistory.USER_ID, userId);
+        QueryWrapper<CarServiceSearchHistory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceSearchHistory.USER_ID, userId);
         remove(wrapper);
     }
 

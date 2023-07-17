@@ -13,8 +13,8 @@ package org.click.carservice.wx.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGroupon;
-import org.click.carservice.db.domain.carserviceGrouponRules;
+import org.click.carservice.db.domain.CarServiceGroupon;
+import org.click.carservice.db.domain.CarServiceGrouponRules;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.GrouponStatus;
 import org.click.carservice.db.service.impl.GrouponServiceImpl;
@@ -43,12 +43,12 @@ public class WxGrouponService extends GrouponServiceImpl {
      * @return null
      */
     public Object isGroupon(String grouponId) {
-        carserviceGroupon groupon = findById(grouponId);
+        CarServiceGroupon groupon = findById(grouponId);
         if (groupon == null) {
             return ResponseUtil.badArgument();
         }
         //验证活动是否有效
-        carserviceGrouponRules rules = grouponRulesService.findById(groupon.getRulesId());
+        CarServiceGrouponRules rules = grouponRulesService.findById(groupon.getRulesId());
         if (rules == null) {
             return ResponseUtil.badArgument();
         }
@@ -77,7 +77,7 @@ public class WxGrouponService extends GrouponServiceImpl {
      */
     public Object isGroupon(String grouponRulesId, String grouponLinkId, String userId) {
         //如果是团购项目,验证活动是否有效
-        carserviceGrouponRules rules = grouponRulesService.findById(grouponRulesId);
+        CarServiceGrouponRules rules = grouponRulesService.findById(grouponRulesId);
         //找不到记录
         if (rules == null) {
             return ResponseUtil.badArgument();
@@ -103,7 +103,7 @@ public class WxGrouponService extends GrouponServiceImpl {
                 return ResponseUtil.fail("团购活动已经参加!");
             }
             // （2）不允许参加自己开团的团购
-            carserviceGroupon groupon = queryById(userId, grouponLinkId);
+            CarServiceGroupon groupon = queryById(userId, grouponLinkId);
             if (groupon != null) {
                 if (groupon.getCreatorUserId().equals(userId)) {
                     return ResponseUtil.fail("团购活动已经参加!");
@@ -123,7 +123,7 @@ public class WxGrouponService extends GrouponServiceImpl {
      */
     public void addGroupon(String orderId, String userId, String grouponRulesId, String grouponLinkId) {
         if (grouponRulesId != null && !"0".equals(grouponRulesId)) {
-            carserviceGroupon groupon = new carserviceGroupon();
+            CarServiceGroupon groupon = new CarServiceGroupon();
             groupon.setOrderId(orderId);
             groupon.setStatus(GrouponStatus.STATUS_NONE.getStatus());
             groupon.setUserId(userId);
@@ -131,7 +131,7 @@ public class WxGrouponService extends GrouponServiceImpl {
             //参与者
             if (grouponLinkId != null && !"0".equals(grouponLinkId)) {
                 //参与的团购记录
-                carserviceGroupon baseGroupon = findById(grouponLinkId);
+                CarServiceGroupon baseGroupon = findById(grouponLinkId);
                 groupon.setCreatorUserId(baseGroupon.getCreatorUserId());
                 groupon.setShareUrl(baseGroupon.getShareUrl());
                 groupon.setGrouponId(grouponLinkId);
@@ -149,11 +149,11 @@ public class WxGrouponService extends GrouponServiceImpl {
      * 获取某个团购活动参与的记录
      */
     @Cacheable(sync = true)
-    public List<carserviceGroupon> queryJoinRecord(String grouponId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.GROUPON_ID, grouponId);
-        wrapper.eq(carserviceGroupon.STATUS, GrouponStatus.STATUS_ON.getStatus());
-        wrapper.orderByDesc(carserviceGroupon.ADD_TIME);
+    public List<CarServiceGroupon> queryJoinRecord(String grouponId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
+        wrapper.eq(CarServiceGroupon.STATUS, GrouponStatus.STATUS_ON.getStatus());
+        wrapper.orderByDesc(CarServiceGroupon.ADD_TIME);
         return queryAll(wrapper);
     }
 
@@ -162,17 +162,17 @@ public class WxGrouponService extends GrouponServiceImpl {
      * 根据ID查询记录
      */
     @Cacheable(sync = true)
-    public carserviceGroupon queryById(String userId, String id) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.USER_ID, userId);
-        wrapper.eq(carserviceGroupon.ID, id);
+    public CarServiceGroupon queryById(String userId, String id) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.USER_ID, userId);
+        wrapper.eq(CarServiceGroupon.ID, id);
         return getOne(wrapper, false);
     }
 
     @Cacheable(sync = true)
-    public carserviceGroupon findByOrderId(String orderId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.ORDER_ID, orderId);
+    public CarServiceGroupon findByOrderId(String orderId) {
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.ORDER_ID, orderId);
         return getOne(wrapper, false);
     }
 
@@ -182,18 +182,18 @@ public class WxGrouponService extends GrouponServiceImpl {
      */
     @Cacheable(sync = true)
     public Integer countGroupon(String grouponId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.GROUPON_ID, grouponId);
-        wrapper.eq(carserviceGroupon.STATUS, GrouponStatus.STATUS_NONE.getStatus());
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
+        wrapper.eq(CarServiceGroupon.STATUS, GrouponStatus.STATUS_NONE.getStatus());
         return Math.toIntExact(count(wrapper));
     }
 
     @Cacheable(sync = true)
     public boolean hasJoin(String userId, String grouponId) {
-        QueryWrapper<carserviceGroupon> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGroupon.USER_ID, userId);
-        wrapper.eq(carserviceGroupon.GROUPON_ID, grouponId);
-        wrapper.eq(carserviceGroupon.STATUS, GrouponStatus.STATUS_NONE.getStatus());
+        QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGroupon.USER_ID, userId);
+        wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
+        wrapper.eq(CarServiceGroupon.STATUS, GrouponStatus.STATUS_NONE.getStatus());
         return exists(wrapper);
     }
 

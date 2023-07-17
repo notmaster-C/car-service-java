@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.order.body.OrderListBody;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.service.impl.OrderServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,31 +32,31 @@ public class AdminOrderService extends OrderServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceOrder> querySelective(OrderListBody body) {
-        QueryWrapper<carserviceOrder> wrapper = startPage(body);
+    public List<CarServiceOrder> querySelective(OrderListBody body) {
+        QueryWrapper<CarServiceOrder> wrapper = startPage(body);
         if (body.getBrandId() != null) {
-            wrapper.eq(carserviceOrder.BRAND_ID, body.getBrandId());
+            wrapper.eq(CarServiceOrder.BRAND_ID, body.getBrandId());
         }
         if (body.getGoodsId() != null) {
-            wrapper.eq(carserviceOrder.GOODS_ID, body.getGoodsId());
+            wrapper.eq(CarServiceOrder.GOODS_ID, body.getGoodsId());
         }
         if (body.getEnd() != null) {
-            wrapper.le(carserviceOrder.ADD_TIME, body.getEnd());
+            wrapper.le(CarServiceOrder.ADD_TIME, body.getEnd());
         }
         if (body.getStart() != null) {
-            wrapper.ge(carserviceOrder.ADD_TIME, body.getStart());
+            wrapper.ge(CarServiceOrder.ADD_TIME, body.getStart());
         }
         if (StringUtils.hasText(body.getShipSn())) {
-            wrapper.le(carserviceOrder.SHIP_SN, body.getShipSn());
+            wrapper.le(CarServiceOrder.SHIP_SN, body.getShipSn());
         }
         if (StringUtils.hasText(body.getMobile())) {
-            wrapper.like(carserviceOrder.MOBILE, body.getMobile());
+            wrapper.like(CarServiceOrder.MOBILE, body.getMobile());
         }
         if (StringUtils.hasText(body.getOrderSn())) {
-            wrapper.like(carserviceOrder.ORDER_SN, body.getOrderSn());
+            wrapper.like(CarServiceOrder.ORDER_SN, body.getOrderSn());
         }
         if (body.getOrderStatusArray() != null && body.getOrderStatusArray().size() > 0) {
-            wrapper.in(carserviceOrder.ORDER_STATUS, body.getOrderStatusArray());
+            wrapper.in(CarServiceOrder.ORDER_STATUS, body.getOrderStatusArray());
         }
         return queryAll(wrapper);
     }
@@ -66,8 +66,8 @@ public class AdminOrderService extends OrderServiceImpl {
         if (orderStatus == null || orderStatus.size() <= 0) {
             return 0;
         }
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.in(carserviceOrder.ORDER_STATUS, orderStatus);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServiceOrder.ORDER_STATUS, orderStatus);
         return Math.toIntExact(count(wrapper));
     }
 

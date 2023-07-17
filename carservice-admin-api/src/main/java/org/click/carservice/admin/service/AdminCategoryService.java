@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 import org.click.carservice.db.service.impl.CategoryServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,7 +32,7 @@ import java.util.Objects;
 public class AdminCategoryService extends CategoryServiceImpl {
 
 
-    public Object validate(carserviceCategory category) {
+    public Object validate(CarServiceCategory category) {
         String name = category.getName();
         if (Objects.isNull(name)) {
             return ResponseUtil.badArgument();
@@ -52,19 +52,19 @@ public class AdminCategoryService extends CategoryServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryL1() {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCategory.LEVEL, "L1");
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryL1() {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCategory.LEVEL, "L1");
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCategory> queryByPid(String pid) {
-        QueryWrapper<carserviceCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCategory.PID, pid);
-        wrapper.orderByDesc(carserviceCategory.WEIGHT);
+    public List<CarServiceCategory> queryByPid(String pid) {
+        QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCategory.PID, pid);
+        wrapper.orderByDesc(CarServiceCategory.WEIGHT);
         return queryAll(wrapper);
     }
 

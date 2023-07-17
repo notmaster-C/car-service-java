@@ -12,7 +12,7 @@ package org.click.carservice.admin.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceRegion;
+import org.click.carservice.db.domain.CarServiceRegion;
 import org.click.carservice.db.service.impl.RegionServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,16 +30,16 @@ public class AdminRegionService extends RegionServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceRegion> getAll() {
-        QueryWrapper<carserviceRegion> wrapper = new QueryWrapper<>();
-        wrapper.ne(carserviceRegion.TYPE, 4);
+    public List<CarServiceRegion> getAll() {
+        QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
+        wrapper.ne(CarServiceRegion.TYPE, 4);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceRegion> queryByPid(String parentId) {
-        QueryWrapper<carserviceRegion> wrapper = new QueryWrapper<>();
-        wrapper.ne(carserviceRegion.PID, parentId);
+    public List<CarServiceRegion> queryByPid(String parentId) {
+        QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
+        wrapper.ne(CarServiceRegion.PID, parentId);
         return queryAll(wrapper);
     }
 

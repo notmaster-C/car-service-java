@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceAftersale;
+import org.click.carservice.db.domain.CarServiceAfterSale;
 import org.click.carservice.db.service.impl.AftersaleServiceImpl;
 import org.click.carservice.wx.model.aftersale.body.AftersaleListBody;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,44 +33,44 @@ public class WxAftersaleService extends AftersaleServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceAftersale findById(String userId, String id) {
-        QueryWrapper<carserviceAftersale> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAftersale.ID, id);
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
+    public CarServiceAfterSale findById(String userId, String id) {
+        QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAfterSale.ID, id);
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAftersale> querySelective(String userId, AftersaleListBody body) {
-        QueryWrapper<carserviceAftersale> wrapper = startPage(body);
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
+    public List<CarServiceAfterSale> querySelective(String userId, AftersaleListBody body) {
+        QueryWrapper<CarServiceAfterSale> wrapper = startPage(body);
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
         if (body.getStatus() != null) {
-            wrapper.eq(carserviceAftersale.STATUS, body.getStatus());
+            wrapper.eq(CarServiceAfterSale.STATUS, body.getStatus());
         }
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
     public Boolean countByAftersaleSn(String userId, String aftersaleSn) {
-        QueryWrapper<carserviceAftersale> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
-        wrapper.eq(carserviceAftersale.AFTERSALE_SN, aftersaleSn);
+        QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
+        wrapper.eq(CarServiceAfterSale.AFTERSALE_SN, aftersaleSn);
         return exists(wrapper);
     }
 
     @CacheEvict(allEntries = true)
     public void deleteByOrderId(String userId, String orderId) {
-        QueryWrapper<carserviceAftersale> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
-        wrapper.eq(carserviceAftersale.ORDER_ID, orderId);
+        QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
+        wrapper.eq(CarServiceAfterSale.ORDER_ID, orderId);
         remove(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceAftersale findByOrderId(String userId, String orderId) {
-        QueryWrapper<carserviceAftersale> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAftersale.USER_ID, userId);
-        wrapper.eq(carserviceAftersale.ORDER_ID, orderId);
+    public CarServiceAfterSale findByOrderId(String userId, String orderId) {
+        QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAfterSale.USER_ID, userId);
+        wrapper.eq(CarServiceAfterSale.ORDER_ID, orderId);
         return getOne(wrapper);
     }
 

@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.click.carservice.db.domain.carserviceDynamic;
+import org.click.carservice.db.domain.CarServiceDynamic;
 import org.click.carservice.db.mapper.DynamicMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IDynamicService;
@@ -26,42 +26,42 @@ import java.util.Map;
 @Service
 @Primary
 @CacheConfig(cacheNames = "carservice_dynamic")
-public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, carserviceDynamic> implements IDynamicService {
+public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, CarServiceDynamic> implements IDynamicService {
 
 
     @Override
     @Cacheable(sync = true)
-    public carserviceDynamic findById(String id) {
+    public CarServiceDynamic findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceDynamic> queryAll(Wrapper<carserviceDynamic> queryWrapper) {
+    public List<CarServiceDynamic> queryAll(Wrapper<CarServiceDynamic> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int add(carserviceDynamic record) {
+    public int add(CarServiceDynamic record) {
         return getBaseMapper().insert(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean batchAdd(List<carserviceDynamic> list) {
+    public boolean batchAdd(List<CarServiceDynamic> list) {
         return saveBatch(list);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateSelective(carserviceDynamic record) {
+    public int updateSelective(CarServiceDynamic record) {
         return getBaseMapper().updateById(record);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public int updateVersionSelective(carserviceDynamic record) {
+    public int updateVersionSelective(CarServiceDynamic record) {
         return getBaseMapper().updateById(record);
     }
 
@@ -73,43 +73,43 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, carservi
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean exists(Wrapper<carserviceDynamic> queryWrapper) {
+    public boolean exists(Wrapper<CarServiceDynamic> queryWrapper) {
         return getBaseMapper().exists(queryWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean save(carserviceDynamic entity) {
+    public boolean save(CarServiceDynamic entity) {
         return super.save(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveBatch(Collection<carserviceDynamic> entityList) {
+    public boolean saveBatch(Collection<CarServiceDynamic> entityList) {
         return super.saveBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceDynamic entity) {
+    public boolean saveOrUpdate(CarServiceDynamic entity) {
         return super.saveOrUpdate(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdate(carserviceDynamic entity, Wrapper<carserviceDynamic> updateWrapper) {
+    public boolean saveOrUpdate(CarServiceDynamic entity, Wrapper<CarServiceDynamic> updateWrapper) {
         return super.saveOrUpdate(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean saveOrUpdateBatch(Collection<carserviceDynamic> entityList) {
+    public boolean saveOrUpdateBatch(Collection<CarServiceDynamic> entityList) {
         return super.saveOrUpdateBatch(entityList);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean removeById(carserviceDynamic entity) {
+    public boolean removeById(CarServiceDynamic entity) {
         return super.removeById(entity);
     }
 
@@ -121,7 +121,7 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, carservi
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean remove(Wrapper<carserviceDynamic> queryWrapper) {
+    public boolean remove(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.remove(queryWrapper);
     }
 
@@ -145,49 +145,49 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, carservi
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateById(carserviceDynamic entity) {
+    public boolean updateById(CarServiceDynamic entity) {
         return super.updateById(entity);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(Wrapper<carserviceDynamic> updateWrapper) {
+    public boolean update(Wrapper<CarServiceDynamic> updateWrapper) {
         return super.update(updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean update(carserviceDynamic entity, Wrapper<carserviceDynamic> updateWrapper) {
+    public boolean update(CarServiceDynamic entity, Wrapper<CarServiceDynamic> updateWrapper) {
         return super.update(entity, updateWrapper);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public boolean updateBatchById(Collection<carserviceDynamic> entityList) {
+    public boolean updateBatchById(Collection<CarServiceDynamic> entityList) {
         return super.updateBatchById(entityList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceDynamic getById(Serializable id) {
+    public CarServiceDynamic getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceDynamic> listByIds(Collection<? extends Serializable> idList) {
+    public List<CarServiceDynamic> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceDynamic> listByMap(Map<String, Object> columnMap) {
+    public List<CarServiceDynamic> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
     @Cacheable(sync = true)
-    public carserviceDynamic getOne(Wrapper<carserviceDynamic> queryWrapper) {
+    public CarServiceDynamic getOne(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
@@ -199,25 +199,25 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, carservi
 
     @Override
     @Cacheable(sync = true)
-    public long count(Wrapper<carserviceDynamic> queryWrapper) {
+    public long count(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceDynamic> list(Wrapper<carserviceDynamic> queryWrapper) {
+    public List<CarServiceDynamic> list(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<carserviceDynamic> list() {
+    public List<CarServiceDynamic> list() {
         return super.list();
     }
 
     @Override
     @Cacheable(sync = true)
-    public List<Map<String, Object>> listMaps(Wrapper<carserviceDynamic> queryWrapper) {
+    public List<Map<String, Object>> listMaps(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 

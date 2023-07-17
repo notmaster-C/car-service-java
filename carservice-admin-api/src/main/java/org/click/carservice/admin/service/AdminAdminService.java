@@ -17,7 +17,7 @@ import org.click.carservice.core.utils.RegexUtil;
 import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.service.impl.AdminServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -38,7 +38,7 @@ import java.util.Objects;
 public class AdminAdminService extends AdminServiceImpl {
 
 
-    public Object validate(carserviceAdmin admin) {
+    public Object validate(CarServiceAdmin admin) {
         String name = admin.getUsername();
         if (Objects.isNull(name) || name.length() < 6) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0110);
@@ -57,7 +57,7 @@ public class AdminAdminService extends AdminServiceImpl {
     }
 
     @CacheEvict(allEntries = true)
-    public boolean saveAdmin(carserviceAdmin admin) {
+    public boolean saveAdmin(CarServiceAdmin admin) {
         String rawPassword = admin.getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(rawPassword);
@@ -66,30 +66,30 @@ public class AdminAdminService extends AdminServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAdmin> findAdmin(String username) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.USERNAME, username);
+    public List<CarServiceAdmin> findAdmin(String username) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.USERNAME, username);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAdmin> findByTenantId(String tenantId) {
-        QueryWrapper<carserviceAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAdmin.TENANT_ID, tenantId);
+    public List<CarServiceAdmin> findByTenantId(String tenantId) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.TENANT_ID, tenantId);
         return queryAll(wrapper);
     }
 
     @Cacheable(sync = true)
-    public List<carserviceAdmin> querySelective(AdminListBody body) {
-        QueryWrapper<carserviceAdmin> wrapper = startPage(body);
+    public List<CarServiceAdmin> querySelective(AdminListBody body) {
+        QueryWrapper<CarServiceAdmin> wrapper = startPage(body);
         if (StringUtils.hasText(body.getMail())) {
-            wrapper.like(carserviceAdmin.MAIL, body.getMail());
+            wrapper.like(CarServiceAdmin.MAIL, body.getMail());
         }
         if (StringUtils.hasText(body.getMobile())) {
-            wrapper.like(carserviceAdmin.MOBILE, body.getMobile());
+            wrapper.like(CarServiceAdmin.MOBILE, body.getMobile());
         }
         if (StringUtils.hasText(body.getUsername())) {
-            wrapper.like(carserviceAdmin.USERNAME, body.getUsername());
+            wrapper.like(CarServiceAdmin.USERNAME, body.getUsername());
         }
         return queryAll(wrapper);
     }

@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.service.impl.UserServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -34,7 +34,7 @@ public class WxUserService extends UserServiceImpl {
 
     @Cacheable(sync = true)
     public UserInfo findUserVoById(String userId) {
-        carserviceUser user = findById(userId);
+        CarServiceUser user = findById(userId);
         UserInfo userInfo = new UserInfo();
         if (user != null) {
             BeanUtil.copyProperties(user, userInfo);
@@ -46,65 +46,65 @@ public class WxUserService extends UserServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public carserviceUser queryByOid(String openId) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.OPENID, openId);
+    public CarServiceUser queryByOid(String openId) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.OPENID, openId);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceUser findByShare(String userId) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.ID, userId);
+    public CarServiceUser findByShare(String userId) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.ID, userId);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public Integer countUser(String inviter) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.INVITER, inviter);
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.INVITER, inviter);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceUser> queryByInviter(String inviter) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.INVITER, inviter);
+    public List<CarServiceUser> queryByInviter(String inviter) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.INVITER, inviter);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceUser> queryByUsername(String username) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.USERNAME, username);
+    public List<CarServiceUser> queryByUsername(String username) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.USERNAME, username);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public boolean checkByUsername(String username) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.USERNAME, username);
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.USERNAME, username);
         return exists(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceUser> queryByMobile(String mobile) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.MOBILE, mobile);
+    public List<CarServiceUser> queryByMobile(String mobile) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.MOBILE, mobile);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceUser> queryByOpenid(String openid) {
-        QueryWrapper<carserviceUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceUser.OPENID, openid);
+    public List<CarServiceUser> queryByOpenid(String openid) {
+        QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceUser.OPENID, openid);
         return queryAll(wrapper);
     }
 

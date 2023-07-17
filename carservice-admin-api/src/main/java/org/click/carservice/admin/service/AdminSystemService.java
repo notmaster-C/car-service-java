@@ -12,7 +12,7 @@ package org.click.carservice.admin.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceSystem;
+import org.click.carservice.db.domain.CarServiceSystem;
 import org.click.carservice.db.service.impl.SystemServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,11 +36,11 @@ public class AdminSystemService extends SystemServiceImpl {
 
     @Cacheable(sync = true)
     public Map<String, String> listMail() {
-        QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-        wrapper.like(carserviceSystem.NAME, "mall_");
-        List<carserviceSystem> systemList = queryAll(wrapper);
+        QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+        wrapper.like(CarServiceSystem.NAME, "mall_");
+        List<CarServiceSystem> systemList = queryAll(wrapper);
         Map<String, String> data = new HashMap<>(systemList.size());
-        for (carserviceSystem system : systemList) {
+        for (CarServiceSystem system : systemList) {
             data.put(system.getName(), system.getValue());
         }
         return data;
@@ -49,11 +49,11 @@ public class AdminSystemService extends SystemServiceImpl {
 
     @Cacheable(sync = true)
     public Map<String, String> listWx() {
-        QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-        wrapper.like(carserviceSystem.NAME, "wx_");
-        List<carserviceSystem> systemList = queryAll(wrapper);
+        QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+        wrapper.like(CarServiceSystem.NAME, "wx_");
+        List<CarServiceSystem> systemList = queryAll(wrapper);
         Map<String, String> data = new HashMap<>(systemList.size());
-        for (carserviceSystem system : systemList) {
+        for (CarServiceSystem system : systemList) {
             data.put(system.getName(), system.getValue());
         }
         return data;
@@ -62,11 +62,11 @@ public class AdminSystemService extends SystemServiceImpl {
 
     @Cacheable(sync = true)
     public Map<String, String> listOrder() {
-        QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-        wrapper.like(carserviceSystem.NAME, "order_");
-        List<carserviceSystem> systemList = queryAll(wrapper);
+        QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+        wrapper.like(CarServiceSystem.NAME, "order_");
+        List<CarServiceSystem> systemList = queryAll(wrapper);
         Map<String, String> data = new HashMap<>(systemList.size());
-        for (carserviceSystem system : systemList) {
+        for (CarServiceSystem system : systemList) {
             data.put(system.getName(), system.getValue());
         }
         return data;
@@ -75,11 +75,11 @@ public class AdminSystemService extends SystemServiceImpl {
 
     @Cacheable(sync = true)
     public Map<String, String> listExpress() {
-        QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-        wrapper.like(carserviceSystem.NAME, "express_");
-        List<carserviceSystem> systemList = queryAll(wrapper);
+        QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+        wrapper.like(CarServiceSystem.NAME, "express_");
+        List<CarServiceSystem> systemList = queryAll(wrapper);
         Map<String, String> data = new HashMap<>(systemList.size());
-        for (carserviceSystem system : systemList) {
+        for (CarServiceSystem system : systemList) {
             data.put(system.getName(), system.getValue());
         }
         return data;
@@ -89,9 +89,9 @@ public class AdminSystemService extends SystemServiceImpl {
     @CacheEvict(allEntries = true)
     public void updateConfig(Map<String, String> data) {
         for (Map.Entry<String, String> entry : data.entrySet()) {
-            QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-            wrapper.eq(carserviceSystem.NAME, entry.getKey());
-            carserviceSystem system = new carserviceSystem();
+            QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+            wrapper.eq(CarServiceSystem.NAME, entry.getKey());
+            CarServiceSystem system = new CarServiceSystem();
             system.setName(entry.getKey());
             system.setValue(entry.getValue());
             system.setUpdateTime(LocalDateTime.now());

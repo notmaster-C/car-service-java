@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.storage.body.StorageListBody;
-import org.click.carservice.db.domain.carserviceStorage;
+import org.click.carservice.db.domain.CarServiceStorage;
 import org.click.carservice.db.service.impl.StorageServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,21 +33,21 @@ public class AdminStorageService extends StorageServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceStorage> querySelective(StorageListBody body) {
-        QueryWrapper<carserviceStorage> wrapper = startPage(body);
+    public List<CarServiceStorage> querySelective(StorageListBody body) {
+        QueryWrapper<CarServiceStorage> wrapper = startPage(body);
         if (StringUtils.hasText(body.getKey())) {
-            wrapper.eq(carserviceStorage.KEY, body.getKey());
+            wrapper.eq(CarServiceStorage.KEY, body.getKey());
         }
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceStorage.NAME, body.getName());
+            wrapper.like(CarServiceStorage.NAME, body.getName());
         }
         return queryAll(wrapper);
     }
 
     @CacheEvict(allEntries = true)
     public void deleteByKey(String key) {
-        QueryWrapper<carserviceStorage> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceStorage.KEY, key);
+        QueryWrapper<CarServiceStorage> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceStorage.KEY, key);
         remove(wrapper);
     }
 

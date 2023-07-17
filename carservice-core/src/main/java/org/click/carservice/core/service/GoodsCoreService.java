@@ -66,7 +66,7 @@ public class GoodsCoreService {
      * 商品信息校验
      */
     private Object validate(GoodsAllinone goodsAllinone) {
-        carserviceGoods goods = goodsAllinone.getGoods();
+        CarServiceGoods goods = goodsAllinone.getGoods();
         String name = goods.getName();
         String unit = goods.getUnit();
         String brief = goods.getBrief();
@@ -89,7 +89,7 @@ public class GoodsCoreService {
         // 品牌商必须设置，如果设置则需要验证品牌商存在
         String brandId = goods.getBrandId();
         if (brandId != null && !brandId.equals("0")) {
-            carserviceBrand brand = brandService.findById(brandId);
+            CarServiceBrand brand = brandService.findById(brandId);
             if (brand == null) {
                 return ResponseUtil.fail("店铺信息错误");
             }
@@ -116,7 +116,7 @@ public class GoodsCoreService {
         }
 
         //如果有团购验证团购
-        carserviceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
+        CarServiceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
         if (goods.getIsGroupon() != null && goods.getIsGroupon() && grouponRules != null) {
             BigDecimal discount = grouponRules.getDiscount();
             LocalDateTime expireTime = grouponRules.getExpireTime();
@@ -132,8 +132,8 @@ public class GoodsCoreService {
         }
 
         //商品规格设置
-        carserviceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
-        for (carserviceGoodsSpecification specification : specifications) {
+        CarServiceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        for (CarServiceGoodsSpecification specification : specifications) {
             String value = specification.getValue();
             String spec = specification.getSpecification();
             String specificationPicUrl = specification.getPicUrl();
@@ -143,8 +143,8 @@ public class GoodsCoreService {
         }
 
         //商品参数设置
-        carserviceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
-        for (carserviceGoodsAttribute attribute : attributes) {
+        CarServiceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        for (CarServiceGoodsAttribute attribute : attributes) {
             String attr = attribute.getAttribute();
             String value = attribute.getValue();
             if (!ObjectUtils.allNotNull(attr, value)) {
@@ -153,11 +153,11 @@ public class GoodsCoreService {
         }
 
         //商品货品设置
-        carserviceGoodsProduct[] products = goodsAllinone.getProducts();
+        CarServiceGoodsProduct[] products = goodsAllinone.getProducts();
         if (products.length <= 0) {
             return ResponseUtil.fail("货品信息至少一条");
         }
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             Integer number = product.getNumber();
             if (number == null || number <= 0) {
                 return ResponseUtil.fail("货品库存不正确");
@@ -189,11 +189,11 @@ public class GoodsCoreService {
             return error;
         }
 
-        carserviceGoods goods = goodsAllinone.getGoods();
-        carserviceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
-        carserviceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
-        carserviceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
-        carserviceGoodsProduct[] products = goodsAllinone.getProducts();
+        CarServiceGoods goods = goodsAllinone.getGoods();
+        CarServiceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
+        CarServiceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        CarServiceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        CarServiceGoodsProduct[] products = goodsAllinone.getProducts();
 
         if (commonService.checkExistByName(goods.getName())) {
             throw new RuntimeException("商品名已经存在");
@@ -201,7 +201,7 @@ public class GoodsCoreService {
 
         // 商品表里面有一个字段retailPrice记录当前商品的最低价
         BigDecimal retailPrice = BigDecimal.valueOf(Integer.MAX_VALUE);
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             BigDecimal productPrice = product.getPrice();
             if (retailPrice.compareTo(productPrice) > 0) {
                 retailPrice = productPrice;
@@ -231,19 +231,19 @@ public class GoodsCoreService {
         }
 
         // 商品规格表carservice_goods_specification
-        for (carserviceGoodsSpecification specification : specifications) {
+        for (CarServiceGoodsSpecification specification : specifications) {
             specification.setGoodsId(goods.getId());
             specificationService.add(specification);
         }
 
         // 商品参数表carservice_goods_attribute
-        for (carserviceGoodsAttribute attribute : attributes) {
+        for (CarServiceGoodsAttribute attribute : attributes) {
             attribute.setGoodsId(goods.getId());
             attributeService.add(attribute);
         }
 
         // 商品货品表carservice_product
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             product.setGoodsId(goods.getId());
             productService.add(product);
         }
@@ -251,7 +251,7 @@ public class GoodsCoreService {
     }
 
     @Async
-    void createGoodShareImage(carserviceGoods goods) {
+    void createGoodShareImage(CarServiceGoods goods) {
         //将生成的分享图片地址写入数据库
         goods.setShareUrl(qCodeService.createGoodShareImage(goods));
         goodsService.updateSelective(goods);
@@ -267,15 +267,15 @@ public class GoodsCoreService {
             return error;
         }
 
-        carserviceGoods goods = goodsAllinone.getGoods();
-        carserviceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
-        carserviceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
-        carserviceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
-        carserviceGoodsProduct[] products = goodsAllinone.getProducts();
+        CarServiceGoods goods = goodsAllinone.getGoods();
+        CarServiceGrouponRules grouponRules = goodsAllinone.getGrouponRules();
+        CarServiceGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        CarServiceGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        CarServiceGoodsProduct[] products = goodsAllinone.getProducts();
 
         // 商品表里面有一个字段retailPrice记录当前商品的最低价
         BigDecimal retailPrice = BigDecimal.valueOf(Integer.MAX_VALUE);
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             BigDecimal productPrice = product.getPrice();
             if (retailPrice.compareTo(productPrice) > 0) {
                 retailPrice = productPrice;
@@ -296,12 +296,12 @@ public class GoodsCoreService {
         //商品下架
         if (!GoodsStatus.getIsOnSale(goods)) {
             //删除赏金
-            carserviceRewardTask rewardTask = commonService.findByRewardTaskGid(goods.getId());
+            CarServiceRewardTask rewardTask = commonService.findByRewardTaskGid(goods.getId());
             if (rewardTask != null) {
                 commonService.deleteByRewardTaskGid(goods.getId());
             }
         } else {
-            carserviceRewardTask rewardTask = commonService.findByRewardTaskGid(goods.getId());
+            CarServiceRewardTask rewardTask = commonService.findByRewardTaskGid(goods.getId());
             if (rewardTask != null) {
                 rewardTask.setPicUrl(goods.getPicUrl());
                 rewardTask.setGoodsName(goods.getName());
@@ -356,7 +356,7 @@ public class GoodsCoreService {
         }
 
         // 商品规格
-        for (carserviceGoodsSpecification specification : specifications) {
+        for (CarServiceGoodsSpecification specification : specifications) {
             // 目前只支持更新规格表的图片字段
             specification.setSpecification(null);
             specification.setValue(null);
@@ -366,14 +366,14 @@ public class GoodsCoreService {
         }
 
         // 商品货品
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             if (productService.updateVersionSelective(product) == 0) {
                 throw new RuntimeException("网络繁忙，请刷新重试");
             }
         }
 
         // 商品参数
-        for (carserviceGoodsAttribute attribute : attributes) {
+        for (CarServiceGoodsAttribute attribute : attributes) {
             if (attributeService.updateVersionSelective(attribute) == 0) {
                 throw new RuntimeException("网络繁忙，请刷新重试");
             }
@@ -381,7 +381,7 @@ public class GoodsCoreService {
 
         // 这里需要注意的是购物车有些字段是拷贝商品的一些字段，因此需要及时更新
         // 目前这些字段是goods_sn, goods_name, price, pic_url
-        for (carserviceGoodsProduct product : products) {
+        for (CarServiceGoodsProduct product : products) {
             commonService.updateProduct(product.getId(), goods.getGoodsSn(), goods.getName(), product.getPrice(), product.getUrl());
         }
         return ResponseUtil.ok();
@@ -391,15 +391,15 @@ public class GoodsCoreService {
     /**
      * 商品删除
      */
-    public Object goodsDelete(carserviceGoods goods) {
+    public Object goodsDelete(CarServiceGoods goods) {
         String goodsId = goods.getId();
-        carserviceGoods carserviceGoods = goodsService.findById(goodsId);
+        CarServiceGoods carserviceGoods = goodsService.findById(goodsId);
         if (goodsId == null || carserviceGoods == null) {
             return ResponseUtil.badArgument();
         }
 
         if (carserviceGoods.getIsGroupon() != null && carserviceGoods.getIsGroupon()) {
-            carserviceGrouponRules grouponRules = commonService.findByGrouponRulesGid(goodsId);
+            CarServiceGrouponRules grouponRules = commonService.findByGrouponRulesGid(goodsId);
             //删除团购超时任务
             taskService.removeTask(new GrouponRuleExpiredTask(grouponRules));
             //设置团购立马过期
@@ -408,7 +408,7 @@ public class GoodsCoreService {
         }
 
         //删除赏金
-        carserviceRewardTask rewardTask = commonService.findByRewardTaskGid(goodsId);
+        CarServiceRewardTask rewardTask = commonService.findByRewardTaskGid(goodsId);
         if (rewardTask != null) {
             commonService.deleteByRewardTaskGid(goodsId);
         }

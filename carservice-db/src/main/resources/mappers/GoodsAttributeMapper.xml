@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.GoodsAttributeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceGoodsAttribute">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceGoodsAttribute">
         <id column="id" property="id"/>
         <result column="goods_id" property="goodsId"/>
         <result column="attribute" property="attribute"/>

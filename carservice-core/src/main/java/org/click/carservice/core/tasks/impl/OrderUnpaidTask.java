@@ -16,7 +16,7 @@ import org.click.carservice.core.service.OrderCoreService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.IOrderService;
 
@@ -37,12 +37,12 @@ public class OrderUnpaidTask extends TaskRunnable {
     private static final long defaultSeconds = SystemConfig.getOrderUnpaid() * 60 * 1000;
 
 
-    public OrderUnpaidTask(carserviceOrder order, long delayInMilliseconds) {
+    public OrderUnpaidTask(CarServiceOrder order, long delayInMilliseconds) {
         super(idPrefix + order.getId(), delayInMilliseconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
 
-    public OrderUnpaidTask(carserviceOrder order) {
+    public OrderUnpaidTask(CarServiceOrder order) {
         super(idPrefix + order.getId(), defaultSeconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
     }
@@ -52,7 +52,7 @@ public class OrderUnpaidTask extends TaskRunnable {
         OrderCoreService orderCoreService = BeanUtil.getBean(OrderCoreService.class);
         IOrderService orderService = BeanUtil.getBean(IOrderService.class);
 
-        carserviceOrder order = orderService.findById(this.orderId);
+        CarServiceOrder order = orderService.findById(this.orderId);
         if (order == null || !OrderStatus.isCreateStatus(order)) {
             return;
         }

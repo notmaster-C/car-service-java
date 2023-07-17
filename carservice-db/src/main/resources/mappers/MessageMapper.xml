@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.MessageMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceMessage">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceMessage">
         <id column="id" property="id"/>
         <result column="avatar_url" property="avatarUrl"/>
         <result column="nick_name" property="nickName"/>

@@ -23,7 +23,7 @@ import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.service.ActionLogService;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceAdmin;
+import org.click.carservice.db.domain.CarServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +56,9 @@ public class AdminAdminController {
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "查询")
     @GetMapping("/list")
     public Object list(AdminListBody body) {
-        List<carserviceAdmin> adminList = adminService.querySelective(body);
+        List<CarServiceAdmin> adminList = adminService.querySelective(body);
         ArrayList<AdminListResult> resultList = new ArrayList<>();
-        for (carserviceAdmin admin : adminList) {
+        for (CarServiceAdmin admin : adminList) {
             AdminListResult result = new AdminListResult();
             BeanUtil.copyProperties(admin, result);
             String token = StpUtil.getTokenValueByLoginId(admin.getId());
@@ -99,13 +99,13 @@ public class AdminAdminController {
     @SaCheckPermission("admin:admin:create")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceAdmin admin) {
+    public Object create(@Valid @RequestBody CarServiceAdmin admin) {
         Object error = adminService.validate(admin);
         if (error != null) {
             return error;
         }
         String username = admin.getUsername();
-        List<carserviceAdmin> adminList = adminService.findAdmin(username);
+        List<CarServiceAdmin> adminList = adminService.findAdmin(username);
         if (adminList.size() > 0) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0204);
         }
@@ -122,7 +122,7 @@ public class AdminAdminController {
     @SaCheckPermission("admin:admin:update")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceAdmin admin) {
+    public Object update(@Valid @RequestBody CarServiceAdmin admin) {
         Object error = adminService.validate(admin);
         if (error != null) {
             return error;

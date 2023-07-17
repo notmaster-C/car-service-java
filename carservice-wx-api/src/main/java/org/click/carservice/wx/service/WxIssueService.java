@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceIssue;
+import org.click.carservice.db.domain.CarServiceIssue;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.service.impl.IssueServiceImpl;
 import org.click.carservice.wx.model.issue.body.IssueListBody;
@@ -34,15 +34,15 @@ public class WxIssueService extends IssueServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceIssue> getGoodsIssue() {
+    public List<CarServiceIssue> getGoodsIssue() {
         return queryAll(startPage(new PageBody(4)));
     }
 
     @Cacheable(sync = true)
-    public List<carserviceIssue> querySelective(IssueListBody body) {
-        QueryWrapper<carserviceIssue> wrapper = startPage(body);
+    public List<CarServiceIssue> querySelective(IssueListBody body) {
+        QueryWrapper<CarServiceIssue> wrapper = startPage(body);
         if (StringUtils.hasText(body.getQuestion())) {
-            wrapper.like(carserviceIssue.QUESTION, body.getQuestion());
+            wrapper.like(CarServiceIssue.QUESTION, body.getQuestion());
         }
         return queryAll(wrapper);
     }

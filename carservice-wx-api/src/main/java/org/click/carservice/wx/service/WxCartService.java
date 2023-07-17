@@ -12,9 +12,9 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceCart;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceGoodsProduct;
+import org.click.carservice.db.domain.CarServiceCart;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceGoodsProduct;
 import org.click.carservice.db.service.impl.CartServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,11 +35,11 @@ public class WxCartService extends CartServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceCart queryExist(String goodsId, String productId, String userId) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.GOODS_ID, goodsId);
-        wrapper.eq(carserviceCart.PRODUCT_ID, productId);
-        wrapper.eq(carserviceCart.USER_ID, userId);
+    public CarServiceCart queryExist(String goodsId, String productId, String userId) {
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.GOODS_ID, goodsId);
+        wrapper.eq(CarServiceCart.PRODUCT_ID, productId);
+        wrapper.eq(CarServiceCart.USER_ID, userId);
         return getOne(wrapper);
     }
 
@@ -48,7 +48,7 @@ public class WxCartService extends CartServiceImpl {
      * 添加到购物车
      */
     @CacheEvict(allEntries = true)
-    public boolean addCart(String userId, carserviceCart cart, Integer number, carserviceGoods goods, carserviceGoodsProduct product) {
+    public boolean addCart(String userId, CarServiceCart cart, Integer number, CarServiceGoods goods, CarServiceGoodsProduct product) {
         if (product == null || number > product.getNumber()) {
             return true;
         }
@@ -71,45 +71,45 @@ public class WxCartService extends CartServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceCart> queryByUid(String userId) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.USER_ID, userId);
+    public List<CarServiceCart> queryByUid(String userId) {
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.USER_ID, userId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceCart> queryByUidAndChecked(String userId) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.USER_ID, userId);
-        wrapper.eq(carserviceCart.CHECKED, true);
+    public List<CarServiceCart> queryByUidAndChecked(String userId) {
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.USER_ID, userId);
+        wrapper.eq(CarServiceCart.CHECKED, true);
         return queryAll(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public boolean delete(List<String> productIdList, String userId) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.USER_ID, userId);
-        wrapper.in(carserviceCart.PRODUCT_ID, productIdList);
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.USER_ID, userId);
+        wrapper.in(CarServiceCart.PRODUCT_ID, productIdList);
         return remove(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceCart findById(String userId, String id) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.USER_ID, userId);
-        wrapper.in(carserviceCart.ID, id);
+    public CarServiceCart findById(String userId, String id) {
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.USER_ID, userId);
+        wrapper.in(CarServiceCart.ID, id);
         return getOne(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void updateCheck(String userId, List<String> idsList, Boolean checked) {
-        QueryWrapper<carserviceCart> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceCart.USER_ID, userId);
-        wrapper.in(carserviceCart.PRODUCT_ID, idsList);
-        carserviceCart cart = new carserviceCart();
+        QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCart.USER_ID, userId);
+        wrapper.in(CarServiceCart.PRODUCT_ID, idsList);
+        CarServiceCart cart = new CarServiceCart();
         cart.setChecked(checked);
         update(cart, wrapper);
     }
@@ -119,11 +119,11 @@ public class WxCartService extends CartServiceImpl {
      * 获取选择商品
      */
     @Cacheable(sync = true)
-    public List<carserviceCart> getCheckedGoods(String userId, String cartId) {
+    public List<CarServiceCart> getCheckedGoods(String userId, String cartId) {
         if (cartId == null || cartId.equals("0")) {
             return queryByUidAndChecked(userId);
         } else {
-            carserviceCart cart = findById(userId, cartId);
+            CarServiceCart cart = findById(userId, cartId);
             if (cart == null) {
                 return null;
             }

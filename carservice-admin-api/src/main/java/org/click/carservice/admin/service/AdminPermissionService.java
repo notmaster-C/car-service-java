@@ -13,7 +13,7 @@ package org.click.carservice.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import org.click.carservice.db.domain.carservicePermission;
+import org.click.carservice.db.domain.CarServicePermission;
 import org.click.carservice.db.service.impl.PermissionServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -39,9 +39,9 @@ public class AdminPermissionService extends PermissionServiceImpl {
         if (roleId == null) {
             return permissions;
         }
-        QueryWrapper<carservicePermission> wrapper = new QueryWrapper<>();
-        wrapper.eq(carservicePermission.ROLE_ID, roleId);
-        for (carservicePermission permission : list(wrapper)) {
+        QueryWrapper<CarServicePermission> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServicePermission.ROLE_ID, roleId);
+        for (CarServicePermission permission : list(wrapper)) {
             permissions.add(permission.getPermission());
         }
         return permissions;
@@ -54,9 +54,9 @@ public class AdminPermissionService extends PermissionServiceImpl {
         if (roleIds == null || roleIds.isEmpty()) {
             return permissions;
         }
-        QueryWrapper<carservicePermission> wrapper = new QueryWrapper<>();
-        wrapper.in(carservicePermission.ROLE_ID, roleIds);
-        for (carservicePermission permission : list(wrapper)) {
+        QueryWrapper<CarServicePermission> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServicePermission.ROLE_ID, roleIds);
+        for (CarServicePermission permission : list(wrapper)) {
             permissions.add(permission.getPermission());
         }
         return permissions;
@@ -68,9 +68,9 @@ public class AdminPermissionService extends PermissionServiceImpl {
         if (roleId == null) {
             return false;
         }
-        QueryWrapper<carservicePermission> wrapper = new QueryWrapper<>();
-        wrapper.eq(carservicePermission.ROLE_ID, roleId);
-        wrapper.eq(carservicePermission.PERMISSION, "*");
+        QueryWrapper<CarServicePermission> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServicePermission.ROLE_ID, roleId);
+        wrapper.eq(CarServicePermission.PERMISSION, "*");
         return exists(wrapper);
     }
 
@@ -80,17 +80,17 @@ public class AdminPermissionService extends PermissionServiceImpl {
         if (roleIds == null || roleIds.isEmpty()) {
             return false;
         }
-        QueryWrapper<carservicePermission> wrapper = new QueryWrapper<>();
-        wrapper.in(carservicePermission.ROLE_ID, roleIds);
-        wrapper.eq(carservicePermission.PERMISSION, "*");
+        QueryWrapper<CarServicePermission> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServicePermission.ROLE_ID, roleIds);
+        wrapper.eq(CarServicePermission.PERMISSION, "*");
         return exists(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void deleteByRoleId(String roleId) {
-        UpdateWrapper<carservicePermission> wrapper = new UpdateWrapper<>();
-        wrapper.eq(carservicePermission.ROLE_ID, roleId);
+        UpdateWrapper<CarServicePermission> wrapper = new UpdateWrapper<>();
+        wrapper.eq(CarServicePermission.ROLE_ID, roleId);
         remove(wrapper);
     }
 

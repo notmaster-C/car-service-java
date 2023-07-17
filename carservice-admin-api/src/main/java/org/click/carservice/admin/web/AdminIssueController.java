@@ -17,7 +17,7 @@ import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.issue.body.IssueListBody;
 import org.click.carservice.admin.service.AdminIssueService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceIssue;
+import org.click.carservice.db.domain.CarServiceIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +64,7 @@ public class AdminIssueController {
     @SaCheckPermission("admin:issue:create")
     @RequiresPermissionsDesc(menu = {"商场管理", "通用问题"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceIssue issue) {
+    public Object create(@Valid @RequestBody CarServiceIssue issue) {
         Object error = issueService.validate(issue);
         if (error != null) {
             return error;
@@ -79,7 +79,7 @@ public class AdminIssueController {
     @SaCheckPermission("admin:issue:update")
     @RequiresPermissionsDesc(menu = {"商场管理", "通用问题"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceIssue issue) {
+    public Object update(@Valid @RequestBody CarServiceIssue issue) {
         Object error = issueService.validate(issue);
         if (error != null) {
             return error;

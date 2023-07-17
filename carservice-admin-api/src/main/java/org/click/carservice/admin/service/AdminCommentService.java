@@ -12,7 +12,7 @@ package org.click.carservice.admin.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceComment;
+import org.click.carservice.db.domain.CarServiceComment;
 import org.click.carservice.db.service.impl.CommentServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,9 +29,9 @@ public class AdminCommentService extends CommentServiceImpl {
 
     @Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
-        QueryWrapper<carserviceComment> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceComment.VALUE_ID, valueId);
-        wrapper.eq(carserviceComment.TYPE, type);
+        QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceComment.VALUE_ID, valueId);
+        wrapper.eq(CarServiceComment.TYPE, type);
         return Math.toIntExact(count(wrapper));
     }
 

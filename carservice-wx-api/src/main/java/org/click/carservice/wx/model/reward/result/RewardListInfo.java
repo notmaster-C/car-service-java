@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.reward.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 import org.click.carservice.db.entity.UserInfo;
 
 import java.io.Serializable;
@@ -16,7 +16,7 @@ public class RewardListInfo implements Serializable {
     /**
      * 赏金规则
      */
-    private carserviceRewardTask rewardTask;
+    private CarServiceRewardTask rewardTask;
 
     /**
      * 完成百分比

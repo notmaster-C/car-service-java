@@ -143,23 +143,23 @@ public class WxWebOrderService {
      */
     public Object list(String userId, OrderListBody body) {
         List<Short> orderStatus = OrderStatus.orderStatus(body.getShowType());
-        List<carserviceOrder> orderList = orderService.queryByOrderStatus(userId, orderStatus, body);
+        List<CarServiceOrder> orderList = orderService.queryByOrderStatus(userId, orderStatus, body);
         List<OrderListResult> orderVoList = new ArrayList<>(orderList.size());
-        for (carserviceOrder order : orderList) {
+        for (CarServiceOrder order : orderList) {
             OrderListResult orderVo = new OrderListResult();
             BeanUtil.copyProperties(order, orderVo);
             orderVo.setOrderStatusText(OrderStatus.orderStatusText(order));
             orderVo.setHandleOption(OrderStatus.build(order));
-            carserviceGroupon groupon = grouponService.findByOrderId(order.getId());
+            CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
             orderVo.setGroupon(groupon);
             orderVo.setIsGroupon(groupon != null);
             if (groupon != null) {
-                carserviceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
+                CarServiceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
                 orderVo.setGrouponStatus(GrouponRuleStatus.parseValue(grouponRules.getStatus()));
             }
-            List<carserviceOrderGoods> orderGoodsList = orderGoodsService.queryByOrderId(order.getId());
+            List<CarServiceOrderGoods> orderGoodsList = orderGoodsService.queryByOrderId(order.getId());
             List<OrderGoodsResult> orderGoodsVoList = new ArrayList<>(orderGoodsList.size());
-            for (carserviceOrderGoods orderGoods : orderGoodsList) {
+            for (CarServiceOrderGoods orderGoods : orderGoodsList) {
                 OrderGoodsResult orderGoodsVo = new OrderGoodsResult();
                 BeanUtil.copyProperties(orderGoods, orderGoodsVo);
                 orderGoodsVoList.add(orderGoodsVo);
@@ -183,9 +183,9 @@ public class WxWebOrderService {
             return ResponseUtil.unlogin();
         }
         // 订单信息
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
-            carserviceBrand brand = brandService.findByUserId(userId);
+            CarServiceBrand brand = brandService.findByUserId(userId);
             if (brand == null) {
                 return ResponseUtil.fail("订单不存在");
             }
@@ -212,9 +212,9 @@ public class WxWebOrderService {
         result.setOrderGoods(orderGoodsService.queryByOrderId(order.getId()));
         result.setGrouponBasics((short) 0);
 
-        carserviceGroupon groupon = grouponService.findByOrderId(order.getId());
+        CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
         if (groupon != null) {
-            carserviceGrouponRules rules = grouponRulesService.findById(groupon.getRulesId());
+            CarServiceGrouponRules rules = grouponRulesService.findById(groupon.getRulesId());
 
             // 获取团购加入id
             String grouponId = groupon.getGrouponId();
@@ -224,8 +224,8 @@ public class WxWebOrderService {
             UserInfo creator = userService.findUserVoById(groupon.getCreatorUserId());
             List<UserInfo> joiners = new ArrayList<>();
             joiners.add(creator);
-            List<carserviceGroupon> grouponList = grouponService.queryJoinRecord(linkGrouponId);
-            for (carserviceGroupon grouponItem : grouponList) {
+            List<CarServiceGroupon> grouponList = grouponService.queryJoinRecord(linkGrouponId);
+            for (CarServiceGroupon grouponItem : grouponList) {
                 joiners.add(userService.findUserVoById(grouponItem.getUserId()));
             }
 
@@ -272,7 +272,7 @@ public class WxWebOrderService {
 
         //判断是否存在赏金活动
         if (rewardLinkId != null && !"0".equals(rewardLinkId)) {
-            carserviceReward reward = rewardService.findById(rewardLinkId);
+            CarServiceReward reward = rewardService.findById(rewardLinkId);
             if (reward == null) {
                 return ResponseUtil.badArgument();
             }
@@ -288,13 +288,13 @@ public class WxWebOrderService {
         }
 
         // 收货地址
-        carserviceAddress checkedAddress = addressService.query(userId, addressId);
+        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
         if (checkedAddress == null) {
             return ResponseUtil.badArgument();
         }
 
         //选中的商品
-        List<carserviceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
+        List<CarServiceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
         if (checkedGoodsList == null) {
             return ResponseUtil.badArgument();
         }
@@ -303,7 +303,7 @@ public class WxWebOrderService {
         BigDecimal couponPrice = BigDecimal.valueOf(0);
         // 如果couponId=0则没有优惠券，couponId=-1则不使用优惠券
         if (!"0".equals(couponId) && !"-1".equals(couponId)) {
-            carserviceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
             if (coupon == null) {
                 return ResponseUtil.badArgumentValue();
             }
@@ -311,7 +311,7 @@ public class WxWebOrderService {
         }
 
         //获取当前用户信息
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
@@ -323,9 +323,9 @@ public class WxWebOrderService {
         //商户订单号
         String outTradeNo = orderRandomCode.generateOutTradeNo(userId);
         // 添加订单商品表项
-        for (carserviceCart cartGoods : checkedGoodsList) {
+        for (CarServiceCart cartGoods : checkedGoodsList) {
             // 创建订单
-            carserviceOrder order = new carserviceOrder();
+            CarServiceOrder order = new CarServiceOrder();
             order.setUserId(userId);
             order.setMessage(message);
             order.setOutTradeNo(outTradeNo);
@@ -339,7 +339,7 @@ public class WxWebOrderService {
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));
             //团购金额
-            carserviceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
+            CarServiceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
             //团购价格默认为零如果有团购直接相加
             order.setGrouponPrice(grouponRules == null ? BigDecimal.valueOf(0) : grouponRules.getDiscount());
             //将优惠券金额分担给每件商品
@@ -405,7 +405,7 @@ public class WxWebOrderService {
         }
 
         //获取当前用户
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null || user.getOpenid() == null) {
             return ResponseUtil.fail("未找到用户");
         }
@@ -413,7 +413,7 @@ public class WxWebOrderService {
         //订单支付总金额
         BigDecimal allPrice = BigDecimal.valueOf(0);
         //保存验证后的订单
-        ArrayList<carserviceOrder> orders = new ArrayList<>();
+        ArrayList<CarServiceOrder> orders = new ArrayList<>();
         //检查订单
         for (String orderId : orderIds) {
             if (orderId == null) {
@@ -421,7 +421,7 @@ public class WxWebOrderService {
             }
 
             //获取订单
-            carserviceOrder order = orderService.findById(userId, orderId);
+            CarServiceOrder order = orderService.findById(userId, orderId);
             if (order == null) {
                 return ResponseUtil.fail("未找到订单");
             }
@@ -466,7 +466,7 @@ public class WxWebOrderService {
             return ResponseUtil.fail("订单不能支付");
         }
 
-        for (carserviceOrder order : orders) {
+        for (CarServiceOrder order : orders) {
             if (orderService.updateVersionSelective(order) == 0) {
                 throw new RuntimeException("网络繁忙，请刷新重试");
             }
@@ -529,11 +529,11 @@ public class WxWebOrderService {
         //订单总支付金额
         BigDecimal allPrice = BigDecimal.valueOf(0);
         //保存验证后的订单
-        ArrayList<carserviceOrder> orders = new ArrayList<>();
+        ArrayList<CarServiceOrder> orders = new ArrayList<>();
         //判断所有订单id是否正常并保存订单信息
         for (String orderId : orderIds) {
             //查询订单
-            carserviceOrder order = orderService.findById(orderId);
+            CarServiceOrder order = orderService.findById(orderId);
             if (order == null) {
                 log.error("订单不存在 =" + orderId);
                 logService.logOrderFail("支付回调", "订单不存在 =" + orderId);
@@ -562,7 +562,7 @@ public class WxWebOrderService {
         }
 
         //更新订单信息
-        for (carserviceOrder order : orders) {
+        for (CarServiceOrder order : orders) {
             //添加支付信息,添加订单联合支付总费用orderPrice
             order.setOrderPrice(allPrice);
             order.setPayId(result.getTransactionId());
@@ -587,7 +587,7 @@ public class WxWebOrderService {
      * @return 取消订单操作结果
      */
     public Object cancel(String userId, String orderId) {
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -624,7 +624,7 @@ public class WxWebOrderService {
      * @return 订单退款操作结果
      */
     public Object refund(String userId, String orderId) {
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
             return ResponseUtil.badArgument();
         }
@@ -662,7 +662,7 @@ public class WxWebOrderService {
      */
     public Object confirm(String userId, String orderId) {
         //获取订单
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -674,13 +674,13 @@ public class WxWebOrderService {
         }
 
         //获取商品信息
-        carserviceOrderGoods orderGoods = orderGoodsService.findByOrderId(orderId);
+        CarServiceOrderGoods orderGoods = orderGoodsService.findByOrderId(orderId);
         if (orderGoods == null) {
             return ResponseUtil.fail("商品不存在");
         }
 
         //获取店铺信息
-        carserviceBrand brand = brandService.findById(order.getBrandId());
+        CarServiceBrand brand = brandService.findById(order.getBrandId());
         if (brand == null) {
             return ResponseUtil.fail("店铺信息获取失败");
         }
@@ -716,7 +716,7 @@ public class WxWebOrderService {
      * @return 订单操作结果
      */
     public Object delete(String userId, String orderId) {
-        carserviceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -743,10 +743,10 @@ public class WxWebOrderService {
      * @return 待评价订单商品信息
      */
     public Object goods(String userId, String goodsId) {
-        carserviceOrderGoods orderGoods = orderGoodsService.findById(goodsId);
+        CarServiceOrderGoods orderGoods = orderGoodsService.findById(goodsId);
         if (orderGoods != null) {
             String orderId = orderGoods.getOrderId();
-            carserviceOrder order = orderService.findById(orderId);
+            CarServiceOrder order = orderService.findById(orderId);
             if (!order.getUserId().equals(userId)) {
                 return ResponseUtil.badArgument();
             }
@@ -764,11 +764,11 @@ public class WxWebOrderService {
      * @return 订单操作结果
      */
     public Object comment(String userId, OrderCommentBody body) {
-        carserviceOrderGoods orderGoods = orderGoodsService.findById(body.getGoodsId());
+        CarServiceOrderGoods orderGoods = orderGoodsService.findById(body.getGoodsId());
         if (orderGoods == null) {
             return ResponseUtil.badArgumentValue();
         }
-        carserviceOrder order = orderService.findById(userId, orderGoods.getOrderId());
+        CarServiceOrder order = orderService.findById(userId, orderGoods.getOrderId());
         if (order == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -801,11 +801,11 @@ public class WxWebOrderService {
         }
 
         //文本校验
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         secCheckService.checkMessage(user.getOpenid(), content);
 
         // 1. 创建评价
-        carserviceGoodsComment comment = new carserviceGoodsComment();
+        CarServiceGoodsComment comment = new CarServiceGoodsComment();
         comment.setUserId(userId);
         comment.setGoodsId(orderGoods.getGoodsId());
         comment.setStar(star.shortValue());
@@ -859,12 +859,12 @@ public class WxWebOrderService {
         String orderId = body.getOrderId();
         String refundMoney = body.getRefundMoney();
 
-        carserviceBrand brand = brandService.findByUserId(userId);
+        CarServiceBrand brand = brandService.findByUserId(userId);
         if (brand == null) {
             return ResponseUtil.fail("未找到店铺");
         }
 
-        carserviceOrder order = orderService.findByBrandId(brand.getId(), orderId);
+        CarServiceOrder order = orderService.findByBrandId(brand.getId(), orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -902,7 +902,7 @@ public class WxWebOrderService {
         orderCoreService.orderRelease(order);
 
         //订单退款订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         //记录操作日志
@@ -924,12 +924,12 @@ public class WxWebOrderService {
      * @return 取消订单操作结果
      */
     public Object adminCancel(String userId, String orderId) {
-        carserviceBrand brand = brandService.findByUserId(userId);
+        CarServiceBrand brand = brandService.findByUserId(userId);
         if (brand == null) {
             return ResponseUtil.fail("未找到店铺");
         }
 
-        carserviceOrder order = orderService.findByBrandId(brand.getId(), orderId);
+        CarServiceOrder order = orderService.findByBrandId(brand.getId(), orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -969,12 +969,12 @@ public class WxWebOrderService {
         String orderId = body.getOrderId();
         String shipChannel = body.getShipChannel();
 
-        carserviceBrand brand = brandService.findByUserId(userId);
+        CarServiceBrand brand = brandService.findByUserId(userId);
         if (brand == null) {
             return ResponseUtil.fail("未找到店铺");
         }
 
-        carserviceOrder order = orderService.findByBrandId(brand.getId(), orderId);
+        CarServiceOrder order = orderService.findByBrandId(brand.getId(), orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -996,7 +996,7 @@ public class WxWebOrderService {
         taskService.addTask(new OrderUnconfirmedTask(order));
 
         //订单发货订阅通知
-        carserviceUser user = userService.findById(order.getUserId());
+        CarServiceUser user = userService.findById(order.getUserId());
         subscribeMessageService.shipSubscribe(user.getOpenid(), order);
 
         //记录操作日志

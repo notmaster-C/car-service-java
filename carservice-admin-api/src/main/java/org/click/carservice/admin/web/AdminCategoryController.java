@@ -18,7 +18,7 @@ import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.category.result.CategoryResult;
 import org.click.carservice.admin.service.AdminCategoryService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 import org.click.carservice.db.entity.BaseOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -51,14 +51,14 @@ public class AdminCategoryController {
     @GetMapping("/list")
     public Object list() {
         List<CategoryResult> categoryResultList = new ArrayList<>();
-        List<carserviceCategory> categoryList = categoryService.queryByPid("0");
-        for (carserviceCategory category : categoryList) {
+        List<CarServiceCategory> categoryList = categoryService.queryByPid("0");
+        for (CarServiceCategory category : categoryList) {
             CategoryResult categoryResult = new CategoryResult();
             BeanUtil.copyProperties(category, categoryResult);
             List<CategoryResult> children = new ArrayList<>();
             //获取子列表
-            List<carserviceCategory> subCategoryList = categoryService.queryByPid(category.getId());
-            for (carserviceCategory subCategory : subCategoryList) {
+            List<CarServiceCategory> subCategoryList = categoryService.queryByPid(category.getId());
+            for (CarServiceCategory subCategory : subCategoryList) {
                 CategoryResult subCategoryVo = new CategoryResult();
                 BeanUtil.copyProperties(subCategory, subCategoryVo);
                 children.add(subCategoryVo);
@@ -77,9 +77,9 @@ public class AdminCategoryController {
     @GetMapping("/l1")
     public Object catL1() {
         // 所有一级分类目录
-        List<carserviceCategory> l1CatList = categoryService.queryL1();
+        List<CarServiceCategory> l1CatList = categoryService.queryL1();
         List<BaseOption> result = new ArrayList<>(l1CatList.size());
-        for (carserviceCategory category : l1CatList) {
+        for (CarServiceCategory category : l1CatList) {
             BaseOption option = new BaseOption();
             option.setValue(category.getId());
             option.setLabel(category.getName());
@@ -95,7 +95,7 @@ public class AdminCategoryController {
     @SaCheckPermission("admin:category:create")
     @RequiresPermissionsDesc(menu = {"商场管理", "类目管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceCategory category) {
+    public Object create(@Valid @RequestBody CarServiceCategory category) {
         Object error = categoryService.validate(category);
         if (error != null) {
             return error;
@@ -120,7 +120,7 @@ public class AdminCategoryController {
     @SaCheckPermission("admin:category:update")
     @RequiresPermissionsDesc(menu = {"商场管理", "类目管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceCategory category) {
+    public Object update(@Valid @RequestBody CarServiceCategory category) {
         Object error = categoryService.validate(category);
         if (error != null) {
             return error;

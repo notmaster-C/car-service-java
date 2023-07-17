@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceOrder;
+import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.impl.OrderServiceImpl;
 import org.click.carservice.wx.model.brand.body.BrandOrderListBody;
@@ -37,26 +37,26 @@ public class WxOrderService extends OrderServiceImpl {
 
 
     @Cacheable(sync = true)
-    public carserviceOrder findById(String userId, String orderId) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.ID, orderId);
+    public CarServiceOrder findById(String userId, String orderId) {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.ID, orderId);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
     public Integer count(String userId) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
     public Integer count(List<Short> orderStatus) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         if (orderStatus != null && orderStatus.size() > 0) {
-            wrapper.in(carserviceOrder.ORDER_STATUS, orderStatus);
+            wrapper.in(CarServiceOrder.ORDER_STATUS, orderStatus);
         }
         return Math.toIntExact(count(wrapper));
     }
@@ -66,9 +66,9 @@ public class WxOrderService extends OrderServiceImpl {
      */
     @Cacheable(sync = true)
     public Boolean countByOrderSn(String userId, String orderSn) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.ORDER_SN, orderSn);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.ORDER_SN, orderSn);
         return exists(wrapper);
     }
 
@@ -76,19 +76,19 @@ public class WxOrderService extends OrderServiceImpl {
      * 判断订单号是否存在
      */
     @Cacheable(sync = true)
-    public carserviceOrder findBySn(String userId, String orderSn) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.ORDER_SN, orderSn);
+    public CarServiceOrder findBySn(String userId, String orderSn) {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.ORDER_SN, orderSn);
         return getOne(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceOrder findByBrandId(String brandId, String orderId) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.ID, orderId);
-        wrapper.eq(carserviceOrder.BRAND_ID, brandId);
+    public CarServiceOrder findByBrandId(String brandId, String orderId) {
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.ID, orderId);
+        wrapper.eq(CarServiceOrder.BRAND_ID, brandId);
         return getOne(wrapper);
     }
 
@@ -96,33 +96,33 @@ public class WxOrderService extends OrderServiceImpl {
      * 判断商户订单号是否存在
      */
     public Boolean countByOutTradeNo(String userId, String outTradeNo) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        wrapper.eq(carserviceOrder.OUT_TRADE_NO, outTradeNo);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        wrapper.eq(CarServiceOrder.OUT_TRADE_NO, outTradeNo);
         return exists(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceOrder> queryByOrderStatus(String userId, List<Short> orderStatus, OrderListBody body) {
-        QueryWrapper<carserviceOrder> wrapper = startPage(body);
-        wrapper.eq(carserviceOrder.USER_ID, userId);
+    public List<CarServiceOrder> queryByOrderStatus(String userId, List<Short> orderStatus, OrderListBody body) {
+        QueryWrapper<CarServiceOrder> wrapper = startPage(body);
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
         if (orderStatus != null && orderStatus.size() > 0) {
-            wrapper.in(carserviceOrder.ORDER_STATUS, orderStatus);
+            wrapper.in(CarServiceOrder.ORDER_STATUS, orderStatus);
         }
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceOrder> queryByBrandOrderStatus(String brandId, List<Short> orderStatus, BrandOrderListBody body) {
-        QueryWrapper<carserviceOrder> wrapper = startPage(body);
-        wrapper.eq(carserviceOrder.BRAND_ID, brandId);
+    public List<CarServiceOrder> queryByBrandOrderStatus(String brandId, List<Short> orderStatus, BrandOrderListBody body) {
+        QueryWrapper<CarServiceOrder> wrapper = startPage(body);
+        wrapper.eq(CarServiceOrder.BRAND_ID, brandId);
         if (orderStatus != null && orderStatus.size() > 0) {
-            wrapper.in(carserviceOrder.ORDER_STATUS, orderStatus);
+            wrapper.in(CarServiceOrder.ORDER_STATUS, orderStatus);
         }
         if (StringUtils.hasText(body.getMobile())) {
-            wrapper.like(carserviceOrder.MOBILE, body.getMobile());
+            wrapper.like(CarServiceOrder.MOBILE, body.getMobile());
         }
         return queryAll(wrapper);
     }
@@ -130,14 +130,14 @@ public class WxOrderService extends OrderServiceImpl {
 
     @Cacheable(sync = true)
     public UserOrderInfo orderInfo(String userId) {
-        QueryWrapper<carserviceOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceOrder.USER_ID, userId);
-        List<carserviceOrder> orders = queryAll(wrapper);
+        QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceOrder.USER_ID, userId);
+        List<CarServiceOrder> orders = queryAll(wrapper);
         Integer unpaid = 0;
         Integer unship = 0;
         Integer unrecv = 0;
         Integer uncomment = 0;
-        for (carserviceOrder order : orders) {
+        for (CarServiceOrder order : orders) {
             if (OrderStatus.isCreateStatus(order) || OrderStatus.isGrouponNoneStatus(order)) {
                 unpaid++;
             } else if (OrderStatus.isPayStatus(order) || OrderStatus.isBtlPayStatus(order) || OrderStatus.isGrouponOnStatus(order) || OrderStatus.isGrouponSucceedStatus(order)) {
@@ -159,7 +159,7 @@ public class WxOrderService extends OrderServiceImpl {
 
     @CacheEvict(allEntries = true)
     public void updateAftersaleStatus(String orderId, Short statusReject) {
-        carserviceOrder order = new carserviceOrder();
+        CarServiceOrder order = new CarServiceOrder();
         order.setId(orderId);
         order.setAftersaleStatus(statusReject);
         order.setUpdateTime(LocalDateTime.now());

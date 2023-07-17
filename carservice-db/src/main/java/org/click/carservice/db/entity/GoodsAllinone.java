@@ -25,22 +25,22 @@ public class GoodsAllinone implements Serializable {
     /**
      * 商品基本信息
      */
-    private carserviceGoods goods;
+    private CarServiceGoods goods;
     /**
      * 货品信息
      */
-    private carserviceGoodsProduct[] products;
+    private CarServiceGoodsProduct[] products;
     /**
      * 团购规则
      */
-    private carserviceGrouponRules grouponRules;
+    private CarServiceGrouponRules grouponRules;
     /**
      * 商品参数
      */
-    private carserviceGoodsAttribute[] attributes;
+    private CarServiceGoodsAttribute[] attributes;
     /**
      * 商品规格
      */
-    private carserviceGoodsSpecification[] specifications;
+    private CarServiceGoodsSpecification[] specifications;
 
 }

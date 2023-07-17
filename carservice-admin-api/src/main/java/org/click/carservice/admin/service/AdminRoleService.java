@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.role.body.RoleListBody;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceRole;
+import org.click.carservice.db.domain.CarServiceRole;
 import org.click.carservice.db.service.impl.RoleServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -38,7 +38,7 @@ public class AdminRoleService extends RoleServiceImpl {
      * @param role 权限
      * @return 错误信息
      */
-    public Object validate(carserviceRole role) {
+    public Object validate(CarServiceRole role) {
         String name = role.getName();
         if (Objects.isNull(name)) {
             return ResponseUtil.fail("角色名称不能为空");
@@ -51,10 +51,10 @@ public class AdminRoleService extends RoleServiceImpl {
     }
 
     @Cacheable(sync = true)
-    public List<carserviceRole> querySelective(RoleListBody body) {
-        QueryWrapper<carserviceRole> wrapper = startPage(body);
+    public List<CarServiceRole> querySelective(RoleListBody body) {
+        QueryWrapper<CarServiceRole> wrapper = startPage(body);
         if (StringUtils.hasText(body.getName())) {
-            wrapper.like(carserviceRole.NAME, body.getName());
+            wrapper.like(CarServiceRole.NAME, body.getName());
         }
         return queryAll(wrapper);
     }
@@ -62,14 +62,14 @@ public class AdminRoleService extends RoleServiceImpl {
 
     @Cacheable(sync = true)
     public boolean checkExist(String name) {
-        QueryWrapper<carserviceRole> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceRole.NAME, name);
+        QueryWrapper<CarServiceRole> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceRole.NAME, name);
         return exists(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceRole> queryAll() {
+    public List<CarServiceRole> queryAll() {
         return list();
     }
 

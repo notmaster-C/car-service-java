@@ -13,7 +13,7 @@ package org.click.carservice.wx.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceCategory;
+import org.click.carservice.db.domain.CarServiceCategory;
 import org.click.carservice.wx.model.catalog.body.CatalogIndexResult;
 import org.click.carservice.wx.service.WxCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,9 @@ public class WxCatalogController {
     @GetMapping("index")
     public Object index(String id) {
         // 所有一级分类目录
-        List<carserviceCategory> categoryList = categoryService.queryL1();
+        List<CarServiceCategory> categoryList = categoryService.queryL1();
         // 当前一级分类目录
-        carserviceCategory currentCategory = null;
+        CarServiceCategory currentCategory = null;
         if (id != null) {
             currentCategory = categoryService.findById(id);
         } else {
@@ -62,7 +62,7 @@ public class WxCatalogController {
             }
         }
         // 当前一级分类目录对应的二级分类目录
-        List<carserviceCategory> currentSubCategory = null;
+        List<CarServiceCategory> currentSubCategory = null;
         if (currentCategory != null) {
             currentSubCategory = categoryService.queryByPid(currentCategory.getId());
         }
@@ -80,18 +80,18 @@ public class WxCatalogController {
     @GetMapping("all")
     public Object queryAll() {
         // 所有一级分类目录
-        List<carserviceCategory> l1CatList = categoryService.queryL1();
+        List<CarServiceCategory> l1CatList = categoryService.queryL1();
         //所有子分类列表
-        Map<String, List<carserviceCategory>> allList = new HashMap<>();
-        List<carserviceCategory> sub;
-        for (carserviceCategory category : l1CatList) {
+        Map<String, List<CarServiceCategory>> allList = new HashMap<>();
+        List<CarServiceCategory> sub;
+        for (CarServiceCategory category : l1CatList) {
             sub = categoryService.queryByPid(category.getId());
             allList.put(category.getId(), sub);
         }
         // 当前一级分类目录
-        carserviceCategory currentCategory = l1CatList.get(0);
+        CarServiceCategory currentCategory = l1CatList.get(0);
         // 当前一级分类目录对应的二级分类目录
-        List<carserviceCategory> currentSubCategory = null;
+        List<CarServiceCategory> currentSubCategory = null;
         if (null != currentCategory) {
             currentSubCategory = categoryService.queryByPid(currentCategory.getId());
         }
@@ -110,7 +110,7 @@ public class WxCatalogController {
     @GetMapping("current")
     public Object current(@NotNull String id) {
         // 当前分类
-        carserviceCategory currentCategory = categoryService.findById(id);
+        CarServiceCategory currentCategory = categoryService.findById(id);
         if (currentCategory == null) {
             return ResponseUtil.badArgumentValue();
         }

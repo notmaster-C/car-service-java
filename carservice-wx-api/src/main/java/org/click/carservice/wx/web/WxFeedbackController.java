@@ -14,8 +14,8 @@ package org.click.carservice.wx.web;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.RegexUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceFeedback;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceFeedback;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.service.WxFeedbackService;
 import org.click.carservice.wx.service.WxUserService;
@@ -45,7 +45,7 @@ public class WxFeedbackController {
     private WxFeedbackService feedbackService;
 
 
-    private Object validate(carserviceFeedback feedback) {
+    private Object validate(CarServiceFeedback feedback) {
         String content = feedback.getContent();
         if (Objects.isNull(content)) {
             return ResponseUtil.badArgument();
@@ -77,12 +77,12 @@ public class WxFeedbackController {
      * @return 操作结果
      */
     @PostMapping("submit")
-    public Object submit(@LoginUser String userId, @Valid @RequestBody carserviceFeedback feedback) {
+    public Object submit(@LoginUser String userId, @Valid @RequestBody CarServiceFeedback feedback) {
         Object error = validate(feedback);
         if (error != null) {
             return error;
         }
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         //状态默认是0，1表示状态已发生变化
         feedback.setStatus(true);
         feedback.setUserId(userId);

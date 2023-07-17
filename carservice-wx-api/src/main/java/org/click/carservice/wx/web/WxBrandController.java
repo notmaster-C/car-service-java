@@ -97,7 +97,7 @@ public class WxBrandController {
      */
     @GetMapping("detail")
     public Object brandDetail(@LoginUser String userId, @JsonBody String brandId) {
-        carserviceBrand brand = brandService.findById(brandId);
+        CarServiceBrand brand = brandService.findById(brandId);
         if (brand == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -122,19 +122,19 @@ public class WxBrandController {
      */
     @PostMapping("/save")
     public Object brandSave(@LoginUser String userId, @Valid @RequestBody BrandSaveBody body) {
-        carserviceBrand brand = new carserviceBrand();
+        CarServiceBrand brand = new CarServiceBrand();
         BeanUtil.copyProperties(body, brand);
         Object error = brandService.validate(brand);
         if (error != null) {
             return error;
         }
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.unlogin();
         }
 
         if (brand.getId() != null && !brand.getId().equals("0")) {
-            carserviceBrand carserviceBrand = brandService.findById(brand.getId());
+            CarServiceBrand carserviceBrand = brandService.findById(brand.getId());
             if (carserviceBrand == null) {
                 return ResponseUtil.fail("店铺更新失败");
             }
@@ -165,7 +165,7 @@ public class WxBrandController {
             slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);
         }
         if (StringUtils.hasText(body.getTrueName())) {
-            carserviceUser service = userService.findById(userId);
+            CarServiceUser service = userService.findById(userId);
             service.setTrueName(body.getTrueName());
             if (userService.updateVersionSelective(service) == 0) {
                 throw new RuntimeException("用户更新失败请重试");
@@ -179,15 +179,15 @@ public class WxBrandController {
      */
     @GetMapping("/order")
     public Object orderList(@LoginUser String userId, BrandOrderListBody body) {
-        List<carserviceBrand> brandList = brandService.queryByUserId(userId);
+        List<CarServiceBrand> brandList = brandService.queryByUserId(userId);
         if (brandList.size() != 1) {
             return ResponseUtil.fail(800, "未找到店铺");
         }
-        carserviceBrand brand = brandList.get(0);
+        CarServiceBrand brand = brandList.get(0);
         List<Short> orderStatus = OrderStatus.brandOrderStatus(body.getShowType());
-        List<carserviceOrder> orderList = orderService.queryByBrandOrderStatus(brand.getId(), orderStatus, body);
+        List<CarServiceOrder> orderList = orderService.queryByBrandOrderStatus(brand.getId(), orderStatus, body);
         List<BrandOrderListResult> orderVoList = new ArrayList<>(orderList.size());
-        for (carserviceOrder order : orderList) {
+        for (CarServiceOrder order : orderList) {
             //拼装订单信息
             BrandOrderListResult result = new BrandOrderListResult();
             result.setGoods(orderGoodsService.findByOrderId(order.getId()));
@@ -195,7 +195,7 @@ public class WxBrandController {
             BeanUtil.copyProperties(order, result);
             result.setOrderStatusText(OrderStatus.orderStatusText(order));
             //添加团购信息
-            carserviceGroupon groupon = grouponService.findByOrderId(order.getId());
+            CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
             result.setGroupon(groupon);
             if (groupon != null) {
                 result.setIsGroupon(true);
@@ -233,15 +233,15 @@ public class WxBrandController {
     public Object catList() {
         // http://element-cn.eleme.io/#/zh-CN/component/cascader
         // 管理员设置“所属分类”
-        List<carserviceCategory> l1CatList = categoryService.queryL1();
+        List<CarServiceCategory> l1CatList = categoryService.queryL1();
         List<BaseOption> categoryList = new ArrayList<>(l1CatList.size());
-        for (carserviceCategory l1 : l1CatList) {
+        for (CarServiceCategory l1 : l1CatList) {
             BaseOption l1CatVo = new BaseOption();
             l1CatVo.setValue(l1.getId());
             l1CatVo.setLabel(l1.getName());
-            List<carserviceCategory> l2CatList = categoryService.queryByPid(l1.getId());
+            List<CarServiceCategory> l2CatList = categoryService.queryByPid(l1.getId());
             List<BaseOption> children = new ArrayList<>(l2CatList.size());
-            for (carserviceCategory l2 : l2CatList) {
+            for (CarServiceCategory l2 : l2CatList) {
                 BaseOption l2CatVo = new BaseOption();
                 l2CatVo.setValue(l2.getId());
                 l2CatVo.setLabel(l2.getName());
@@ -278,7 +278,7 @@ public class WxBrandController {
      * @return 成功
      */
     @PostMapping("/goods/delete")
-    public Object goodsDelete(@Valid @RequestBody carserviceGoods goods) {
+    public Object goodsDelete(@Valid @RequestBody CarServiceGoods goods) {
         return goodsCoreService.goodsDelete(goods);
     }
 
@@ -299,17 +299,17 @@ public class WxBrandController {
      */
     @GetMapping("/goods/detail")
     public Object goodsDetail(@NotNull String id) {
-        carserviceGoods goods = goodsService.findById(id);
+        CarServiceGoods goods = goodsService.findById(id);
         if (goods == null) {
             return ResponseUtil.fail(600, "商品不存在");
         }
-        List<carserviceGoodsProduct> products = productService.queryByGid(id);
-        List<carserviceGrouponRules> grouponRules = rulesService.queryByGoodsId(id);
-        List<carserviceGoodsSpecification> specifications = specificationService.queryByGid(id);
-        List<carserviceGoodsAttribute> attributes = attributeService.queryByGid(id);
+        List<CarServiceGoodsProduct> products = productService.queryByGid(id);
+        List<CarServiceGrouponRules> grouponRules = rulesService.queryByGoodsId(id);
+        List<CarServiceGoodsSpecification> specifications = specificationService.queryByGid(id);
+        List<CarServiceGoodsAttribute> attributes = attributeService.queryByGid(id);
 
         String categoryId = goods.getCategoryId();
-        carserviceCategory category = categoryService.findById(categoryId);
+        CarServiceCategory category = categoryService.findById(categoryId);
         String[] categoryIds = new String[]{};
         if (category != null) {
             categoryIds = new String[]{category.getPid(), categoryId};

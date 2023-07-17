@@ -14,8 +14,8 @@ package org.click.carservice.core.system;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
-import org.click.carservice.db.domain.carserviceSystem;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceSystem;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.ISystemService;
 import org.click.carservice.db.service.ITenantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +53,11 @@ public class SystemStartupRunner {
      */
     public void initConfig() {
         //系统默认配置
-        Map<String, carserviceSystem> defaultConfigs = new HashMap<>();
+        Map<String, CarServiceSystem> defaultConfigs = new HashMap<>();
         Map<String, String> redisConfigs = new HashMap<>();
         //初始化系统默认配置
         for (SystemConstant item : SystemConstant.values()) {
-            carserviceSystem system = new carserviceSystem();
+            CarServiceSystem system = new CarServiceSystem();
             system.setName(item.getName());
             system.setValue(item.getValue());
             system.setDepict(item.getDepict());
@@ -66,11 +66,11 @@ public class SystemStartupRunner {
         }
 
         //读取所有租户配置
-        List<carserviceTenant> tenantList = tenantService.list();
+        List<CarServiceTenant> tenantList = tenantService.list();
         updateConfigs(defaultConfigs, redisConfigs);
 
         //切换租户数据库
-        for (carserviceTenant tenant : tenantList) {
+        for (CarServiceTenant tenant : tenantList) {
             TenantContextHolder.setLocalTenantId(tenant.getId());
             updateConfigs(defaultConfigs, redisConfigs);
         }
@@ -86,10 +86,10 @@ public class SystemStartupRunner {
      * @param defaultConfigs 数据库默认配置
      * @param redisConfigs  redis配置
      */
-    private void updateConfigs(Map<String, carserviceSystem> defaultConfigs, Map<String, String> redisConfigs) {
-        List<carserviceSystem> systemList = systemService.list();
-        HashMap<String, carserviceSystem> systemMap = new HashMap<>(defaultConfigs);
-        for (carserviceSystem system : systemList) {
+    private void updateConfigs(Map<String, CarServiceSystem> defaultConfigs, Map<String, String> redisConfigs) {
+        List<CarServiceSystem> systemList = systemService.list();
+        HashMap<String, CarServiceSystem> systemMap = new HashMap<>(defaultConfigs);
+        for (CarServiceSystem system : systemList) {
             system.setDepict(SystemConstant.parseDepict(system.getName()));
             systemMap.put(system.getName(), system);
             redisConfigs.put(system.getName(), system.getValue());
@@ -101,15 +101,15 @@ public class SystemStartupRunner {
     }
 
 
-    public void initConfig(Collection<carserviceSystem> systemList) {
-        for (carserviceSystem system : systemList) {
+    public void initConfig(Collection<CarServiceSystem> systemList) {
+        for (CarServiceSystem system : systemList) {
             if (system.getId() == null) {
                 systemService.add(system);
                 continue;
             }
-            QueryWrapper<carserviceSystem> wrapper = new QueryWrapper<>();
-            wrapper.eq(carserviceSystem.ID, system.getId());
-            wrapper.eq(carserviceSystem.NAME, system.getName());
+            QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
+            wrapper.eq(CarServiceSystem.ID, system.getId());
+            wrapper.eq(CarServiceSystem.NAME, system.getName());
             if (!systemService.update(system, wrapper)) {
                 system.setId(null);
                 systemService.add(system);

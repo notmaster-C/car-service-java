@@ -14,7 +14,7 @@ package org.click.carservice.wx.web;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoodsComment;
+import org.click.carservice.db.domain.CarServiceGoodsComment;
 import org.click.carservice.wx.model.goods.body.GoodsCommentListBody;
 import org.click.carservice.wx.model.goods.result.GoodsCommentCountResult;
 import org.click.carservice.wx.model.goods.result.GoodsCommentListResult;
@@ -65,9 +65,9 @@ public class WxGoodsCommentController {
      */
     @GetMapping("list")
     public Object list(GoodsCommentListBody body) {
-        List<carserviceGoodsComment> commentList = goodsCommentService.querySelective(body);
+        List<CarServiceGoodsComment> commentList = goodsCommentService.querySelective(body);
         List<GoodsCommentListResult> commentVoList = new ArrayList<>(commentList.size());
-        for (carserviceGoodsComment comment : commentList) {
+        for (CarServiceGoodsComment comment : commentList) {
             GoodsCommentListResult result = new GoodsCommentListResult();
             BeanUtil.copyProperties(comment, result);
             result.setUserInfo(userService.findUserVoById(comment.getUserId()));

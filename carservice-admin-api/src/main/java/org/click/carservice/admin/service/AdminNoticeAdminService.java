@@ -14,7 +14,7 @@ package org.click.carservice.admin.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.click.carservice.admin.model.notice.admin.body.NoticeAdminListBody;
-import org.click.carservice.db.domain.carserviceNoticeAdmin;
+import org.click.carservice.db.domain.CarServiceNoticeAdmin;
 import org.click.carservice.db.service.impl.NoticeAdminServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,37 +35,37 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> querySelective(NoticeAdminListBody body) {
-        QueryWrapper<carserviceNoticeAdmin> wrapper = startPage(body);
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, body.getAdminId());
+    public List<CarServiceNoticeAdmin> querySelective(NoticeAdminListBody body) {
+        QueryWrapper<CarServiceNoticeAdmin> wrapper = startPage(body);
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, body.getAdminId());
         if ("read".equals(body.getAdminId())) {
-            wrapper.isNotNull(carserviceNoticeAdmin.READ_TIME);
+            wrapper.isNotNull(CarServiceNoticeAdmin.READ_TIME);
         }
         if ("unread".equals(body.getAdminId())) {
-            wrapper.isNull(carserviceNoticeAdmin.READ_TIME);
+            wrapper.isNull(CarServiceNoticeAdmin.READ_TIME);
         }
         if (StringUtils.hasText(body.getTitle())) {
-            wrapper.like(carserviceNoticeAdmin.NOTICE_TITLE, body.getTitle());
+            wrapper.like(CarServiceNoticeAdmin.NOTICE_TITLE, body.getTitle());
         }
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public carserviceNoticeAdmin find(String noticeId, String adminId) {
-        QueryWrapper<carserviceNoticeAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.NOTICE_ID, noticeId);
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, adminId);
+    public CarServiceNoticeAdmin find(String noticeId, String adminId) {
+        QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
         return getOne(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void markReadByIds(List<String> ids, String adminId) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.in(carserviceNoticeAdmin.ID, ids);
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, adminId);
-        carserviceNoticeAdmin noticeAdmin = new carserviceNoticeAdmin();
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.in(CarServiceNoticeAdmin.ID, ids);
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
+        CarServiceNoticeAdmin noticeAdmin = new CarServiceNoticeAdmin();
         LocalDateTime now = LocalDateTime.now();
         noticeAdmin.setReadTime(now);
         noticeAdmin.setUpdateTime(now);
@@ -75,10 +75,10 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
 
     @CacheEvict(allEntries = true)
     public void deleteById(String id, String adminId) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.ID, id);
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, adminId);
-        carserviceNoticeAdmin noticeAdmin = new carserviceNoticeAdmin();
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.ID, id);
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
+        CarServiceNoticeAdmin noticeAdmin = new CarServiceNoticeAdmin();
         noticeAdmin.setUpdateTime(LocalDateTime.now());
         noticeAdmin.setDeleted(true);
         update(noticeAdmin, wrapper);
@@ -87,59 +87,59 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
 
     @CacheEvict(allEntries = true)
     public void deleteByIds(List<String> ids, String adminId) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.in(carserviceNoticeAdmin.ID, ids);
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, adminId);
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.in(CarServiceNoticeAdmin.ID, ids);
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
         remove(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public Integer countUnread(String adminId) {
-        QueryWrapper<carserviceNoticeAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.ADMIN_ID, adminId);
-        wrapper.isNull(carserviceNoticeAdmin.READ_TIME);
+        QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
+        wrapper.isNull(CarServiceNoticeAdmin.READ_TIME);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceNoticeAdmin> queryByNoticeId(String noticeId) {
-        QueryWrapper<carserviceNoticeAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.NOTICE_ID, noticeId);
+    public List<CarServiceNoticeAdmin> queryByNoticeId(String noticeId) {
+        QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
         return queryAll(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void deleteByNoticeId(String id) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.NOTICE_ID, id);
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, id);
         remove(wrapper);
     }
 
 
     @CacheEvict(allEntries = true)
     public void deleteByNoticeIds(List<String> ids) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.in(carserviceNoticeAdmin.NOTICE_ID, ids);
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.in(CarServiceNoticeAdmin.NOTICE_ID, ids);
         remove(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public Integer countReadByNoticeId(String noticeId) {
-        QueryWrapper<carserviceNoticeAdmin> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.NOTICE_ID, noticeId);
-        wrapper.isNotNull(carserviceNoticeAdmin.READ_TIME);
+        QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
+        wrapper.isNotNull(CarServiceNoticeAdmin.READ_TIME);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @CacheEvict(allEntries = true)
-    public void updateByNoticeId(carserviceNoticeAdmin noticeAdmin, String noticeId) {
-        UpdateWrapper<carserviceNoticeAdmin> wrapper = new UpdateWrapper<>();
-        wrapper.eq(carserviceNoticeAdmin.NOTICE_ID, noticeId);
+    public void updateByNoticeId(CarServiceNoticeAdmin noticeAdmin, String noticeId) {
+        UpdateWrapper<CarServiceNoticeAdmin> wrapper = new UpdateWrapper<>();
+        wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
         update(noticeAdmin, wrapper);
     }
 

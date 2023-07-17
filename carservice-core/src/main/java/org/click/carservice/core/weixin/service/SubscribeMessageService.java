@@ -17,9 +17,9 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.click.carservice.core.express.service.ExpressService;
-import org.click.carservice.db.domain.carserviceMessage;
-import org.click.carservice.db.domain.carserviceOrder;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceMessage;
+import org.click.carservice.db.domain.CarServiceOrder;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -58,7 +58,7 @@ public class SubscribeMessageService {
      * @param order 订单信息
      */
     @Async
-    public void shipSubscribe(String openId, carserviceOrder order) {
+    public void shipSubscribe(String openId, CarServiceOrder order) {
         // 模板数据 下面的数据，是需要根据申请的微信模板对应的，并不是每个人都一样
         List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
         data.add(new WxMaSubscribeMessage.MsgData("character_string1", order.getOrderSn()));
@@ -76,7 +76,7 @@ public class SubscribeMessageService {
      * @param order 订单信息
      */
     @Async
-    public void refundSubscribe(String openId, carserviceOrder order) {
+    public void refundSubscribe(String openId, CarServiceOrder order) {
         // 模板数据 下面的数据，是需要根据申请的微信模板对应的，并不是每个人都一样
         List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
         data.add(new WxMaSubscribeMessage.MsgData("phrase9", OrderStatus.orderStatusText(order)));
@@ -93,7 +93,7 @@ public class SubscribeMessageService {
      * @param order 订单信息
      */
     @Async
-    public void newOrderSubscribe(String openId, carserviceOrder order, carserviceOrderGoods orderGoods) {
+    public void newOrderSubscribe(String openId, CarServiceOrder order, CarServiceOrderGoods orderGoods) {
         // 模板数据 下面的数据，是需要根据申请的微信模板对应的，并不是每个人都一样
         List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
         data.add(new WxMaSubscribeMessage.MsgData("character_string1", order.getOrderSn()));
@@ -110,7 +110,7 @@ public class SubscribeMessageService {
      * @param message 消息内容
      */
     @Async
-    public void newMessageSubscribe(String openId, carserviceMessage message) {
+    public void newMessageSubscribe(String openId, CarServiceMessage message) {
         // 模板数据 下面的数据，是需要根据申请的微信模板对应的，并不是每个人都一样
         List<WxMaSubscribeMessage.MsgData> data = new ArrayList<>();
         data.add(new WxMaSubscribeMessage.MsgData("thing1", message.getNickName()));

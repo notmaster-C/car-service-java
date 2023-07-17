@@ -20,8 +20,8 @@ import org.click.carservice.admin.service.AdminGoodsService;
 import org.click.carservice.admin.service.AdminRewardService;
 import org.click.carservice.admin.service.AdminRewardTaskService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceRewardTask;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceRewardTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -84,18 +84,18 @@ public class AdminRewardController {
     @SaCheckPermission("admin:reward:update")
     @RequiresPermissionsDesc(menu = {"推广管理", "赏金管理"}, button = "编辑")
     @PostMapping("/update")
-    public Object update(@Valid @RequestBody carserviceRewardTask rewardTask) {
+    public Object update(@Valid @RequestBody CarServiceRewardTask rewardTask) {
         Object error = rewardTaskService.validate(rewardTask);
         if (error != null) {
             return error;
         }
 
-        carserviceRewardTask task = rewardTaskService.findById(rewardTask.getId());
+        CarServiceRewardTask task = rewardTaskService.findById(rewardTask.getId());
         if (task == null) {
             return ResponseUtil.badArgumentValue();
         }
 
-        carserviceGoods goods = goodsService.findById(rewardTask.getGoodsId());
+        CarServiceGoods goods = goodsService.findById(rewardTask.getGoodsId());
         if (goods == null) {
             return ResponseUtil.badArgumentValue();
         }
@@ -115,14 +115,14 @@ public class AdminRewardController {
     @SaCheckPermission("admin:reward:create")
     @RequiresPermissionsDesc(menu = {"推广管理", "赏金管理"}, button = "添加")
     @PostMapping("/create")
-    public Object create(@Valid @RequestBody carserviceRewardTask rewardTask) {
+    public Object create(@Valid @RequestBody CarServiceRewardTask rewardTask) {
         Object error = rewardTaskService.validate(rewardTask);
         if (error != null) {
             return error;
         }
 
         String goodsId = rewardTask.getGoodsId();
-        carserviceGoods goods = goodsService.findById(goodsId);
+        CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null) {
             return ResponseUtil.fail("商品不存在");
         }

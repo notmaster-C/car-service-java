@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.token.TokenManager;
 import org.click.carservice.core.weixin.config.WxProperties;
-import org.click.carservice.db.domain.carserviceTenant;
+import org.click.carservice.db.domain.CarServiceTenant;
 import org.click.carservice.db.service.impl.TenantServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -37,16 +37,16 @@ public class WxTenantService extends TenantServiceImpl {
 
 
     //    @Cacheable(sync = true)
-    public carserviceTenant findAppid(String appid) {
-        QueryWrapper<carserviceTenant> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceTenant.APP_ID, appid);
+    public CarServiceTenant findAppid(String appid) {
+        QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceTenant.APP_ID, appid);
         return getOne(wrapper);
     }
 
     @Cacheable(sync = true)
-    public carserviceTenant findAddress(String address) {
-        QueryWrapper<carserviceTenant> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceTenant.ADDRESS, address);
+    public CarServiceTenant findAddress(String address) {
+        QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceTenant.ADDRESS, address);
         return getOne(wrapper);
     }
 
@@ -65,7 +65,7 @@ public class WxTenantService extends TenantServiceImpl {
             return TokenManager.createTenantToken(tenantId);
         }
         //根据appid获取租户
-        carserviceTenant tenant = findAppid(appid);
+        CarServiceTenant tenant = findAppid(appid);
         if (tenant == null) {
             //判断是否添加的有多租户
             if (count() == 0) {

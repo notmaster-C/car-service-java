@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceGoodsComment;
+import org.click.carservice.db.domain.CarServiceGoodsComment;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.service.impl.GoodsCommentServiceImpl;
@@ -47,10 +47,10 @@ public class WxGoodsCommentService extends GoodsCommentServiceImpl {
      */
     public GoodsCommentResult getComments(String goodsId, int page, int limit) {
         // 评论
-        List<carserviceGoodsComment> comments = queryCommentList(goodsId, page, limit);
+        List<CarServiceGoodsComment> comments = queryCommentList(goodsId, page, limit);
         List<GoodsCommentInfo> commentsVo = new ArrayList<>(comments.size());
         int commentCount = count(goodsId, false);
-        for (carserviceGoodsComment comment : comments) {
+        for (CarServiceGoodsComment comment : comments) {
             GoodsCommentInfo commentInfo = new GoodsCommentInfo();
             commentInfo.setGoodId(comment.getGoodsId());
             commentInfo.setAddTime(comment.getAddTime());
@@ -70,30 +70,30 @@ public class WxGoodsCommentService extends GoodsCommentServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGoodsComment> querySelective(GoodsCommentListBody body) {
-        QueryWrapper<carserviceGoodsComment> wrapper = startPage(body);
-        wrapper.eq(carserviceGoodsComment.GOODS_ID, body.getGoodsId());
+    public List<CarServiceGoodsComment> querySelective(GoodsCommentListBody body) {
+        QueryWrapper<CarServiceGoodsComment> wrapper = startPage(body);
+        wrapper.eq(CarServiceGoodsComment.GOODS_ID, body.getGoodsId());
         if (body.getHasPicture() != null && body.getHasPicture()) {
-            wrapper.eq(carserviceGoodsComment.HAS_PICTURE, true);
+            wrapper.eq(CarServiceGoodsComment.HAS_PICTURE, true);
         }
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceGoodsComment> queryCommentList(String goodsId, Integer page, Integer limit) {
-        QueryWrapper<carserviceGoodsComment> wrapper = startPage(new PageBody(page, limit));
-        wrapper.eq(carserviceGoodsComment.GOODS_ID, goodsId);
+    public List<CarServiceGoodsComment> queryCommentList(String goodsId, Integer page, Integer limit) {
+        QueryWrapper<CarServiceGoodsComment> wrapper = startPage(new PageBody(page, limit));
+        wrapper.eq(CarServiceGoodsComment.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public Integer count(String goodsId, Boolean hasPicture) {
-        QueryWrapper<carserviceGoodsComment> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsComment.GOODS_ID, goodsId);
+        QueryWrapper<CarServiceGoodsComment> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsComment.GOODS_ID, goodsId);
         if (hasPicture) {
-            wrapper.eq(carserviceGoodsComment.HAS_PICTURE, true);
+            wrapper.eq(CarServiceGoodsComment.HAS_PICTURE, true);
         }
         return Math.toIntExact(count(wrapper));
     }

@@ -12,9 +12,9 @@ package org.click.carservice.core.service;
  */
 
 
-import org.click.carservice.db.domain.carserviceCart;
-import org.click.carservice.db.domain.carserviceCoupon;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCart;
+import org.click.carservice.db.domain.CarServiceCoupon;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.enums.CouponGoodsType;
 import org.click.carservice.db.enums.CouponStatus;
 import org.click.carservice.db.enums.CouponTimeType;
@@ -47,13 +47,13 @@ public class CouponVerifyService {
     /**
      * 检测优惠券是否适合
      */
-    public carserviceCoupon checkCoupon(String userId, String couponId, String userCouponId, List<carserviceCart> cartList) {
-        carserviceCoupon coupon = couponService.findById(couponId);
+    public CarServiceCoupon checkCoupon(String userId, String couponId, String userCouponId, List<CarServiceCart> cartList) {
+        CarServiceCoupon coupon = couponService.findById(couponId);
         if (coupon == null || coupon.getDeleted()) {
             return null;
         }
 
-        carserviceCouponUser couponUser = couponUserService.findById(userCouponId);
+        CarServiceCouponUser couponUser = couponUserService.findById(userCouponId);
         if (couponUser == null) {
             couponUser = commonService.queryOne(userId, couponId);
         } else if (!couponId.equals(couponUser.getCouponId())) {
@@ -82,21 +82,21 @@ public class CouponVerifyService {
         }
 
         // 检测商品是否符合
-        Map<String, List<carserviceCart>> cartMap = new HashMap<>();
+        Map<String, List<CarServiceCart>> cartMap = new HashMap<>();
         //可使用优惠券的商品或分类
         List<String> goodsValueList = new ArrayList<>(Arrays.asList(coupon.getGoodsIds()));
         Short goodType = coupon.getGoodsType();
 
         // 商品总价
         BigDecimal checkedGoodsPrice = new BigDecimal("0.00");
-        for (carserviceCart cart : cartList) {
+        for (CarServiceCart cart : cartList) {
             checkedGoodsPrice = checkedGoodsPrice.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
         }
 
         // 判断商品是否满足优惠券限制
         if (goodType.equals(CouponGoodsType.GOODS_TYPE_CATEGORY.getStatus()) ||
                 goodType.equals((CouponGoodsType.GOODS_TYPE_ARRAY.getStatus()))) {
-            for (carserviceCart cart : cartList) {
+            for (CarServiceCart cart : cartList) {
                 String key;
                 if (goodType.equals(CouponGoodsType.GOODS_TYPE_ARRAY.getStatus())) {
                     key = cart.getGoodsId();
@@ -104,7 +104,7 @@ public class CouponVerifyService {
                     key = goodsService.findById(cart.getGoodsId()).getCategoryId();
                 }
 
-                List<carserviceCart> carts = cartMap.get(key);
+                List<CarServiceCart> carts = cartMap.get(key);
                 if (carts == null) {
                     carts = new LinkedList<>();
                 }
@@ -116,8 +116,8 @@ public class CouponVerifyService {
             //可使用优惠券的商品的总价格
             BigDecimal total = BigDecimal.valueOf(0);
             for (String goodsId : goodsValueList) {
-                List<carserviceCart> carts = cartMap.get(goodsId);
-                for (carserviceCart cart : carts) {
+                List<CarServiceCart> carts = cartMap.get(goodsId);
+                for (CarServiceCart cart : carts) {
                     total = total.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
                 }
             }

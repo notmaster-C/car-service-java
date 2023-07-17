@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.GrouponMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceGroupon">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceGroupon">
         <id column="id" property="id"/>
         <result column="order_id" property="orderId"/>
         <result column="groupon_id" property="grouponId"/>

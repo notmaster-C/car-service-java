@@ -1,7 +1,7 @@
 package org.click.carservice.wx.model.groupon.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGroupon;
+import org.click.carservice.db.domain.CarServiceGroupon;
 
 import java.io.Serializable;
 
@@ -18,6 +18,6 @@ public class GrouponJoinResult implements Serializable {
     /**
      * 团购信息
      */
-    private carserviceGroupon groupon;
+    private CarServiceGroupon groupon;
 
 }

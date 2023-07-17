@@ -14,7 +14,7 @@ package org.click.carservice.core.tasks.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.tasks.service.TaskRunnable;
 import org.click.carservice.core.utils.BeanUtil;
-import org.click.carservice.db.domain.carserviceCouponUser;
+import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.enums.CouponUserStatus;
 import org.click.carservice.db.service.ICouponUserService;
 
@@ -33,7 +33,7 @@ public class CouponUserExpiredTask extends TaskRunnable {
     private static final String taskName = "用户优惠券过期";
 
 
-    public CouponUserExpiredTask(carserviceCouponUser couponUser, long delayInMilliseconds) {
+    public CouponUserExpiredTask(CarServiceCouponUser couponUser, long delayInMilliseconds) {
         super(idPrefix + couponUser.getId(), delayInMilliseconds, couponUser.getTenantId(), taskName);
         this.couponUserId = couponUser.getId();
     }
@@ -41,7 +41,7 @@ public class CouponUserExpiredTask extends TaskRunnable {
     @Override
     public void runTask() {
         ICouponUserService couponUserService = BeanUtil.getBean(ICouponUserService.class);
-        carserviceCouponUser couponUser = couponUserService.findById(this.couponUserId);
+        CarServiceCouponUser couponUser = couponUserService.findById(this.couponUserId);
         if (couponUser == null || !CouponUserStatus.STATUS_USABLE.equals(couponUser.getStatus())) {
             return;
         }

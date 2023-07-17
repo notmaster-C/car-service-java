@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.admin.model.region.result.RegionListResult;
 import org.click.carservice.admin.service.AdminRegionService;
 import org.click.carservice.core.utils.response.ResponseUtil;
-import org.click.carservice.db.domain.carserviceRegion;
+import org.click.carservice.db.domain.CarServiceRegion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,35 +54,35 @@ public class AdminRegionController {
      */
     @GetMapping("/list")
     public Object list() {
-        List<carserviceRegion> regionAll = regionService.getAll();
-        Map<Byte, List<carserviceRegion>> collect = regionAll.stream().collect(Collectors.groupingBy(carserviceRegion::getType));
+        List<CarServiceRegion> regionAll = regionService.getAll();
+        Map<Byte, List<CarServiceRegion>> collect = regionAll.stream().collect(Collectors.groupingBy(CarServiceRegion::getType));
         byte provinceType = 1;
-        List<carserviceRegion> provinceList = collect.get(provinceType);
+        List<CarServiceRegion> provinceList = collect.get(provinceType);
         byte cityType = 2;
-        List<carserviceRegion> citys = collect.get(cityType);
-        Map<String, List<carserviceRegion>> cityListMap = citys.stream().collect(Collectors.groupingBy(carserviceRegion::getPid));
+        List<CarServiceRegion> citys = collect.get(cityType);
+        Map<String, List<CarServiceRegion>> cityListMap = citys.stream().collect(Collectors.groupingBy(CarServiceRegion::getPid));
         byte areaType = 3;
-        List<carserviceRegion> areas = collect.get(areaType);
-        Map<String, List<carserviceRegion>> areaListMap = areas.stream().collect(Collectors.groupingBy(carserviceRegion::getPid));
+        List<CarServiceRegion> areas = collect.get(areaType);
+        Map<String, List<CarServiceRegion>> areaListMap = areas.stream().collect(Collectors.groupingBy(CarServiceRegion::getPid));
 
         //省列表
         List<RegionListResult> regionVOList = new ArrayList<>();
         //遍历省
-        for (carserviceRegion province : provinceList) {
+        for (CarServiceRegion province : provinceList) {
             //复制省
             RegionListResult provinceResult = new RegionListResult();
             BeanUtil.copyProperties(province, provinceResult);
             List<RegionListResult> cityVOList = new ArrayList<>();
             //遍历市
-            List<carserviceRegion> cityList = cityListMap.get(province.getId());
-            for (carserviceRegion city : cityList) {
+            List<CarServiceRegion> cityList = cityListMap.get(province.getId());
+            for (CarServiceRegion city : cityList) {
                 //复制市
                 RegionListResult cityResult = new RegionListResult();
                 BeanUtil.copyProperties(city, cityResult);
                 List<RegionListResult> areaVOList = new ArrayList<>();
                 //遍历区
-                List<carserviceRegion> areaList = areaListMap.get(city.getId());
-                for (carserviceRegion area : areaList) {
+                List<CarServiceRegion> areaList = areaListMap.get(city.getId());
+                for (CarServiceRegion area : areaList) {
                     //复制地区
                     RegionListResult areaResult = new RegionListResult();
                     BeanUtil.copyProperties(area, areaResult);

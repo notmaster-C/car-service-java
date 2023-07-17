@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.topic.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceGoods;
-import org.click.carservice.db.domain.carserviceTopic;
+import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.domain.CarServiceTopic;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,12 +16,12 @@ public class TopicDetailResult implements Serializable {
     /**
      * 专题信息
      */
-    private carserviceTopic topic;
+    private CarServiceTopic topic;
 
     /**
      * 商品列表
      */
-    private List<carserviceGoods> goods;
+    private List<CarServiceGoods> goods;
 
     /**
      * 是否点赞

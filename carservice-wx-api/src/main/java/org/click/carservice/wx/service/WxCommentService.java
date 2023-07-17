@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceComment;
+import org.click.carservice.db.domain.CarServiceComment;
 import org.click.carservice.db.service.impl.CommentServiceImpl;
 import org.click.carservice.wx.model.comment.body.CommentListBody;
 import org.click.carservice.wx.model.comment.body.CommentReplyListBody;
@@ -33,36 +33,36 @@ public class WxCommentService extends CommentServiceImpl {
 
     @Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
-        QueryWrapper<carserviceComment> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceComment.TYPE, type);
-        wrapper.eq(carserviceComment.VALUE_ID, valueId);
+        QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceComment.TYPE, type);
+        wrapper.eq(CarServiceComment.VALUE_ID, valueId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
     public Integer replyCount(String commentId) {
-        QueryWrapper<carserviceComment> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceComment.REPLY_ID, commentId);
+        QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceComment.REPLY_ID, commentId);
         return Math.toIntExact(count(wrapper));
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceComment> queryReplySelective(CommentReplyListBody body) {
-        QueryWrapper<carserviceComment> wrapper = startPage(body);
-        wrapper.eq(carserviceComment.REPLY_ID, body.getCommentId());
-        wrapper.orderByDesc(carserviceComment.LIKE_COUNT);
+    public List<CarServiceComment> queryReplySelective(CommentReplyListBody body) {
+        QueryWrapper<CarServiceComment> wrapper = startPage(body);
+        wrapper.eq(CarServiceComment.REPLY_ID, body.getCommentId());
+        wrapper.orderByDesc(CarServiceComment.LIKE_COUNT);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
-    public List<carserviceComment> querySelective(CommentListBody body) {
-        QueryWrapper<carserviceComment> wrapper = startPage(body);
-        wrapper.eq(carserviceComment.TYPE, body.getCommentType());
-        wrapper.eq(carserviceComment.VALUE_ID, body.getValueId());
-        wrapper.isNull(carserviceComment.REPLY_ID);
+    public List<CarServiceComment> querySelective(CommentListBody body) {
+        QueryWrapper<CarServiceComment> wrapper = startPage(body);
+        wrapper.eq(CarServiceComment.TYPE, body.getCommentType());
+        wrapper.eq(CarServiceComment.VALUE_ID, body.getValueId());
+        wrapper.isNull(CarServiceComment.REPLY_ID);
         return queryAll(wrapper);
     }
 

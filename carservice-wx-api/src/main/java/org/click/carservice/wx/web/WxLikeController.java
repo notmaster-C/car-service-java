@@ -68,12 +68,12 @@ public class WxLikeController {
             return ResponseUtil.fail("类型不支持");
         }
 
-        carserviceLike like = likeService.query(likeType, valueId, userId);
+        CarServiceLike like = likeService.query(likeType, valueId, userId);
         if (like != null) {
             like.setCancel(!like.getCancel());
             likeService.updateSelective(like);
         } else {
-            like = new carserviceLike();
+            like = new CarServiceLike();
             like.setUserId(userId);
             like.setType(likeType);
             like.setValueId(valueId);
@@ -82,7 +82,7 @@ public class WxLikeController {
         }
 
         if (LikeType.TYPE_TOPIC.getStatus().equals(likeType)) {
-            carserviceTopic topic = topicService.findById(valueId);
+            CarServiceTopic topic = topicService.findById(valueId);
             if (like.getCancel()) {
                 topic.setLikeCount(topic.getLikeCount() > 0 ? topic.getLikeCount() - 1 : 0);
             } else {
@@ -93,7 +93,7 @@ public class WxLikeController {
             }
         }
         if (LikeType.TYPE_BRAND.getStatus().equals(likeType)) {
-            carserviceBrand brand = brandService.findById(valueId);
+            CarServiceBrand brand = brandService.findById(valueId);
             if (like.getCancel()) {
                 brand.setLikeCount(brand.getLikeCount() > 0 ? brand.getLikeCount() - 1 : 0);
             } else {
@@ -104,7 +104,7 @@ public class WxLikeController {
             }
         }
         if (LikeType.TYPE_TIMELINE.getStatus().equals(likeType)) {
-            carserviceDynamic dynamic = dynamicService.findById(valueId);
+            CarServiceDynamic dynamic = dynamicService.findById(valueId);
             if (like.getCancel()) {
                 dynamic.setLikeCount(dynamic.getLikeCount() > 0 ? dynamic.getLikeCount() - 1 : 0);
             } else {
@@ -115,7 +115,7 @@ public class WxLikeController {
             }
         }
         if (LikeType.TYPE_COMMENT.getStatus().equals(likeType)) {
-            carserviceComment comment = commentService.findById(valueId);
+            CarServiceComment comment = commentService.findById(valueId);
             if (like.getCancel()) {
                 comment.setLikeCount(comment.getLikeCount() > 0 ? comment.getLikeCount() - 1 : 0);
             } else {

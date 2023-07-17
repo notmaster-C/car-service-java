@@ -3,7 +3,7 @@
 <mapper namespace="org.click.carservice.db.mapper.NoticeAdminMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.carserviceNoticeAdmin">
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceNoticeAdmin">
         <id column="id" property="id"/>
         <result column="admin_id" property="adminId"/>
         <result column="notice_id" property="noticeId"/>

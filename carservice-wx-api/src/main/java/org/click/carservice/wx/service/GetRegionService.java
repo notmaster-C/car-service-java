@@ -11,7 +11,7 @@ package org.click.carservice.wx.service;
  * See the Mulan PSL v2 for more details.
  */
 
-import org.click.carservice.db.domain.carserviceRegion;
+import org.click.carservice.db.domain.CarServiceRegion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +27,9 @@ public class GetRegionService {
     @Autowired
     private WxRegionService regionService;
 
-    private static List<carserviceRegion> regionList;
+    private static List<CarServiceRegion> regionList;
 
-    protected List<carserviceRegion> getRegions() {
+    protected List<CarServiceRegion> getRegions() {
         if (regionList == null) {
             createRegion();
         }

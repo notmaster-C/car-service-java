@@ -1,7 +1,7 @@
 package org.click.carservice.admin.model.order.result;
 
 import lombok.Data;
-import org.click.carservice.db.domain.carserviceOrderGoods;
+import org.click.carservice.db.domain.CarServiceOrderGoods;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -194,7 +194,7 @@ public class OrderListResult implements Serializable {
     /**
      * 商品列表
      */
-    private List<carserviceOrderGoods> goodsVoList;
+    private List<CarServiceOrderGoods> goodsVoList;
 
     /**
      * 创建时间

@@ -1,6 +1,6 @@
 package org.click.carservice.db.enums;
 
-import org.click.carservice.db.domain.carserviceGoods;
+import org.click.carservice.db.domain.CarServiceGoods;
 
 import java.io.Serializable;
 
@@ -76,28 +76,28 @@ public enum GoodsStatus implements Serializable {
     /**
      * 判断商品是否待审核
      */
-    public static Boolean getIsAudit(carserviceGoods goods) {
+    public static Boolean getIsAudit(CarServiceGoods goods) {
         return goods.getStatus().equals(GOODS_AUDIT.getStatus());
     }
 
     /**
      * 判断商品是否已上架
      */
-    public static Boolean getIsOnSale(carserviceGoods goods) {
+    public static Boolean getIsOnSale(CarServiceGoods goods) {
         return goods.getStatus().equals(GOODS_ON_SALE.getStatus());
     }
 
     /**
      * 判断商品是否已下架
      */
-    public static Boolean getIsUnsold(carserviceGoods goods) {
+    public static Boolean getIsUnsold(CarServiceGoods goods) {
         return goods.getStatus().equals(GOODS_UNSOLD.getStatus());
     }
 
     /**
      * 判断商品是否已驳回
      */
-    public static Boolean getIsReject(carserviceGoods goods) {
+    public static Boolean getIsReject(CarServiceGoods goods) {
         return goods.getStatus().equals(GOODS_REJECT.getStatus());
     }
 

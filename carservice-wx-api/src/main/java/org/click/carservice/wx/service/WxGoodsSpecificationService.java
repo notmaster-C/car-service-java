@@ -13,7 +13,7 @@ package org.click.carservice.wx.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceGoodsSpecification;
+import org.click.carservice.db.domain.CarServiceGoodsSpecification;
 import org.click.carservice.db.entity.GoodsSpecificationVo;
 import org.click.carservice.db.service.impl.GoodsSpecificationServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -36,31 +36,31 @@ public class WxGoodsSpecificationService extends GoodsSpecificationServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceGoodsSpecification> queryByGid(String goodsId) {
-        QueryWrapper<carserviceGoodsSpecification> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceGoodsSpecification.GOODS_ID, goodsId);
+    public List<CarServiceGoodsSpecification> queryByGid(String goodsId) {
+        QueryWrapper<CarServiceGoodsSpecification> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceGoodsSpecification.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 
 
     @Cacheable(sync = true)
     public List<GoodsSpecificationVo> getSpecificationVoList(String goodsId) {
-        List<carserviceGoodsSpecification> goodsSpecificationList = queryByGid(goodsId);
+        List<CarServiceGoodsSpecification> goodsSpecificationList = queryByGid(goodsId);
         Map<String, GoodsSpecificationVo> map = new HashMap<>();
         List<GoodsSpecificationVo> specificationVoList = new ArrayList<>();
-        for (carserviceGoodsSpecification goodsSpecification : goodsSpecificationList) {
+        for (CarServiceGoodsSpecification goodsSpecification : goodsSpecificationList) {
             String specification = goodsSpecification.getSpecification();
             GoodsSpecificationVo goodsSpecificationVo = map.get(specification);
             if (goodsSpecificationVo == null) {
                 goodsSpecificationVo = new GoodsSpecificationVo();
                 goodsSpecificationVo.setName(specification);
-                List<carserviceGoodsSpecification> valueList = new ArrayList<>();
+                List<CarServiceGoodsSpecification> valueList = new ArrayList<>();
                 valueList.add(goodsSpecification);
                 goodsSpecificationVo.setValueList(valueList);
                 map.put(specification, goodsSpecificationVo);
                 specificationVoList.add(goodsSpecificationVo);
             } else {
-                List<carserviceGoodsSpecification> valueList = goodsSpecificationVo.getValueList();
+                List<CarServiceGoodsSpecification> valueList = goodsSpecificationVo.getValueList();
                 valueList.add(goodsSpecification);
             }
         }

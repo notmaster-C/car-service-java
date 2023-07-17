@@ -14,7 +14,7 @@ package org.click.carservice.wx.annotation.support;
 import org.click.carservice.core.handler.NotLoginException;
 import org.click.carservice.core.utils.BeanUtil;
 import org.click.carservice.core.utils.token.TokenManager;
-import org.click.carservice.db.domain.carserviceUser;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.enums.UserStatus;
 import org.click.carservice.db.service.IUserService;
 import org.click.carservice.wx.annotation.LoginUser;
@@ -72,7 +72,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         }
 
         IUserService userService = BeanUtil.getBean(IUserService.class);
-        carserviceUser user = userService.findById(userId);
+        CarServiceUser user = userService.findById(userId);
         if (user == null || !UserStatus.isNormal(user)) {
             if (loginUser.require()) {
                 throw new NotLoginException("未登录");
@@ -82,7 +82,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         //参数类型
         Class<?> classType = parameter.getParameterType();
-        if (classType.isAssignableFrom(carserviceUser.class)) {
+        if (classType.isAssignableFrom(CarServiceUser.class)) {
             return user;
         }
         if (classType.isAssignableFrom(Integer.class)) {

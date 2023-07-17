@@ -12,7 +12,7 @@ package org.click.carservice.wx.service;
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.click.carservice.db.domain.carserviceAd;
+import org.click.carservice.db.domain.CarServiceAd;
 import org.click.carservice.db.service.impl.AdServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,11 +30,11 @@ public class WxAdService extends AdServiceImpl {
 
 
     @Cacheable(sync = true)
-    public List<carserviceAd> queryIndex() {
-        QueryWrapper<carserviceAd> wrapper = new QueryWrapper<>();
-        wrapper.eq(carserviceAd.POSITION, 1);
-        wrapper.eq(carserviceAd.ENABLED, true);
-        wrapper.orderByDesc(carserviceAd.WEIGHT);
+    public List<CarServiceAd> queryIndex() {
+        QueryWrapper<CarServiceAd> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAd.POSITION, 1);
+        wrapper.eq(CarServiceAd.ENABLED, true);
+        wrapper.orderByDesc(CarServiceAd.WEIGHT);
         return queryAll(wrapper);
     }
 
