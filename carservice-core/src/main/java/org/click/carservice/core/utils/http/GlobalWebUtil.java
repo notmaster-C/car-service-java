@@ -63,9 +63,9 @@ public class GlobalWebUtil {
      * @throws IOException 异常
      */
     public static void sendMessage(ServletResponse response, String message) throws IOException {
-        PrintWriter out = ((HttpServletResponse) response).getWriter();
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
+        PrintWriter out = ((HttpServletResponse) response).getWriter();
         //这里返回固定的BaseResponse对象给前端，直接抛异常时发现，在filter中的异常，GlobalExceptionHandler全局异常处理类无法处理
         out.print(JSONObject.toJSONString(ResponseUtil.fail(message), SerializerFeature.WriteNullStringAsEmpty));
         out.flush();

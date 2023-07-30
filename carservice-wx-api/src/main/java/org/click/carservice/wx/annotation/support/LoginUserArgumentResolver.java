@@ -36,7 +36,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     /**
      * 用户token请求头
      */
-    public static final String LOGIN_TOKEN_KEY = "X-carservice-User-Token";
+    public static final String LOGIN_TOKEN_KEY = "X-CarService-User-Token";
 
 
     @Override

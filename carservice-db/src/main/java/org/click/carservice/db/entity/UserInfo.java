@@ -11,6 +11,8 @@ package org.click.carservice.db.entity;
  * See the Mulan PSL v2 for more details.
  */
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,59 +24,73 @@ import java.time.LocalDate;
  * @author click
  */
 @Data
+@ApiModel(value = "微信用户信息", description = "微信用户信息")
 public class UserInfo implements Serializable {
 
     /**
      * 微信openid
      */
+    @ApiModelProperty("微信openid")
     private String openId;
     /**
      * 用户昵称
      */
+    @ApiModelProperty("用户昵称")
     private String nickName;
     /**
      * 用户头像
      */
+    @ApiModelProperty("用户头像")
     private String avatarUrl;
     /**
      * 用户手机号码
      */
+    @ApiModelProperty("用户手机号码")
     private String mobile;
     /**
      * 真实姓名
      */
+    @ApiModelProperty("真实姓名")
     private String trueName;
     /**
      * 国家
      */
+    @ApiModelProperty("国家")
     private String country;
     /**
      * 省份
      */
+    @ApiModelProperty("省份")
     private String province;
     /**
      * 城市
      */
+    @ApiModelProperty("城市")
     private String city;
     /**
      * 性别
      */
+    @ApiModelProperty("性别")
     private Byte gender;
     /**
      * 语言
      */
+    @ApiModelProperty("语言")
     private String language;
     /**
      * 生日
      */
+    @ApiModelProperty("生日")
     private LocalDate birthday;
     /**
      * uni登陆ID
      */
+    @ApiModelProperty("uni登陆ID")
     private String unionId;
     /**
      * 个人分享图片
      */
+    @ApiModelProperty("个人分享图片")
     private String shareUrl;
 
 

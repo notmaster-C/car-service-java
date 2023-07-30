@@ -12,10 +12,16 @@ package org.click.carservice.wx.service;
  */
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.service.impl.UserServiceImpl;
+import org.click.carservice.wx.model.auth.body.AuthLoginBody;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -106,6 +112,36 @@ public class WxUserService extends UserServiceImpl {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.OPENID, openid);
         return queryAll(wrapper);
+    }
+
+    /**
+     * 小程序用户名密码登录
+     * @param body
+     * @return
+     */
+    public CarServiceUser auth(AuthLoginBody body) {
+        CarServiceUser user = selectByUserName(body.getUsername());
+        // 用户是否存在
+        if (ObjectUtil.isNull(user)){
+            throw new RuntimeException("用户已存在");
+        }
+        // 验证密码
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(body.getPassword(), user.getPassword())) {
+            throw new RuntimeException("账号或密码错误");
+        }
+        return user;
+    }
+
+    /**
+     * 用户名查询用户
+     * @param userName
+     * @return
+     */
+    public CarServiceUser selectByUserName(String userName){
+        LambdaQueryWrapper<CarServiceUser> queryWrapper = Wrappers.lambdaQuery(CarServiceUser.class)
+                .eq(StrUtil.isNotBlank(userName), CarServiceUser::getUsername, userName);
+        return getOne(queryWrapper);
     }
 
 }

@@ -28,7 +28,7 @@ import java.util.*;
 public class TokenJwtHelper {
 
     /**加密数字签名的秘钥*/
-    private static final String SECRET = "X-carservice-User-Token";
+    private static final String SECRET = "X-CarService-User-Token";
     /**签名是有谁生成*/
     private static final String ISSUSER = "Lite-mall-plus";
     /**签名的主题*/

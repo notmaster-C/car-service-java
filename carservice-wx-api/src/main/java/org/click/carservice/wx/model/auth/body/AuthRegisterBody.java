@@ -14,6 +14,11 @@ import java.io.Serializable;
 public class AuthRegisterBody implements Serializable {
 
     /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
      * 手机号
      */
     @NotNull(message = "手机号不能为空")

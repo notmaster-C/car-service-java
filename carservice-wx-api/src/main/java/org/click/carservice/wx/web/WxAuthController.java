@@ -13,6 +13,9 @@ package org.click.carservice.wx.web;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.notify.model.NotifyType;
@@ -20,7 +23,6 @@ import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.notify.service.NotifyMobileService;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
 import org.click.carservice.core.satoken.handler.AuthenticationInfo;
-import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.service.CouponAssignService;
 import org.click.carservice.core.utils.RandomStrUtil;
 import org.click.carservice.core.utils.RegexUtil;
@@ -69,11 +71,9 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/wx/auth")
 @Validated
+@Api(value = "微信-鉴权服务", tags = "微信-鉴权服务")
 public class WxAuthController {
 
-
-    @Autowired
-    private ActionLogHandler logHelper;
     @Autowired
     private WxUserService userService;
     @Autowired
@@ -92,7 +92,8 @@ public class WxAuthController {
      * 扫码授权登陆
      */
     @PostMapping("login_by_qr")
-    public Object loginByQr(@LoginUser String userId, @Valid @RequestBody AuthLoginByQrBody body) {
+    @ApiOperation("扫码授权登陆")
+    public ResponseUtil loginByQr(@LoginUser String userId, @Valid @RequestBody AuthLoginByQrBody body) {
         CarServiceUser user = userService.findById(userId);
         if (user == null) {
             return ResponseUtil.fail("授权失败1");
@@ -119,6 +120,26 @@ public class WxAuthController {
     }
 
     /**
+     * 小程序用户名密码登录
+     * @param body
+     * @return
+     */
+    @PostMapping("login_by_default")
+    @ApiOperation("小程序用户名密码登录")
+    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body){
+        CarServiceUser user = userService.auth(body);
+        UserInfo userInfo = new UserInfo();
+        BeanUtil.copyProperties(user, userInfo);
+        // token
+        String token = TokenManager.createUserToken(user.getId());
+        WxLoginResult result = new WxLoginResult();
+        result.setUserToken(token);
+        result.setUserInfo(userInfo);
+
+        return ResponseUtil.ok(result);
+    }
+
+    /**
      * 账号登录
      */
     @PostMapping("login")
@@ -134,7 +155,7 @@ public class WxAuthController {
         //登陆成功
         CarServiceUser user = userService.findById(userId);
         if (StringUtils.hasText(admin.getOpenid())) {
-            if (!admin.getOpenid().equals(user.getOpenid())) {
+            if (ObjectUtil.isNotNull(user) && !admin.getOpenid().equals(user.getOpenid())) {
                 throw new RuntimeException("该管理员账户已绑定其他用户");
             }
         } else {
@@ -179,7 +200,6 @@ public class WxAuthController {
         }
 
         String code = RandomStrUtil.getRandom(6, RandomStrUtil.TYPE.NUMBER);
-        ;
         if (CaptchaManager.addToCache(mobile, code)) {
             return ResponseUtil.fail("验证码未超时，不能发送");
         }
@@ -307,22 +327,18 @@ public class WxAuthController {
         String code = body.getCode();
         String wxCode = body.getWxCode();
 
-        List<CarServiceUser> userList = userService.queryByMobile(mobile);
-        if (userList.size() > 0) {
-            return ResponseUtil.fail("用户名已注册");
-        }
+//        //判断验证码是否正确
+//        if (CaptchaManager.isCachedCaptcha(mobile, code)) {
+//            return ResponseUtil.fail("验证码错误");
+//        }
 
-        userList = userService.queryByMobile(mobile);
-        if (userList.size() > 0) {
-            return ResponseUtil.fail("手机号已注册");
-        }
         if (!RegexUtil.isMobileSimple(mobile)) {
             return ResponseUtil.fail("手机号格式不正确");
         }
 
-        //判断验证码是否正确
-        if (CaptchaManager.isCachedCaptcha(mobile, code)) {
-            return ResponseUtil.fail("验证码错误");
+        List<CarServiceUser> userList = userService.queryByMobile(mobile);
+        if (userList.size() > 0) {
+            return ResponseUtil.fail("手机号已注册");
         }
 
         String openId = "";
@@ -350,7 +366,8 @@ public class WxAuthController {
         CarServiceUser user = new CarServiceUser();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
-        user.setUsername(openId);
+        // 如果没授权登录，则使用用户手机作为用户名
+        user.setUsername(body.getMobile());
         user.setPassword(encodedPassword);
         user.setMobile(mobile);
         user.setOpenid(openId);

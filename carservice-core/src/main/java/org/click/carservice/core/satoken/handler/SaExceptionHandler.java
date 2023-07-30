@@ -98,4 +98,10 @@ public class SaExceptionHandler {
         return ResponseUtil.fail(e.getMessage());
     }
 
+    @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseUtil<String> handlerRuntimeException(RuntimeException e){
+        return ResponseUtil.fail(e.getMessage());
+    }
+
 }

@@ -12,9 +12,12 @@ package org.click.carservice.admin.web;
  */
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.click.carservice.core.handler.ActionLogHandler;
+import org.click.carservice.db.entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
@@ -39,6 +42,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/admin")
 @Validated
+@Api(value = "管理员管理", tags = "管理员管理")
 public class AdminAdminController {
 
     @Autowired
@@ -50,7 +54,7 @@ public class AdminAdminController {
     @SaCheckPermission("admin:admin:list")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "查询")
     @GetMapping("/list")
-    public Object list(AdminListBody body) {
+    public ResponseUtil<PageResult<AdminListResult>> list(AdminListBody body) {
         List<CarServiceAdmin> adminList = adminService.querySelective(body);
         ArrayList<AdminListResult> resultList = new ArrayList<>();
         for (CarServiceAdmin admin :adminList) {
@@ -70,7 +74,8 @@ public class AdminAdminController {
     @SaCheckPermission("admin:admin:read")
     @RequiresPermissionsDesc(menu = {"系统管理", "管理员管理"}, button = "详情")
     @GetMapping("/read")
-    public Object read(@NotNull String id) {
+    @ApiOperation(value = "详情")
+    public ResponseUtil<CarServiceAdmin> read(@NotNull String id) {
         return ResponseUtil.ok(adminService.findById(id));
     }
 

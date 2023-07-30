@@ -1,6 +1,8 @@
 package org.click.carservice.db.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("car_service_admin")
+@ApiModel(description = "管理员表")
 public class CarServiceAdmin implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +37,7 @@ public class CarServiceAdmin implements Serializable {
      * 管理员名称
      */
     @TableField("`username`")
+    @ApiModelProperty(value = "管理员名称")
     private String username;
     /**
      * 管理员密码
