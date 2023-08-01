@@ -66,6 +66,7 @@ import java.util.Objects;
 
 /**
  * 鉴权服务
+ *
  * @author click
  */
 @Slf4j
@@ -122,12 +123,13 @@ public class WxAuthController {
 
     /**
      * 小程序用户名密码登录
+     *
      * @param body
      * @return
      */
     @PostMapping("login_by_default")
     @ApiOperation("小程序用户名密码登录")
-    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body){
+    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body) {
         CarServiceUser user = userService.auth(body);
         UserInfo userInfo = new UserInfo();
         BeanUtil.copyProperties(user, userInfo);
@@ -192,6 +194,7 @@ public class WxAuthController {
      * 请求手机验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param mobile 手机号码
      */
     @PostMapping("captcha/mobile")
@@ -222,6 +225,7 @@ public class WxAuthController {
      * 请求邮箱验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param username 邮箱 { username }
      */
     @PostMapping("captcha/mail")
@@ -321,6 +325,7 @@ public class WxAuthController {
 
     /**
      * 账号注册
+     *
      * @param body    请求内容
      * @param request @Ignore
      * @return 登录结果
@@ -362,7 +367,8 @@ public class WxAuthController {
             if (userList.size() == 1) {
                 CarServiceUser checkUser = userList.get(0);
                 String checkPassword = checkUser.getPassword();
-                if (!checkPassword.equals(openId)) {
+                if (!checkPassword.equals(password)
+                        || !checkUser.getUsername().equals(body.getUserName())) {
                     return ResponseUtil.fail("openid已绑定账号");
                 }
             }
@@ -383,6 +389,8 @@ public class WxAuthController {
         user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
         user.setLastLoginTime(LocalDateTime.now());
         user.setLastLoginIp(IpUtil.getIpAddr(request));
+        user.setAddTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
         userService.add(user);
 
         // userInfo
@@ -400,7 +408,8 @@ public class WxAuthController {
 
     /**
      * 账号密码重置
-     * @param body    请求内容
+     *
+     * @param body 请求内容
      * @return 登录结果
      */
     @PostMapping("reset")
@@ -433,7 +442,8 @@ public class WxAuthController {
 
     /**
      * 账号手机号码重置
-     * @param userId  @Ignore
+     *
+     * @param userId @Ignore
      * @param body   请求内容
      */
     @PostMapping("resetPhone")
@@ -467,8 +477,9 @@ public class WxAuthController {
 
     /**
      * 账号信息更新
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
     @PostMapping("profile")
     public Object profile(@LoginUser String userId, @Valid @RequestBody UserInfo body, HttpServletRequest request) {
@@ -484,8 +495,9 @@ public class WxAuthController {
 
     /**
      * 微信手机号码绑定
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
     @PostMapping("bindPhone")
     public Object bindPhone(@LoginUser String userId, @Valid @RequestBody AuthBindPhoneBody body) {
