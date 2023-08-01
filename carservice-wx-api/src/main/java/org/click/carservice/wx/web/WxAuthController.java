@@ -50,6 +50,7 @@ import org.click.carservice.wx.service.WxAuthService;
 import org.click.carservice.wx.service.WxUserService;
 import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -142,6 +143,7 @@ public class WxAuthController {
     /**
      * 账号登录
      */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("login")
     public Object login(@LoginUser String userId, @Valid @RequestBody AuthLoginBody body) {
         String username = body.getUsername();
@@ -158,20 +160,23 @@ public class WxAuthController {
             if (ObjectUtil.isNotNull(user) && !admin.getOpenid().equals(user.getOpenid())) {
                 throw new RuntimeException("该管理员账户已绑定其他用户");
             }
-        } else {
-            CarServiceAdmin service = adminService.findById(admin.getId());
-            service.setOpenid(user.getOpenid());
-            if (adminService.updateVersionSelective(service) == 0) {
-                throw new RuntimeException("网络繁忙,请重试");
-            }
         }
+
         //绑定新的管理员账户后，解除原有账户的绑定
+        //先将原有账户解除绑定，否则findByopenid可能查出多个
+        //添加事务
         CarServiceAdmin originalAdmin = adminService.findByOpenId(user.getOpenid());
         if (originalAdmin != null && !originalAdmin.getId().equals(admin.getId())) {
             originalAdmin.setOpenid("");
             if (adminService.updateVersionSelective(originalAdmin) == 0) {
                 throw new RuntimeException("网络繁忙,请重试");
             }
+        }
+
+        CarServiceAdmin service = adminService.findById(admin.getId());
+        service.setOpenid(user.getOpenid());
+        if (adminService.updateVersionSelective(service) == 0) {
+            throw new RuntimeException("网络繁忙,请重试");
         }
 
         // adminInfo

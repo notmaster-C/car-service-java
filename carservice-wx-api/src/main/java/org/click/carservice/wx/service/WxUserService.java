@@ -123,7 +123,7 @@ public class WxUserService extends UserServiceImpl {
         CarServiceUser user = selectByUserName(body.getUsername());
         // 用户是否存在
         if (ObjectUtil.isNull(user)){
-            throw new RuntimeException("用户已存在");
+            throw new RuntimeException("用户不存在");
         }
         // 验证密码
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
