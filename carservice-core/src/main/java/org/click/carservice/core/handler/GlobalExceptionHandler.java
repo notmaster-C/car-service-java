@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(RuntimeException.class)
     public Object runtimeHandler(RuntimeException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
         return ResponseUtil.fail(e.getMessage());
     }
 
