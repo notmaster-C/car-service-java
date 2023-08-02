@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.click.carservice.db.domain.CarServiceCar;
 import org.click.carservice.db.mapper.CarServiceCarMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
+import org.click.carservice.db.service.ICarServiceCarService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ import java.util.List;
  * @since 2023-08-01
  */
 @Service
-public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapper, CarServiceCar> {
+public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapper, CarServiceCar> implements ICarServiceCarService {
 
     /**
      * 查询用户车牌信息
@@ -50,20 +51,17 @@ public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapp
         if (StrUtil.isNotBlank(carServiceCar.getCarNumber())){
             lqw.eq(CarServiceCar::getCarNumber ,carServiceCar.getCarNumber());
         }
+        if (StrUtil.isNotBlank(carServiceCar.getCarType())){
+            lqw.eq(CarServiceCar::getCarType ,carServiceCar.getCarType());
+        }
+        if (StrUtil.isNotBlank(carServiceCar.getEngineType())){
+            lqw.eq(CarServiceCar::getEngineType ,carServiceCar.getEngineType());
+        }
         if (carServiceCar.getIsDefault() != null){
             lqw.eq(CarServiceCar::getIsDefault ,carServiceCar.getIsDefault());
         }
-        if (carServiceCar.getAddTime() != null){
-            lqw.eq(CarServiceCar::getAddTime ,carServiceCar.getAddTime());
-        }
-        if (carServiceCar.getDeleted() != null){
-            lqw.eq(CarServiceCar::getDeleted ,carServiceCar.getDeleted());
-        }
         if (StrUtil.isNotBlank(carServiceCar.getTenantId())){
             lqw.eq(CarServiceCar::getTenantId ,carServiceCar.getTenantId());
-        }
-        if (carServiceCar.getVersion() != null){
-            lqw.eq(CarServiceCar::getVersion ,carServiceCar.getVersion());
         }
         return this.list(lqw);
     }

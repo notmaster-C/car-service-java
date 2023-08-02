@@ -43,6 +43,15 @@ public class CarServiceCar implements Serializable {
     @ApiModelProperty("车牌号")
     private String carNumber;
 
+    /** 车辆类型(0:轿车，1:SUV, 2:MPV, 3:其他) */
+    @ApiModelProperty("车辆类型(0:轿车，1:SUV, 2:MPV, 3:其他)")
+    private String carType;
+
+    /** 动力类型(0:燃油车,1:新能源车) */
+    @ApiModelProperty("动力类型(0:燃油车,1:新能源车)")
+    private String engineType;
+
+
     /** 是否默认车牌号（0：是，1：否） */
     @ApiModelProperty("是否默认车牌号（0：是，1：否）")
     private Integer isDefault;
