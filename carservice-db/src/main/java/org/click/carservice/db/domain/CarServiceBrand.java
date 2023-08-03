@@ -1,6 +1,8 @@
 package org.click.carservice.db.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("car_service_brand")
+@ApiModel("品牌商表")
 public class CarServiceBrand implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,11 +32,13 @@ public class CarServiceBrand implements Serializable {
      * 品牌商表ID
      */
     @TableId("`id`")
+    @ApiModelProperty("品牌商表ID")
     private String id;
     /**
      * 用户表的用户ID
      */
     @TableField("`user_id`")
+    @ApiModelProperty("用户表的用户ID")
     private String userId;
     /**
      * 品牌商名称

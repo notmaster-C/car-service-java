@@ -13,6 +13,8 @@ package org.click.carservice.admin.web;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.brand.body.BrandListBody;
@@ -23,6 +25,7 @@ import org.click.carservice.core.service.GoodsCoreService;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceBrand;
 import org.click.carservice.db.domain.CarServiceGoods;
+import org.click.carservice.db.entity.PageResult;
 import org.click.carservice.db.enums.BrandStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +43,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/brand")
 @Validated
+@Api(value = "品牌管理", tags = "品牌管理")
 public class AdminBrandController {
 
     @Autowired
@@ -55,7 +59,7 @@ public class AdminBrandController {
     @SaCheckPermission("admin:brand:list")
     @RequiresPermissionsDesc(menu = {"商场管理", "品牌管理"}, button = "查询")
     @GetMapping("/list")
-    public Object list(BrandListBody body) {
+    public ResponseUtil<PageResult<CarServiceBrand>> list(BrandListBody body) {
         return ResponseUtil.okList(brandService.querySelective(body));
     }
 
@@ -66,7 +70,8 @@ public class AdminBrandController {
     @SaCheckPermission("admin:brand:read")
     @RequiresPermissionsDesc(menu = {"商场管理", "品牌管理"}, button = "详情")
     @GetMapping("/read")
-    public Object read(@NotNull String id) {
+    @ApiOperation("详情")
+    public ResponseUtil<CarServiceBrand> read(@NotNull String id) {
         return ResponseUtil.ok(brandService.findById(id));
     }
 

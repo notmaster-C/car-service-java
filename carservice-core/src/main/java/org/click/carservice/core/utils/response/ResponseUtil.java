@@ -13,6 +13,8 @@ package org.click.carservice.core.utils.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.click.carservice.db.entity.PageResult;
 
@@ -32,15 +34,22 @@ import java.util.List;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel("响应操作结果")
 public class ResponseUtil<T> implements Serializable {
 
     /** 状态码 */
-    private final String errno;
+    @ApiModelProperty("状态码")
+    private String errno;
     /** 返回信息 */
-    private final String errmsg;
+    @ApiModelProperty("返回信息")
+    private String errmsg;
     /** 返回实体结果 */
-    private final T data;
 
+    @ApiModelProperty(value = "返回实体结果", name = "date")
+    private T data;
+
+    public ResponseUtil() {
+    }
 
     /**
      * 响应实体类
