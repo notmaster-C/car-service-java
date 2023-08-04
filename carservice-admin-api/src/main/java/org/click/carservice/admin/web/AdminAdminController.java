@@ -17,10 +17,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.click.carservice.admin.model.constants.Constans;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.db.entity.PageResult;
-import org.click.carservice.wx.service.WxAdminService;
+import org.click.carservice.db.enums.UserRole;
 import org.click.carservice.wx.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
@@ -38,7 +37,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -123,7 +121,7 @@ public class AdminAdminController {
             return ResponseUtil.fail("管理员添加失败");
         }
         //如果权限列表中有商户，就添加一个前台商户账号
-        if (Arrays.asList(admin.getRoleIds()).contains(Constans.commercial_tenant_ID)) {
+        if (Arrays.asList(admin.getRoleIds()).contains(UserRole.Role_commercialTenant.getId())) {
             wxUserService.addByAdmin(admin);
         }
         ActionLogHandler.logAuthSucceed("添加管理员", username);

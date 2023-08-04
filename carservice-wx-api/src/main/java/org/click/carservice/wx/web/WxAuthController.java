@@ -280,6 +280,7 @@ public class WxAuthController {
             user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
+            user.setAddTime(LocalDateTime.now());
             user.setSessionKey(sessionKey);
             userService.add(user);
             // 新用户发送注册优惠券
