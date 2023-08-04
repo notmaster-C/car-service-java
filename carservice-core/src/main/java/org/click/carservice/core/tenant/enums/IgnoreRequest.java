@@ -9,6 +9,7 @@ import org.springframework.util.AntPathMatcher;
 public enum IgnoreRequest {
 
     /**多租户请求白名单*/
+    request11("/wx/auth/login_by_default", "用户名密码登录"),
     request10("/admin/storage/uploadFile", "富文本图片上传"),
     request9("/admin/auth/captcha", "登录验证码"),
     request8("/wx/msg/**", "微信消息推送"),

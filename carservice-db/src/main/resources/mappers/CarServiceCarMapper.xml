@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.click.carservice.db.mapper.CarServiceCarMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.click.carservice.db.domain.CarServiceCar">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="car_number" property="carNumber" />
+        <result property="carType"    column="car_type"    />
+        <result property="engineType"    column="engine_type"    />
+        <result column="is_default" property="isDefault" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+        <result column="tenant_id" property="tenantId" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <select id="selectUserCarPage" resultType="org.click.carservice.db.entity.car.UserCarResult">
+        select c.*, u.username, u.nick_name, u.mobile from car_service_car c
+        left join car_service_user u on u.id = c.user_id
+        <where>
+            c.deleted = 0
+            <if test="body.userName != null and body.userName != '' ">
+                and u.username like concat('%', {body.userName}, '%')
+            </if>
+            <if test="body.carNumber != null and body.carNumber != '' ">
+                and c.car_number like concat('%', {body.carNumber}, '%')
+            </if>
+            <if test="body.carType != null and body.carType != '' ">
+                and c.car_type like concat('%', {body.carType}, '%')
+            </if>
+            <if test="body.engineType != null and body.engineType != '' ">
+                and c.engine_type like concat('%', {body.engineType}, '%')
+            </if>
+        </where>
+        ${ew.sqlSegment}
+    </select>
+
+</mapper>
