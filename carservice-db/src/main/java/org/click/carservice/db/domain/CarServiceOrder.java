@@ -202,7 +202,12 @@ public class CarServiceOrder implements Serializable {
     @TableField("`version`")
     @Version
     private Integer version;
-
+    /**
+     * 二维码
+     */
+    @TableField("`QrCode`")
+    @Version
+    private String QrCode;
     /////////////////////////////////
     // 数据库字段常量
     ////////////////////////////////
@@ -347,4 +352,8 @@ public class CarServiceOrder implements Serializable {
      * 更新版本号
      */
     public static final String VERSION = "`version`";
+    /**
+     * 二维码
+     */
+    public static final String QRCODE = "`Qrcode`";
 }

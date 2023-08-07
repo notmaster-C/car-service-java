@@ -136,6 +136,18 @@ public class WxOrderController {
     }
 
     /**
+     * 核销订单
+     *
+     * @param userId 用户ID
+     * @param orderId   订单信息，{ orderId：xxx }
+     * @return 订单操作结果
+     */
+    @PostMapping("verification")
+    public Object verification(@LoginUser String userId, @JsonBody String orderId) {
+        return orderService.confirm(userId, orderId);
+    }
+
+    /**
      * 删除订单
      *
      * @param userId 用户ID

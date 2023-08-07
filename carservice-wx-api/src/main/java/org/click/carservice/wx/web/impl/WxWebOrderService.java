@@ -360,6 +360,7 @@ public class WxWebOrderService {
             if (order.getActualPrice().compareTo(BigDecimal.ZERO) <= 0 || !SystemConfig.isAutoPay()) {
                 //下单成功
                 orderCoreService.orderPaySuccess(order);
+                orderService.createQrcode(order.getId());
             } else {
                 //计算订单总金额
                 allPrice = allPrice.add(order.getActualPrice());
@@ -995,5 +996,8 @@ public class WxWebOrderService {
         ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
 
         return ResponseUtil.ok();
+    }
+    public boolean setQrcode(String orderId){
+        return orderService.createQrcode(orderId);
     }
 }
