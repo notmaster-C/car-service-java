@@ -205,9 +205,8 @@ public class CarServiceOrder implements Serializable {
     /**
      * 二维码
      */
-    @TableField("`QrCode`")
-    @Version
-    private String QrCode;
+    @TableField("`qrcode`")
+    private String qrcode;
     /////////////////////////////////
     // 数据库字段常量
     ////////////////////////////////
@@ -355,5 +354,5 @@ public class CarServiceOrder implements Serializable {
     /**
      * 二维码
      */
-    public static final String QRCODE = "`Qrcode`";
+    public static final String QRCODE = "`qrcode`";
 }

@@ -10,8 +10,7 @@ spring:
   redis:
     database: 0
     port: 6379
-#    host: 192.168.106.132
-    host: 127.0.0.1
+    host: localhost
     password:
     timeout: 50000
     lettuce:
@@ -30,7 +29,7 @@ spring:
         master: # 数据源1配置
           url: jdbc:mysql://localhost:3306/car_service?serverTimezone=GMT%2B8&autoReconnect=false&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true
           username: root
-          password: root
+          password: 123456
           driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       initial-size: 10  # 初始化连接池的连接数
@@ -93,8 +92,6 @@ mybatis-plus:
     #      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     #关闭sql日志
     log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
-
-
 knife4j:
   enable: true
   openapi:
