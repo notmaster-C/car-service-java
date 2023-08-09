@@ -56,7 +56,6 @@ public class WxWebUserService {
     private WxDealingSlipService dealingSlipService;
     @Autowired
     private OrderRandomCode orderRandomCode;
-
     /**
      * 用户个人页面数据
      * <p>

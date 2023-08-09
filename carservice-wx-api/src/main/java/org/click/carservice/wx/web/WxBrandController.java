@@ -11,6 +11,8 @@ package org.click.carservice.wx.web;
  * See the Mulan PSL v2 for more details.
  */
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.service.GoodsCoreService;
@@ -37,6 +39,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/wx/brand")
 @Validated
+@Api(value = "微信-店铺", tags = "微信-店铺")
 public class WxBrandController {
 
     @Autowired
@@ -49,6 +52,7 @@ public class WxBrandController {
      * 店铺列表
      */
     @GetMapping("list")
+    @ApiOperation(value = "分页排序列表")
     public Object list(BrandListBody body) {
         return brandService.list(body);
     }
@@ -60,6 +64,7 @@ public class WxBrandController {
      * @return 品牌详情
      */
     @GetMapping("read")
+    @ApiOperation(value = "用户id,品牌id,品牌信息")
     public Object read(@LoginUser String userId, @JsonBody String brandId) {
         return brandService.read(userId , brandId);
     }
@@ -70,6 +75,7 @@ public class WxBrandController {
      * @return 品牌详情
      */
     @GetMapping("detail")
+    @ApiOperation(value = "用户id,品牌id,品牌详情")
     public Object brandDetail(@LoginUser String userId ,@JsonBody String brandId) {
         return brandService.brandDetail(userId , brandId);
     }
@@ -82,6 +88,7 @@ public class WxBrandController {
      * @return 成功
      */
     @PostMapping("/save")
+    @ApiOperation(value = "添加或修改店铺")
     public Object brandSave(@LoginUser String userId, @Valid @RequestBody BrandSaveBody body) {
         return brandService.brandSave(userId , body);
     }
@@ -90,6 +97,7 @@ public class WxBrandController {
      * 店铺订单列表
      */
     @GetMapping("/order")
+    @ApiOperation(value = "店铺订单列表")
     public Object orderList(@LoginUser String userId, BrandOrderListBody body) {
         return brandService.orderList(userId , body);
     }
@@ -99,6 +107,7 @@ public class WxBrandController {
      * @return 分类
      */
     @GetMapping("/goods/init")
+    @ApiOperation(value = "商品上传参数初始化")
     public Object goodsInit() {
         return brandService.goodsInit();
     }
@@ -108,6 +117,7 @@ public class WxBrandController {
      * @return 分类
      */
     @GetMapping("/goods/category")
+    @ApiOperation(value = "分类列表")
     public Object catList() {
         return brandService.catList();
     }
@@ -116,6 +126,7 @@ public class WxBrandController {
      * 店铺商品列表
      */
     @GetMapping("goods/list")
+    @ApiOperation(value = "店铺商品列表")
     public Object goodsList(BrandGoodsListBody body) {
         return brandService.goodsList(body);
     }
@@ -126,6 +137,7 @@ public class WxBrandController {
      * @return 商品信息
      */
     @GetMapping("/goods/detail")
+    @ApiOperation(value = "店铺商品详情")
     public Object goodsDetail(@NotNull String id) {
         return brandService.goodsDetail(id);
     }
@@ -135,6 +147,7 @@ public class WxBrandController {
      * @param goodsAllinone 商品信息
      */
     @PostMapping("/goods/update")
+    @ApiOperation(value = "编辑店铺商品")
     public Object goodsUpdate(@Valid @RequestBody GoodsAllinone goodsAllinone) {
         return goodsCoreService.goodsUpdate(goodsAllinone);
     }
@@ -145,6 +158,7 @@ public class WxBrandController {
      * @return 成功
      */
     @PostMapping("/goods/delete")
+    @ApiOperation(value = "删除店铺商品")
     public Object goodsDelete(@Valid @RequestBody CarServiceGoods goods) {
         return goodsCoreService.goodsDelete(goods);
     }
@@ -155,6 +169,7 @@ public class WxBrandController {
      * @return 成功
      */
     @PostMapping("/goods/create")
+    @ApiOperation(value = "添加店铺商品")
     public Object goodsCreate(@Valid @RequestBody GoodsAllinone goodsAllinone) {
         return goodsCoreService.goodsCreate(goodsAllinone);
     }

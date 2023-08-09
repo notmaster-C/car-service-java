@@ -50,6 +50,7 @@ import org.click.carservice.wx.service.WxAuthService;
 import org.click.carservice.wx.service.WxUserService;
 import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +66,7 @@ import java.util.Objects;
 
 /**
  * 鉴权服务
+ *
  * @author click
  */
 @Slf4j
@@ -121,12 +123,13 @@ public class WxAuthController {
 
     /**
      * 小程序用户名密码登录
+     *
      * @param body
      * @return
      */
     @PostMapping("login_by_default")
     @ApiOperation("小程序用户名密码登录")
-    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body){
+    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body) {
         CarServiceUser user = userService.auth(body);
         UserInfo userInfo = new UserInfo();
         BeanUtil.copyProperties(user, userInfo);
@@ -142,6 +145,7 @@ public class WxAuthController {
     /**
      * 账号登录
      */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("login")
     public Object login(@LoginUser String userId, @Valid @RequestBody AuthLoginBody body) {
         String username = body.getUsername();
@@ -158,20 +162,23 @@ public class WxAuthController {
             if (ObjectUtil.isNotNull(user) && !admin.getOpenid().equals(user.getOpenid())) {
                 throw new RuntimeException("该管理员账户已绑定其他用户");
             }
-        } else {
-            CarServiceAdmin service = adminService.findById(admin.getId());
-            service.setOpenid(user.getOpenid());
-            if (adminService.updateVersionSelective(service) == 0) {
-                throw new RuntimeException("网络繁忙,请重试");
-            }
         }
+
         //绑定新的管理员账户后，解除原有账户的绑定
+        //先将原有账户解除绑定，否则findByopenid可能查出多个
+        //添加事务
         CarServiceAdmin originalAdmin = adminService.findByOpenId(user.getOpenid());
         if (originalAdmin != null && !originalAdmin.getId().equals(admin.getId())) {
             originalAdmin.setOpenid("");
             if (adminService.updateVersionSelective(originalAdmin) == 0) {
                 throw new RuntimeException("网络繁忙,请重试");
             }
+        }
+
+        CarServiceAdmin service = adminService.findById(admin.getId());
+        service.setOpenid(user.getOpenid());
+        if (adminService.updateVersionSelective(service) == 0) {
+            throw new RuntimeException("网络繁忙,请重试");
         }
 
         // adminInfo
@@ -187,6 +194,7 @@ public class WxAuthController {
      * 请求手机验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param mobile 手机号码
      */
     @PostMapping("captcha/mobile")
@@ -217,6 +225,7 @@ public class WxAuthController {
      * 请求邮箱验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param username 邮箱 { username }
      */
     @PostMapping("captcha/mail")
@@ -271,6 +280,7 @@ public class WxAuthController {
             user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
+            user.setAddTime(LocalDateTime.now());
             user.setSessionKey(sessionKey);
             userService.add(user);
             // 新用户发送注册优惠券
@@ -316,6 +326,7 @@ public class WxAuthController {
 
     /**
      * 账号注册
+     *
      * @param body    请求内容
      * @param request @Ignore
      * @return 登录结果
@@ -357,7 +368,8 @@ public class WxAuthController {
             if (userList.size() == 1) {
                 CarServiceUser checkUser = userList.get(0);
                 String checkPassword = checkUser.getPassword();
-                if (!checkPassword.equals(openId)) {
+                if (!checkPassword.equals(password)
+                        || !checkUser.getUsername().equals(body.getUserName())) {
                     return ResponseUtil.fail("openid已绑定账号");
                 }
             }
@@ -378,6 +390,8 @@ public class WxAuthController {
         user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
         user.setLastLoginTime(LocalDateTime.now());
         user.setLastLoginIp(IpUtil.getIpAddr(request));
+        user.setAddTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
         userService.add(user);
 
         // userInfo
@@ -395,7 +409,8 @@ public class WxAuthController {
 
     /**
      * 账号密码重置
-     * @param body    请求内容
+     *
+     * @param body 请求内容
      * @return 登录结果
      */
     @PostMapping("reset")
@@ -428,7 +443,8 @@ public class WxAuthController {
 
     /**
      * 账号手机号码重置
-     * @param userId  @Ignore
+     *
+     * @param userId @Ignore
      * @param body   请求内容
      */
     @PostMapping("resetPhone")
@@ -462,8 +478,9 @@ public class WxAuthController {
 
     /**
      * 账号信息更新
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
     @PostMapping("profile")
     public Object profile(@LoginUser String userId, @Valid @RequestBody UserInfo body, HttpServletRequest request) {
@@ -479,8 +496,9 @@ public class WxAuthController {
 
     /**
      * 微信手机号码绑定
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
     @PostMapping("bindPhone")
     public Object bindPhone(@LoginUser String userId, @Valid @RequestBody AuthBindPhoneBody body) {
