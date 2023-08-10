@@ -51,5 +51,10 @@ public class WxAdminService extends AdminServiceImpl {
         return queryAll(wrapper);
     }
 
-
+    @Cacheable(sync = true)
+    public CarServiceAdmin findByMobile(String mobile) {
+        QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceAdmin.MOBILE, mobile);
+        return getOne(wrapper);
+    }
 }
