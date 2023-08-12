@@ -1,16 +1,25 @@
 package org.click.carservice.admin.web;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
+import org.click.carservice.admin.model.insurance.model.InsuranceInfoImportBody;
+import org.click.carservice.admin.model.insurance.model.InsuranceServiceImportBody;
 import org.click.carservice.admin.service.AdminInsuranceInfoService;
+import org.click.carservice.core.utils.poi.ExcelUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceInsuranceInfo;
 import org.click.carservice.db.entity.PageResult;
 import org.click.carservice.db.entity.car.CarServiceInsuranceInfoParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 保单信息Controller
@@ -73,4 +82,43 @@ public class AdminInsuranceInfoController
     {
         return ResponseUtil.ok(carServiceInsuranceInfoService.updateCarServiceInsuranceInfo(carServiceInsuranceInfo));
     }
+
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, CarServiceInsuranceInfoParam carServiceInsuranceInfo)
+    {
+        List<CarServiceInsuranceInfo> list = carServiceInsuranceInfoService.selectCarServiceInsuranceInfoList(carServiceInsuranceInfo);
+        List<InsuranceInfoImportBody> insuranceInfoImportBodies = new ArrayList<>();
+        InsuranceInfoImportBody insuranceInfoImportBody = new InsuranceInfoImportBody();
+        CarServiceInsuranceInfo carServiceInsuranceInfo1 = list.get(0);
+        BeanUtil.copyProperties(carServiceInsuranceInfo1, insuranceInfoImportBody);
+        List<InsuranceServiceImportBody> insuranceServiceImportBodies = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            InsuranceServiceImportBody insuranceServiceImportBody = new InsuranceServiceImportBody();
+            insuranceServiceImportBody.setServiceCode("100001" + i);
+            insuranceServiceImportBody.setServiceName("dsahiduashd" + i);
+            insuranceServiceImportBody.setServiceTotal(10L * i);
+            insuranceServiceImportBodies.add(insuranceServiceImportBody);
+        }
+        insuranceInfoImportBody.setInsuranceServiceImportBodyList(insuranceServiceImportBodies);
+        insuranceInfoImportBodies.add(insuranceInfoImportBody);
+        System.out.println(insuranceInfoImportBodies);
+        ExcelUtil<InsuranceInfoImportBody> util = new ExcelUtil<InsuranceInfoImportBody>(InsuranceInfoImportBody.class);
+        util.exportExcel(response, insuranceInfoImportBodies, "用户数据");
+    }
+
+    /**
+     * 导入保单信息
+     * @param file
+     * @return
+     * @throws Exception
+     */
+//    @SaCheckPermission("admin:insurance:import")
+    @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "导入")
+    @PostMapping("/importData")
+    @ApiOperation("导入保单信息")
+    public ResponseUtil importData(MultipartFile file) throws Exception
+    {
+        return ResponseUtil.ok(carServiceInsuranceInfoService.importInsuranceData(file));
+    }
+
 }

@@ -43,5 +43,19 @@ public enum UserGender implements Serializable {
         this.depict = depict;
     }
 
-
+    /**
+     * 根据描述获取code
+     * @param depict
+     * @return
+     */
+    public static Byte parseCode(String depict) {
+        if (depict != null) {
+            for (UserGender item : values()) {
+                if (item.depict.equals(depict)) {
+                    return item.status;
+                }
+            }
+        }
+        throw new IllegalStateException("depict不支持");
+    }
 }

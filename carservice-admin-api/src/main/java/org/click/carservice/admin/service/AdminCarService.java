@@ -23,6 +23,5 @@ public class AdminCarService extends CarServiceCarServiceImpl {
         QueryWrapper<CarServiceCar> queryWrapper = startPage(body);
         List<UserCarResult> list = carServiceCarMapper.selectUserCarPage(body, queryWrapper);
         return list;
-
     }
 }

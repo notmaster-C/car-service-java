@@ -9,6 +9,9 @@
         <result column="car_number" property="carNumber" />
         <result property="carType"    column="car_type"    />
         <result property="engineType"    column="engine_type"    />
+        <result property="carAge"    column="car_age"    />
+        <result property="carModel"    column="car_model"    />
+        <result property="carProperties"    column="car_properties"    />
         <result column="is_default" property="isDefault" />
         <result column="add_time" property="addTime" />
         <result column="update_time" property="updateTime" />

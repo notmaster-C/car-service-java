@@ -18,16 +18,6 @@
         <result property="version"    column="version"    />
     </resultMap>
 
-    <resultMap id="CarServiceInsuranceServiceCarServiceInsuranceServiceOrderResult" type="org.click.carservice.db.domain.CarServiceInsuranceService" extends="CarServiceInsuranceServiceResult">
-        <collection property="carServiceInsuranceServiceOrderList" notNullColumn="sub_id" javaType="java.util.List" resultMap="CarServiceInsuranceServiceOrderResult" />
-    </resultMap>
-
-    <resultMap type="org.click.carservice.db.domain.CarServiceInsuranceServiceOrder" id="CarServiceInsuranceServiceOrderResult">
-        <result property="id"    column="sub_id"    />
-        <result property="insuranceServiceId"    column="sub_insurance_service_id"    />
-        <result property="orderId"    column="sub_order_id"    />
-    </resultMap>
-
     <sql id="selectCarServiceInsuranceServiceVo">
         select id, insurance_info_id, service_name, service_code, service_total, service_used, add_time, update_time, deleted, tenant_id, version from car_service_insurance_service
     </sql>

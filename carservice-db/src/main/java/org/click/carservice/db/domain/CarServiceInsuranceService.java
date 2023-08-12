@@ -74,9 +74,4 @@ public class CarServiceInsuranceService {
     @ApiModelProperty("更新版本号")
     private Long version;
 
-    /** 保险服务项-订单信息 */
-    @TableField(exist = false)
-    @ApiModelProperty("保险服务项-订单信息")
-    private List<CarServiceInsuranceServiceOrder> carServiceInsuranceServiceOrderList;
-
 }
