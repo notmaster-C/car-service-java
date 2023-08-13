@@ -26,7 +26,7 @@ public class WxCarController {
     @Autowired
     private WxCarService carService;
 
-    @GetMapping("/user")
+    @GetMapping("/list")
     @ApiOperation(value = "用户id查询用户所拥有的车辆牌照信息")
     public ResponseUtil<List<CarServiceCar>> list(@LoginUser String userId) {
         return ResponseUtil.ok(carService.queryByUid(userId));
@@ -37,7 +37,7 @@ public class WxCarController {
      * @param carServiceCar
      * @return
      */
-    @PostMapping()
+    @PostMapping("add")
     @ApiOperation(value = "新增车牌信息")
     public ResponseUtil add(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
         carServiceCar.setUserId(userId);
@@ -46,9 +46,22 @@ public class WxCarController {
     }
 
     /**
+     * 修改车牌
+     * @param userId
+     * @param carServiceCar
+     * @return
+     */
+    @PostMapping("/edit")
+    @ApiOperation(value = "修改车牌信息")
+    public ResponseUtil edit(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
+        carService.edit(userId, carServiceCar);
+        return ResponseUtil.ok();
+    }
+
+    /**
      * 删除用户车牌信息
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiOperation("删除用户车牌信息")
     public ResponseUtil remove(@LoginUser String userId, @PathVariable String id) {
         return ResponseUtil.ok(carService.deleteCarServiceCarById(userId, id));

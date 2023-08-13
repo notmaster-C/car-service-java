@@ -53,4 +53,13 @@ public class WxCarService extends CarServiceCarServiceImpl {
                 .eq(CarServiceCar::getId, id);
         return update(updateWrapper) ? 1 : 0;
     }
+
+    /**
+     * 修改
+     * @param userId
+     * @param carServiceCar
+     */
+    public void edit(String userId, CarServiceCar carServiceCar) {
+        updateById(carServiceCar);
+    }
 }
