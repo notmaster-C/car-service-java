@@ -12,4 +12,5 @@ import org.click.carservice.db.mybatis.IBaseService;
  */
 public interface IAdminService extends IBaseService<CarServiceAdmin> {
 
+
 }

@@ -50,6 +50,7 @@ import org.click.carservice.wx.service.WxAuthService;
 import org.click.carservice.wx.service.WxUserService;
 import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +66,7 @@ import java.util.Objects;
 
 /**
  * 鉴权服务
+ *
  * @author click
  */
 @Slf4j
@@ -121,12 +123,13 @@ public class WxAuthController {
 
     /**
      * 小程序用户名密码登录
+     *
      * @param body
      * @return
      */
     @PostMapping("login_by_default")
     @ApiOperation("小程序用户名密码登录")
-    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body){
+    public ResponseUtil<WxLoginResult> login(@Valid @RequestBody AuthLoginBody body) {
         CarServiceUser user = userService.auth(body);
         UserInfo userInfo = new UserInfo();
         BeanUtil.copyProperties(user, userInfo);
@@ -142,7 +145,9 @@ public class WxAuthController {
     /**
      * 账号登录
      */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("login")
+    @ApiOperation("账号登录")
     public Object login(@LoginUser String userId, @Valid @RequestBody AuthLoginBody body) {
         String username = body.getUsername();
         String password = body.getPassword();
@@ -154,24 +159,28 @@ public class WxAuthController {
         AuthenticationInfo.login(admin, body.getCode());
         //登陆成功
         CarServiceUser user = userService.findById(userId);
-        if (StringUtils.hasText(admin.getOpenid())) {
-            if (ObjectUtil.isNotNull(user) && !admin.getOpenid().equals(user.getOpenid())) {
+
+        if (StringUtils.hasText(admin.getMobile())) {
+            if (ObjectUtil.isNotNull(user) && !admin.getMobile().equals(user.getMobile())) {
                 throw new RuntimeException("该管理员账户已绑定其他用户");
             }
-        } else {
-            CarServiceAdmin service = adminService.findById(admin.getId());
-            service.setOpenid(user.getOpenid());
-            if (adminService.updateVersionSelective(service) == 0) {
-                throw new RuntimeException("网络繁忙,请重试");
-            }
         }
+
         //绑定新的管理员账户后，解除原有账户的绑定
-        CarServiceAdmin originalAdmin = adminService.findByOpenId(user.getOpenid());
+        //先将原有账户解除绑定，否则findByopenid可能查出多个
+        //添加事务
+        CarServiceAdmin originalAdmin = adminService.findByMobile(user.getMobile());
         if (originalAdmin != null && !originalAdmin.getId().equals(admin.getId())) {
-            originalAdmin.setOpenid("");
+            originalAdmin.setMobile("");
             if (adminService.updateVersionSelective(originalAdmin) == 0) {
                 throw new RuntimeException("网络繁忙,请重试");
             }
+        }
+
+        CarServiceAdmin service = adminService.findById(admin.getId());
+        service.setMobile(user.getMobile());
+        if (adminService.updateVersionSelective(service) == 0) {
+            throw new RuntimeException("网络繁忙,请重试");
         }
 
         // adminInfo
@@ -187,10 +196,12 @@ public class WxAuthController {
      * 请求手机验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param mobile 手机号码
      */
     @PostMapping("captcha/mobile")
     @RequestRateLimiter(rate = 10, rateInterval = 1, timeUnit = RateIntervalUnit.DAYS, errMsg = "验证码申请超过单日限制")
+    @ApiOperation("请求手机验证码")
     public Object mobileCaptcha(@LoginUser String userId, @JsonBody String mobile) {
         if (Objects.isNull(userId)) {
             return ResponseUtil.unlogin();
@@ -209,7 +220,8 @@ public class WxAuthController {
             mobileService.notifySmsTemplate(mobile, NotifyType.CAPTCHA, new String[]{code});
             return ResponseUtil.ok("验证码发送成功，请注意查收");
         }
-        return ResponseUtil.ok("验证码发送成功，请注意查收" + "登录验证码：" + code);
+//        return ResponseUtil.ok("验证码发送成功，请注意查收" + "登录验证码：" + code);
+        return ResponseUtil.ok("验证码发送成功，请注意查收");
     }
 
 
@@ -217,10 +229,12 @@ public class WxAuthController {
      * 请求邮箱验证码
      * TODO
      * 这里需要一定机制防止短信验证码被滥用
+     *
      * @param username 邮箱 { username }
      */
     @PostMapping("captcha/mail")
     @RequestRateLimiter(rate = 10, rateInterval = 1, timeUnit = RateIntervalUnit.DAYS, errMsg = "验证码申请超过单日限制")
+    @ApiOperation("请求邮箱验证码")
     public Object mailCaptcha(@JsonBody String username) {
         List<CarServiceAdmin> adminList = adminService.findAdmin(username);
         if (adminList.size() != 1) {
@@ -242,7 +256,9 @@ public class WxAuthController {
 
     /**
      * 微信登录
+     *
      */
+    @ApiOperation("微信登录")
     @PostMapping("login_by_weixin")
     public Object loginByWeixin(@Valid @RequestBody WxLoginInfo wxLoginInfo, HttpServletRequest request) {
         String wxCode = wxLoginInfo.getWxCode();
@@ -253,11 +269,12 @@ public class WxAuthController {
         WxAuthResult wxAuth = wxAuthService.wxAuth(wxCode);
         String openId = wxAuth.getOpenId();
         String sessionKey = wxAuth.getSessionKey();
-//        String mobile = wxAuthService.getPhoneNumber(phoneCode);
-        String mobile = "17396228815";
+        String mobile = wxAuthService.getPhoneNumber(phoneCode);
+//        String mobile = "17396228815";
         userInfo.setOpenId(openId);
         //获取用户信息
-        CarServiceUser user = userService.queryByOid(openId);
+//        CarServiceUser user = userService.queryByOid(openId);
+        CarServiceUser user=userService.queryByMobile(mobile).get(0);
         if (user == null) {
             user = new CarServiceUser();
             user.setUsername(mobile);
@@ -271,6 +288,7 @@ public class WxAuthController {
             user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
+            user.setAddTime(LocalDateTime.now());
             user.setSessionKey(sessionKey);
             userService.add(user);
             // 新用户发送注册优惠券
@@ -316,10 +334,12 @@ public class WxAuthController {
 
     /**
      * 账号注册
+     *
      * @param body    请求内容
      * @param request @Ignore
      * @return 登录结果
      */
+    @ApiOperation("账号注册")
     @PostMapping("register")
     public Object register(@Valid @RequestBody AuthRegisterBody body, HttpServletRequest request) {
         String password = body.getPassword();
@@ -357,7 +377,8 @@ public class WxAuthController {
             if (userList.size() == 1) {
                 CarServiceUser checkUser = userList.get(0);
                 String checkPassword = checkUser.getPassword();
-                if (!checkPassword.equals(openId)) {
+                if (!checkPassword.equals(password)
+                        || !checkUser.getUsername().equals(body.getUserName())) {
                     return ResponseUtil.fail("openid已绑定账号");
                 }
             }
@@ -378,6 +399,8 @@ public class WxAuthController {
         user.setStatus(UserStatus.STATUS_NORMAL.getStatus());
         user.setLastLoginTime(LocalDateTime.now());
         user.setLastLoginIp(IpUtil.getIpAddr(request));
+        user.setAddTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
         userService.add(user);
 
         // userInfo
@@ -395,9 +418,11 @@ public class WxAuthController {
 
     /**
      * 账号密码重置
-     * @param body    请求内容
+     *
+     * @param body 请求内容
      * @return 登录结果
      */
+    @ApiOperation("账号的-密码-重置")
     @PostMapping("reset")
     public Object reset(@Valid @RequestBody AuthResetBody body) {
         String code = body.getCode();
@@ -428,11 +453,14 @@ public class WxAuthController {
 
     /**
      * 账号手机号码重置
-     * @param userId  @Ignore
+     *
+     * @param userId @Ignore
      * @param body   请求内容
      */
+    @Deprecated
+    @ApiOperation("账号-手机号-重置")
     @PostMapping("resetPhone")
-    public Object resetPhone(@LoginUser String userId, @Valid @RequestBody AuthResetBody body) {
+    public Object resetPhone(@LoginUser String userId, @Valid @RequestBody AuthResetBody body)  {
         String code = body.getCode();
         String mobile = body.getMobile();
         String password = body.getPassword();
@@ -462,12 +490,19 @@ public class WxAuthController {
 
     /**
      * 账号信息更新
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
+    @ApiOperation("账号信息更新")
     @PostMapping("profile")
     public Object profile(@LoginUser String userId, @Valid @RequestBody UserInfo body, HttpServletRequest request) {
         CarServiceUser user = userService.findById(userId);
+        if(StringUtils.hasText(user.getMobile())){
+            if(!user.getMobile().equals(body.getMobile())){
+                return ResponseUtil.fail("不能修改手机号");
+            }
+        }
         BeanUtil.copyProperties(body, user);
         user.setLastLoginTime(LocalDateTime.now());
         user.setLastLoginIp(IpUtil.getIpAddr(request));
@@ -479,10 +514,12 @@ public class WxAuthController {
 
     /**
      * 微信手机号码绑定
-     * @param userId  @Ignore
-     * @param body    请求内容
+     *
+     * @param userId @Ignore
+     * @param body   请求内容
      */
     @PostMapping("bindPhone")
+    @ApiOperation("微信手机号码绑定")
     public Object bindPhone(@LoginUser String userId, @Valid @RequestBody AuthBindPhoneBody body) {
         String iv = body.getIv();
         String encryptedData = body.getEncryptedData();
@@ -498,6 +535,7 @@ public class WxAuthController {
     /**
      * 退出登陆
      */
+    @ApiOperation("退出登录")
     @PostMapping("logout")
     public Object logout() {
         return ResponseUtil.unlogin();

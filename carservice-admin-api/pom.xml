@@ -30,6 +30,10 @@
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.click</groupId>
+            <artifactId>carservice-wx-api</artifactId>
+        </dependency>
 
     </dependencies>
 

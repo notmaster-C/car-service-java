@@ -31,6 +31,7 @@ import java.util.List;
 
 /**
  * 用户服务
+ *
  * @author click
  */
 @Service
@@ -116,14 +117,15 @@ public class WxUserService extends UserServiceImpl {
 
     /**
      * 小程序用户名密码登录
+     *
      * @param body
      * @return
      */
     public CarServiceUser auth(AuthLoginBody body) {
         CarServiceUser user = selectByUserName(body.getUsername());
         // 用户是否存在
-        if (ObjectUtil.isNull(user)){
-            throw new RuntimeException("用户已存在");
+        if (ObjectUtil.isNull(user)) {
+            throw new RuntimeException("用户不存在");
         }
         // 验证密码
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -135,10 +137,11 @@ public class WxUserService extends UserServiceImpl {
 
     /**
      * 用户名查询用户
+     *
      * @param userName
      * @return
      */
-    public CarServiceUser selectByUserName(String userName){
+    public CarServiceUser selectByUserName(String userName) {
         LambdaQueryWrapper<CarServiceUser> queryWrapper = Wrappers.lambdaQuery(CarServiceUser.class)
                 .eq(StrUtil.isNotBlank(userName), CarServiceUser::getUsername, userName);
         return getOne(queryWrapper);
