@@ -10,6 +10,8 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
@@ -20,6 +22,8 @@ import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -33,6 +37,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/wx/order")
 @Validated
+@Api(value = "微信-订单", tags = "微信-订单")
 public class WxOrderController {
 
     @Autowired
@@ -42,6 +47,7 @@ public class WxOrderController {
      * 订单列表
      */
     @GetMapping("list")
+    @ApiOperation(value = "用户id查询用户所拥有的订单信息")
     public Object list(@LoginUser String userId, OrderListBody body) {
         return orderService.list(userId, body);
     }
@@ -54,6 +60,7 @@ public class WxOrderController {
      * @return 订单详情
      */
     @GetMapping("detail")
+    @ApiOperation(value = "用户id和订单id查询订单详细信息信息")
     public Object detail(@LoginUser String userId, @NotNull String orderId) {
         return orderService.detail(userId, orderId);
     }
@@ -66,6 +73,7 @@ public class WxOrderController {
      * @return 提交订单操作结果
      */
     @PostMapping("submit")
+    @ApiOperation(value = "用户id,订单信息提交订单信息")
     @RequestRateLimiter(rate = 1, rateInterval = 3, timeUnit = RateIntervalUnit.SECONDS , errMsg = "你有一笔相同订单已提交，请等待")
     public Object submit(@LoginUser String userId, @Valid @RequestBody OrderSubmitBody body) {
         return orderService.submit(userId, body);
@@ -80,6 +88,7 @@ public class WxOrderController {
      * @return 取消订单操作结果
      */
     @PostMapping("cancel")
+    @ApiOperation(value = "用户id,订单ID取消订单")
     public Object cancel(@LoginUser String userId, @JsonBody String orderId) {
         return orderService.cancel(userId, orderId);
     }
@@ -92,6 +101,7 @@ public class WxOrderController {
      * @return 支付订单ID
      */
     @PostMapping("prepay")
+    @ApiOperation(value = "用户id,订单ID列表预支付")
     public Object prepay(@LoginUser String userId, @JsonBody List<String> orderIds, HttpServletRequest request) {
         return orderService.prepay(userId, orderIds, request);
     }
@@ -106,6 +116,7 @@ public class WxOrderController {
      * @return 操作结果
      */
     @PostMapping("pay-notify")
+    @ApiOperation(value = "订单预支付回调")
     public Object payNotify(HttpServletRequest request) {
         return orderService.payNotify(request);
     }
@@ -119,6 +130,7 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("refund")
+    @ApiOperation(value = "用户id,订单ID申请退款")
     public Object refund(@LoginUser String userId, @JsonBody String orderId) {
         return orderService.refund(userId, orderId);
     }
@@ -128,24 +140,15 @@ public class WxOrderController {
      *
      * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
+     * @param file   核销照片，MultipartFile
      * @return 订单操作结果
      */
     @PostMapping("confirm")
-    public Object confirm(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.confirm(userId, orderId);
+    @ApiOperation(value = "用户验收，确认收货")
+    public Object confirm(@LoginUser String userId, @JsonBody String orderId, @JsonBody MultipartFile file) {
+        return orderService.confirm(userId, orderId,file);
     }
 
-    /**
-     * 核销订单
-     *
-     * @param userId 用户ID
-     * @param orderId   订单信息，{ orderId：xxx }
-     * @return 订单操作结果
-     */
-    @PostMapping("verification")
-    public Object verification(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.confirm(userId, orderId);
-    }
 
     /**
      * 删除订单
@@ -155,6 +158,7 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("delete")
+    @ApiOperation(value = "删除订单")
     public Object delete(@LoginUser String userId, @JsonBody String orderId) {
         return orderService.delete(userId, orderId);
     }
@@ -167,6 +171,7 @@ public class WxOrderController {
      * @return 待评价订单商品信息
      */
     @GetMapping("goods")
+    @ApiOperation(value = "获取待评价商品信息")
     public Object goods(@LoginUser String userId, @NotNull String goodsId) {
         return orderService.goods(userId, goodsId);
     }
@@ -179,6 +184,7 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("comment")
+    @ApiOperation(value = "评价订单商品")
     public Object comment(@LoginUser String userId, @Valid @RequestBody OrderCommentBody body) {
         return orderService.comment(userId, body);
     }
@@ -190,6 +196,7 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("admin/refund")
+    @ApiOperation(value = "订单退款")
     public Object adminRefund(@LoginUser String userId, @Valid @RequestBody OrderAdminRefundBody body) {
         return orderService.adminRefund(userId , body);
     }
@@ -201,18 +208,20 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("admin/cancel")
+    @ApiOperation(value = "订单商家取消订单")
     public Object adminCancel(@LoginUser String userId, @JsonBody String orderId) {
         return orderService.adminCancel(userId, orderId);
     }
 
     /**
-     * 发货
-     *
+     * 商品核销
+     *v0发货
      * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      */
     @PostMapping("admin/ship")
-    public Object adminShip(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
+    @ApiOperation(value = "商品核销")
+    public Object adminUse(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
         return orderService.adminShip(userId , body);
     }
 

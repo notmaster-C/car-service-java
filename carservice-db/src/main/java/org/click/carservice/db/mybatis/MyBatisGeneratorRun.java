@@ -72,7 +72,7 @@ public class MyBatisGeneratorRun {
                     builder.addInclude(getTables("car_service_order_verification"))
                             // Entity 策略配置
                             .entityBuilder()
-                            .formatFileName("carservice%s")
+                            .formatFileName("%s")
                             .versionColumnName("version")
                             .versionPropertyName("version")
                             .logicDeleteColumnName("deleted")
