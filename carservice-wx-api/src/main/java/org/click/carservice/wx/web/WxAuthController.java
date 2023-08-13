@@ -100,8 +100,7 @@ public class WxAuthController {
         if (user == null) {
             return ResponseUtil.fail("授权失败1");
         }
-        CarServiceAdmin admin=adminService.findByMobile(user.getMobile());
-//        CarServiceAdmin admin = adminService.findByOpenId(user.getOpenid());
+        CarServiceAdmin admin = adminService.findByOpenId(user.getOpenid());
         if (admin == null) {
             return ResponseUtil.fail("授权失败2");
         }
@@ -202,6 +201,7 @@ public class WxAuthController {
      */
     @PostMapping("captcha/mobile")
     @RequestRateLimiter(rate = 10, rateInterval = 1, timeUnit = RateIntervalUnit.DAYS, errMsg = "验证码申请超过单日限制")
+    @ApiOperation("请求手机验证码")
     public Object mobileCaptcha(@LoginUser String userId, @JsonBody String mobile) {
         if (Objects.isNull(userId)) {
             return ResponseUtil.unlogin();
@@ -234,6 +234,7 @@ public class WxAuthController {
      */
     @PostMapping("captcha/mail")
     @RequestRateLimiter(rate = 10, rateInterval = 1, timeUnit = RateIntervalUnit.DAYS, errMsg = "验证码申请超过单日限制")
+    @ApiOperation("请求邮箱验证码")
     public Object mailCaptcha(@JsonBody String username) {
         List<CarServiceAdmin> adminList = adminService.findAdmin(username);
         if (adminList.size() != 1) {
@@ -257,6 +258,7 @@ public class WxAuthController {
      * 微信登录
      *
      */
+    @ApiOperation("微信登录")
     @PostMapping("login_by_weixin")
     public Object loginByWeixin(@Valid @RequestBody WxLoginInfo wxLoginInfo, HttpServletRequest request) {
         String wxCode = wxLoginInfo.getWxCode();
@@ -337,6 +339,7 @@ public class WxAuthController {
      * @param request @Ignore
      * @return 登录结果
      */
+    @ApiOperation("账号注册")
     @PostMapping("register")
     public Object register(@Valid @RequestBody AuthRegisterBody body, HttpServletRequest request) {
         String password = body.getPassword();
@@ -532,6 +535,7 @@ public class WxAuthController {
     /**
      * 退出登陆
      */
+    @ApiOperation("退出登录")
     @PostMapping("logout")
     public Object logout() {
         return ResponseUtil.unlogin();

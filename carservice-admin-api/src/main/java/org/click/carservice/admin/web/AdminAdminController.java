@@ -53,9 +53,6 @@ public class AdminAdminController {
     @Autowired
     private AdminAdminService adminService;
 
-    @Autowired
-    private WxUserService wxUserService;
-
     /**
      * 查询
      */
@@ -122,7 +119,7 @@ public class AdminAdminController {
         }
         //如果权限列表中有商户，就添加一个前台商户账号
         if (Arrays.asList(admin.getRoleIds()).contains(UserRole.Role_commercialTenant.getId())) {
-            wxUserService.addByAdmin(admin);
+            adminService.addWxByAdmin(admin);
         }
         ActionLogHandler.logAuthSucceed("添加管理员", username);
         return ResponseUtil.ok(admin);
