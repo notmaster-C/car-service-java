@@ -14,6 +14,7 @@ package org.click.carservice.wx.web;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -269,7 +270,10 @@ public class WxAuthController {
         WxAuthResult wxAuth = wxAuthService.wxAuth(wxCode);
         String openId = wxAuth.getOpenId();
         String sessionKey = wxAuth.getSessionKey();
-        String mobile = wxAuthService.getPhoneNumber(phoneCode);
+//        String mobile = wxAuthService.getPhoneNumber(phoneCode);
+        String phone = String.valueOf(request.getHeader("phone"));
+        String mobile = StrUtil.isNotBlank(phone) ? phone : "17396228815";
+        userInfo.setOpenId(openId);
 //        String mobile = "17396228815";
         userInfo.setOpenId(openId);
         //获取用户信息

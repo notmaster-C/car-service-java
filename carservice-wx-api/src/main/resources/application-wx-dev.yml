@@ -1,0 +1,7 @@
+logging:
+  level:
+    root: ERROR
+    org.springframework: ERROR
+    org.mybatis: ERROR
+    org.click.carservice.wx: DEBUG
+    org.click.carservice: ERROR

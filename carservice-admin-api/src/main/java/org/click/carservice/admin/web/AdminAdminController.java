@@ -20,7 +20,6 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.db.entity.PageResult;
 import org.click.carservice.db.enums.UserRole;
-import org.click.carservice.wx.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
