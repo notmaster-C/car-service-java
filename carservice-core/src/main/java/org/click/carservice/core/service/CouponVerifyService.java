@@ -66,7 +66,7 @@ public class CouponVerifyService {
 
         // 检查是否超期
         Short timeType = coupon.getTimeType();
-        Short days = coupon.getDays();
+        Integer days = coupon.getDays();
         LocalDateTime now = LocalDateTime.now();
         if (timeType.equals(CouponTimeType.TIME_TYPE_TIME.getStatus())) {
             if (now.isBefore(coupon.getStartTime()) || now.isAfter(coupon.getEndTime())) {

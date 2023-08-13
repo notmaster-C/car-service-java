@@ -12,9 +12,11 @@ import org.click.carservice.db.mapper.CarServiceInsuranceInfoMapper;
 import org.click.carservice.db.service.ICarServiceInsuranceInfoService;
 import org.click.carservice.db.service.ICarServiceInsuranceServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +32,9 @@ public class CarServiceInsuranceInfoServiceImpl extends ServiceImpl<CarServiceIn
 
     @Autowired
     private CarServiceInsuranceInfoMapper carServiceInsuranceInfoMapper;
-    @Autowired
+
+    @Resource
+    @Qualifier("carServiceInsuranceServiceServiceImpl")
     private ICarServiceInsuranceServiceService carServiceInsuranceServiceService;
     /**
      * 查询保单信息

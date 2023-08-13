@@ -35,7 +35,9 @@ public enum CouponType implements Serializable {
     /**
      * 兑换
      */
-    TYPE_CODE((short) 2, "兑换");
+    TYPE_CODE((short) 2, "兑换"),
+
+    TYPE_THIRD_PARTY((short) 3, "第三方赠送");
 
 
     /**

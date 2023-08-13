@@ -100,7 +100,7 @@ public class CarServiceCoupon implements Serializable {
      * 基于领取时间的有效天数days。
      */
     @TableField("`days`")
-    private Short days;
+    private Integer days;
     /**
      * 使用券开始时间
      */

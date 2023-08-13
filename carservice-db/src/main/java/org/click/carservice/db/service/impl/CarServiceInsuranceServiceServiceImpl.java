@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.click.carservice.db.domain.CarServiceInsuranceService;
-import org.click.carservice.db.domain.CarServiceInsuranceServiceOrder;
 import org.click.carservice.db.mapper.CarServiceInsuranceServiceMapper;
-import org.click.carservice.db.service.ICarServiceInsuranceServiceOrderService;
 import org.click.carservice.db.service.ICarServiceInsuranceServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +27,7 @@ public class CarServiceInsuranceServiceServiceImpl extends ServiceImpl<CarServic
 {
     @Autowired
     private CarServiceInsuranceServiceMapper carServiceInsuranceServiceMapper;
-    @Autowired
-    private ICarServiceInsuranceServiceOrderService carServiceInsuranceServiceOrderService;
+
     /**
      * 查询保险信息服务项
      *
@@ -41,8 +38,6 @@ public class CarServiceInsuranceServiceServiceImpl extends ServiceImpl<CarServic
     public CarServiceInsuranceService selectCarServiceInsuranceServiceById(String id)
     {
         CarServiceInsuranceService carServiceInsuranceService = this.getBaseMapper().selectById(id);
-        List<CarServiceInsuranceServiceOrder> CarServiceInsuranceServiceOrderList = carServiceInsuranceServiceOrderService.getBaseMapper().selectList(Wrappers.<CarServiceInsuranceServiceOrder>lambdaQuery().eq(CarServiceInsuranceServiceOrder::getInsuranceServiceId, id));
-        carServiceInsuranceService.setCarServiceInsuranceServiceOrderList(CollectionUtil.isEmpty(CarServiceInsuranceServiceOrderList) ? new ArrayList<>() : CarServiceInsuranceServiceOrderList);
         return carServiceInsuranceService;
     }
 
@@ -96,7 +91,6 @@ public class CarServiceInsuranceServiceServiceImpl extends ServiceImpl<CarServic
     public int insertCarServiceInsuranceService(CarServiceInsuranceService carServiceInsuranceService)
     {
         int rows = this.getBaseMapper().insert(carServiceInsuranceService);
-        insertCarServiceInsuranceServiceOrder(carServiceInsuranceService);
         return rows;
     }
 
@@ -111,36 +105,6 @@ public class CarServiceInsuranceServiceServiceImpl extends ServiceImpl<CarServic
     public int updateCarServiceInsuranceService(CarServiceInsuranceService carServiceInsuranceService)
     {
         carServiceInsuranceService.setUpdateTime(new Date());
-        // 删除子表数据
-        carServiceInsuranceServiceOrderService.getBaseMapper().delete(Wrappers.<CarServiceInsuranceServiceOrder>lambdaQuery().eq(CarServiceInsuranceServiceOrder::getInsuranceServiceId, carServiceInsuranceService.getId()));
-        // 新增子表数据
-        insertCarServiceInsuranceServiceOrder(carServiceInsuranceService);
         return this.getBaseMapper().updateById(carServiceInsuranceService);
-    }
-
-
-    /**
-     * 新增保险服务项-订单信息
-     *
-     * @param carServiceInsuranceService 保险信息服务项对象
-     */
-    public void insertCarServiceInsuranceServiceOrder(CarServiceInsuranceService carServiceInsuranceService)
-    {
-        List<CarServiceInsuranceServiceOrder> carServiceInsuranceServiceOrderList = carServiceInsuranceService.getCarServiceInsuranceServiceOrderList();
-        String id = carServiceInsuranceService.getId();
-        if (CollectionUtil.isNotEmpty(carServiceInsuranceServiceOrderList))
-        {
-            List<CarServiceInsuranceServiceOrder> list = new ArrayList<CarServiceInsuranceServiceOrder>();
-            for (CarServiceInsuranceServiceOrder carServiceInsuranceServiceOrder : carServiceInsuranceServiceOrderList)
-            {
-                // 子表中设置父表id
-                carServiceInsuranceServiceOrder.setInsuranceServiceId(id);
-                list.add(carServiceInsuranceServiceOrder);
-            }
-            if (list.size() > 0)
-            {
-                carServiceInsuranceServiceOrderService.saveBatch(list);
-            }
-        }
     }
 }
