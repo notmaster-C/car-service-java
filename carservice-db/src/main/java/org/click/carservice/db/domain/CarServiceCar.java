@@ -60,7 +60,7 @@ public class CarServiceCar implements Serializable {
     private String carModel;
 
     /** 车辆性质(运营/非运营) */
-    @ApiModelProperty("车辆性质(运营/非运营)")
+    @ApiModelProperty("车辆性质(0:运营/1:非运营)")
     private String carProperties;
 
     /** 是否默认车牌号（0：是，1：否） */
