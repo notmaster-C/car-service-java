@@ -65,7 +65,7 @@ public enum OrderStatus implements Serializable {
     /**
      * 已付款
      */
-    STATUS_PAY((short) 201, "已付款"),
+    STATUS_PAY((short) 201, "已付款,待使用"),
     /**
      * 已取消(退款中)
      */
@@ -93,9 +93,8 @@ public enum OrderStatus implements Serializable {
     STATUS_GROUPON_SUCCEED((short) 304, "团购成功"),
 
     /**
-     * 已发货
+     * 待验收
 //     */
-//    STATUS_SHIP((short) 401, "已发货"),
     STATUS_SHIP((short) 401, "已使用，待验收"),
     /**
      * 已收货
@@ -374,7 +373,7 @@ public enum OrderStatus implements Serializable {
     }
 
     /**
-     * 判断是否可以发货
+     * 判断是否可以核销
      */
     public static boolean hasShip(CarServiceOrder order) {
         return OrderStatus.isPayStatus(order) || OrderStatus.isBtlPayStatus(order)

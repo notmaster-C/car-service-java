@@ -23,6 +23,8 @@ import org.redisson.api.RateIntervalUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -114,7 +116,7 @@ public class WxOrderController {
      * @param request 请求内容
      * @return 操作结果
      */
-    @PostMapping("pay-notify")
+    @PostMapping("pay-status")
     @ApiOperation(value = "微信付款成功或失败回调接口")
     public ResponseUtil payNotify(HttpServletRequest request) {
         return ResponseUtil.ok(orderService.payNotify(request));
@@ -134,18 +136,6 @@ public class WxOrderController {
         return ResponseUtil.ok(orderService.refund(userId, orderId));
     }
 
-    /**
-     * 确认收货
-     *
-     * @param userId 用户ID
-     * @param orderId   订单信息，{ orderId：xxx }
-     * @return 订单操作结果
-     */
-    @PostMapping("confirm")
-    @ApiOperation(value = "确认收货")
-    public ResponseUtil confirm(@LoginUser String userId, @JsonBody String orderId) {
-        return ResponseUtil.ok(orderService.confirm(userId, orderId));
-    }
 
     /**
      * 删除订单
@@ -211,16 +201,27 @@ public class WxOrderController {
     }
 
     /**
-     * 商家订单确认，用户待使用
+     * 订单使用,订单待使用-》订单待验收
      *
      * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      */
-    @PostMapping("admin/ship")
-    @ApiOperation(value = "商家订单确认，用户待使用")
-    public ResponseUtil adminShip(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
+    @PostMapping("admin/Use")
+    @ApiOperation(value = "订单使用")
+    public ResponseUtil adminUse(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
         return ResponseUtil.ok(orderService.adminUse(userId , body));
     }
-
+    /**
+     * 订单使用后，用户验收确认收货
+     *
+     * @param userId 用户ID
+     * @param orderId   订单信息，{ orderId：xxx }
+     * @return 订单操作结果
+     */
+    @PostMapping("confirm")
+    @ApiOperation(value = "订单使用后，用户验收确认收货")
+    public ResponseUtil confirm(@LoginUser String userId, @JsonBody String orderId, MultipartFile file) {
+        return ResponseUtil.ok(orderService.confirm(userId, orderId,file));
+    }
 
 }

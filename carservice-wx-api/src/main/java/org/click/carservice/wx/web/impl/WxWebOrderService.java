@@ -27,6 +27,7 @@ import org.click.carservice.core.express.service.ExpressService;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.service.*;
+import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.impl.OrderCommentTask;
 import org.click.carservice.core.tasks.impl.OrderUnconfirmedTask;
@@ -44,12 +45,16 @@ import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
+import org.click.carservice.db.service.ICarServiceOrderVerificationService;
+import org.click.carservice.db.validator.order.Order;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.*;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -136,6 +141,11 @@ public class WxWebOrderService {
     private WxRewardService rewardService;
     @Autowired
     private RewardCoreService rewardCoreService;
+    @Autowired
+    private StorageService storageService;
+
+    @Autowired
+    private ICarServiceOrderVerificationService iCarServiceOrderVerificationService;
 
     /**
      * 订单列表
@@ -559,6 +569,7 @@ public class WxWebOrderService {
             //添加支付信息,添加订单联合支付总费用orderPrice
             order.setOrderPrice(allPrice);
             order.setPayId(result.getTransactionId());
+            order.setOrderStatus(OrderStatus.STATUS_PAY.getStatus());
             orderCoreService.orderPaySuccess(order);
         }
 
@@ -651,11 +662,13 @@ public class WxWebOrderService {
      *
      * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
+     * @param file   核销照片，MultipartFile
      * @return 订单操作结果
      */
-    public Object confirm(String userId, String orderId) {
+    public Object confirm(String userId, String orderId, MultipartFile file) {
         //获取订单
         CarServiceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrderVerification carServiceOrderVerification = new CarServiceOrderVerification();
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -663,7 +676,7 @@ public class WxWebOrderService {
         //判断订单状态
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isConfirm() || !OrderStatus.isShipStatus(order)) {
-            return ResponseUtil.fail( "订单不能确认收货");
+            return ResponseUtil.fail( "订单不能使用");
         }
 
         //获取商品信息
@@ -677,11 +690,21 @@ public class WxWebOrderService {
         if (brand == null){
             return ResponseUtil.fail("店铺信息获取失败");
         }
-
+        //存放照片到数据库
+        String storageId=storageService.store(file).getId();
         //更新订单
         Integer comments = orderGoodsService.getComments(orderId);
         order.setComments(comments.shortValue());
         order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
+        //保存订单核销记录
+        carServiceOrderVerification.setUserId(order.getUserId());
+        carServiceOrderVerification.setGoodsId(order.getGoodsId());
+        carServiceOrderVerification.setOrderSn(order.getId());
+        carServiceOrderVerification.setAddress(order.getAddress());
+        carServiceOrderVerification.setVerificationTime(LocalDateTime.now());
+        carServiceOrderVerification.setStorageId(storageId);
+        iCarServiceOrderVerificationService.add(carServiceOrderVerification);
+
         order.setConfirmTime(LocalDateTime.now());
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("订单数据失效");
@@ -962,7 +985,6 @@ public class WxWebOrderService {
 
         String orderId = body.getOrderId();
 
-
         CarServiceBrand brand = brandService.findByUserId(userId);
         if (brand == null) {
             return ResponseUtil.fail("未找到店铺");
@@ -991,60 +1013,9 @@ public class WxWebOrderService {
         subscribeMessageService.shipSubscribe(user.getOpenid(),order);
 
         //记录操作日志
-        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("发货", "订单时间 " + order.getShipTime());
 
         return ResponseUtil.ok();
     }
 
-
-    /**
-     * 发货
-     * 1. 检测当前订单是否能够发货
-     * 2. 设置订单发货状态
-     *
-     * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
-     * @return 订单操作结果
-     * 成功则 { errno: 0, errmsg: '成功' }
-     * 失败则 { errno: XXX, errmsg: XXX }
-     */
-    public Object adminShip(String userId, OrderAdminShipBody body) {
-        String shipSn = body.getShipSn();
-        String orderId = body.getOrderId();
-        String shipChannel = body.getShipChannel();
-
-        CarServiceBrand brand = brandService.findByUserId(userId);
-        if (brand == null) {
-            return ResponseUtil.fail("未找到店铺");
-        }
-
-        CarServiceOrder order = orderService.findByBrandId(brand.getId() , orderId);
-        if (order == null) {
-            return ResponseUtil.fail("未找到订单");
-        }
-
-        // 如果订单不是已付款状态，则不能发货
-        if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不能发货");
-        }
-
-        order.setShipSn(shipSn);
-        order.setShipChannel(shipChannel);
-        order.setShipTime(LocalDateTime.now());
-        order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
-        if (orderService.updateVersionSelective(order) == 0) {
-            throw new RuntimeException("网络繁忙，请刷新重试");
-        }
-
-        //添加确认收货定时任务
-        taskService.addTask(new OrderUnconfirmedTask(order));
-
-        //订单发货订阅通知
-        CarServiceUser user = userService.findById(order.getUserId());
-        subscribeMessageService.shipSubscribe(user.getOpenid(),order);
-
-        //记录操作日志
-        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
-
-        return ResponseUtil.ok();
-    }
 }
