@@ -248,11 +248,12 @@ public class WxWebOrderService {
         String cartId = body.getCartId();
         String message = body.getMessage();
         String couponId = body.getCouponId();
-        String addressId = body.getAddressId();
+//        String addressId = body.getAddressId();
         String userCouponId = body.getUserCouponId();
         String rewardLinkId = body.getRewardLinkId();
         String grouponLinkId = body.getGrouponLinkId();
         String grouponRulesId = body.getGrouponRulesId();
+        String mobile = body.getMobile();
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && !"0".equals(grouponRulesId)) {
@@ -275,15 +276,15 @@ public class WxWebOrderService {
         }
 
         //判断参数是否错误
-        if (cartId == null || addressId == null || couponId == null) {
+        if (cartId == null || mobile == null || couponId == null) {
             return ResponseUtil.badArgument();
         }
 
         // 收货地址
-        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-        if (checkedAddress == null) {
-            return ResponseUtil.badArgument();
-        }
+//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+//        if (checkedAddress == null) {
+//            return ResponseUtil.badArgument();
+//        }
 
         //选中的商品
         List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
@@ -323,10 +324,10 @@ public class WxWebOrderService {
             order.setOutTradeNo(outTradeNo);
             order.setGoodsId(cartGoods.getGoodsId());
             order.setBrandId(cartGoods.getBrandId());
-            order.setMobile(checkedAddress.getMobile());
-            order.setConsignee(checkedAddress.getName());
+            order.setMobile(mobile);
+//            order.setConsignee(checkedAddress.getName());
             order.setBrandId(cartGoods.getBrandId());
-            order.setAddress(checkedAddress.getAddressAll());
+//            order.setAddress(checkedAddress.getAddressAll());
             order.setOrderStatus(OrderStatus.STATUS_CREATE.getStatus());
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));
@@ -658,19 +659,19 @@ public class WxWebOrderService {
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        
+
         //判断订单状态
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isConfirm() || !OrderStatus.isShipStatus(order)) {
             return ResponseUtil.fail( "订单不能确认收货");
         }
-        
+
         //获取商品信息
         CarServiceOrderGoods orderGoods = orderGoodsService.findByOrderId(orderId);
         if (orderGoods == null){
             return ResponseUtil.fail( "商品不存在");
         }
-        
+
         //获取店铺信息
         CarServiceBrand brand = brandService.findById(order.getBrandId());
         if (brand == null){
@@ -945,6 +946,56 @@ public class WxWebOrderService {
         orderCoreService.orderRelease(order);
         return ResponseUtil.ok();
     }
+
+    /**
+     * v0发货
+     * 商品扫码核销后待验收
+     * 1. 检测当前订单是否能够发货
+     * 2. 设置订单待验收状态
+     *
+     * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
+     * @return 订单操作结果
+     * 成功则 { errno: 0, errmsg: '成功' }
+     * 失败则 { errno: XXX, errmsg: XXX }
+     */
+    public Object adminUse(String userId, OrderAdminShipBody body) {
+
+        String orderId = body.getOrderId();
+
+
+        CarServiceBrand brand = brandService.findByUserId(userId);
+        if (brand == null) {
+            return ResponseUtil.fail("未找到店铺");
+        }
+
+        CarServiceOrder order = orderService.findByBrandId(brand.getId() , orderId);
+        if (order == null) {
+            return ResponseUtil.fail("未找到订单");
+        }
+
+        // 如果订单不是已付款状态，则不能发货
+        if(!OrderStatus.hasShip(order)){
+            return ResponseUtil.fail( "订单不是已付款状态，不能使用");
+        }
+        order.setShipTime(LocalDateTime.now());
+        order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
+        if (orderService.updateVersionSelective(order) == 0) {
+            throw new RuntimeException("网络繁忙，请刷新重试");
+        }
+
+        //添加确认收货定时任务
+        taskService.addTask(new OrderUnconfirmedTask(order));
+
+        //订单发货订阅通知
+        CarServiceUser user = userService.findById(order.getUserId());
+        subscribeMessageService.shipSubscribe(user.getOpenid(),order);
+
+        //记录操作日志
+        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
+
+        return ResponseUtil.ok();
+    }
+
 
     /**
      * 发货

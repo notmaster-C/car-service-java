@@ -10,9 +10,12 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
+import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.web.impl.WxWebOrderService;
@@ -33,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/wx/order")
 @Validated
+@Api(value = "微信-订单", tags = "微信-订单")
 public class WxOrderController {
 
     @Autowired
@@ -42,8 +46,9 @@ public class WxOrderController {
      * 订单列表
      */
     @GetMapping("list")
-    public Object list(@LoginUser String userId, OrderListBody body) {
-        return orderService.list(userId, body);
+    @ApiOperation(value = "查看用户订单列表")
+    public ResponseUtil list(@LoginUser String userId, OrderListBody body) {
+        return ResponseUtil.ok(orderService.list(userId, body));
     }
 
     /**
@@ -54,8 +59,9 @@ public class WxOrderController {
      * @return 订单详情
      */
     @GetMapping("detail")
-    public Object detail(@LoginUser String userId, @NotNull String orderId) {
-        return orderService.detail(userId, orderId);
+    @ApiOperation(value = "查看用户订单详情")
+    public ResponseUtil detail(@LoginUser String userId, @NotNull String orderId) {
+        return ResponseUtil.ok(orderService.detail(userId, orderId));
     }
 
     /**
@@ -66,9 +72,10 @@ public class WxOrderController {
      * @return 提交订单操作结果
      */
     @PostMapping("submit")
+    @ApiOperation(value = "提交订单")
     @RequestRateLimiter(rate = 1, rateInterval = 3, timeUnit = RateIntervalUnit.SECONDS , errMsg = "你有一笔相同订单已提交，请等待")
-    public Object submit(@LoginUser String userId, @Valid @RequestBody OrderSubmitBody body) {
-        return orderService.submit(userId, body);
+    public ResponseUtil submit(@LoginUser String userId, @Valid @RequestBody OrderSubmitBody body) {
+        return ResponseUtil.ok(orderService.submit(userId, body));
     }
 
 
@@ -80,8 +87,9 @@ public class WxOrderController {
      * @return 取消订单操作结果
      */
     @PostMapping("cancel")
-    public Object cancel(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.cancel(userId, orderId);
+    @ApiOperation(value = "取消订单")
+    public ResponseUtil cancel(@LoginUser String userId, @JsonBody String orderId) {
+        return ResponseUtil.ok(orderService.cancel(userId, orderId));
     }
 
     /**
@@ -92,8 +100,9 @@ public class WxOrderController {
      * @return 支付订单ID
      */
     @PostMapping("prepay")
-    public Object prepay(@LoginUser String userId, @JsonBody List<String> orderIds, HttpServletRequest request) {
-        return orderService.prepay(userId, orderIds, request);
+    @ApiOperation(value = "付款订单的预支付")
+    public ResponseUtil prepay(@LoginUser String userId, @JsonBody List<String> orderIds, HttpServletRequest request) {
+        return ResponseUtil.ok(orderService.prepay(userId, orderIds, request));
     }
 
     /**
@@ -106,8 +115,9 @@ public class WxOrderController {
      * @return 操作结果
      */
     @PostMapping("pay-notify")
-    public Object payNotify(HttpServletRequest request) {
-        return orderService.payNotify(request);
+    @ApiOperation(value = "微信付款成功或失败回调接口")
+    public ResponseUtil payNotify(HttpServletRequest request) {
+        return ResponseUtil.ok(orderService.payNotify(request));
     }
 
 
@@ -119,8 +129,9 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("refund")
-    public Object refund(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.refund(userId, orderId);
+    @ApiOperation(value = "订单申请退款")
+    public ResponseUtil refund(@LoginUser String userId, @JsonBody String orderId) {
+        return ResponseUtil.ok(orderService.refund(userId, orderId));
     }
 
     /**
@@ -131,8 +142,9 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("confirm")
-    public Object confirm(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.confirm(userId, orderId);
+    @ApiOperation(value = "确认收货")
+    public ResponseUtil confirm(@LoginUser String userId, @JsonBody String orderId) {
+        return ResponseUtil.ok(orderService.confirm(userId, orderId));
     }
 
     /**
@@ -143,8 +155,9 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("delete")
-    public Object delete(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.delete(userId, orderId);
+    @ApiOperation(value = "删除订单")
+    public ResponseUtil delete(@LoginUser String userId, @JsonBody String orderId) {
+        return ResponseUtil.ok(orderService.delete(userId, orderId));
     }
 
     /**
@@ -155,8 +168,9 @@ public class WxOrderController {
      * @return 待评价订单商品信息
      */
     @GetMapping("goods")
-    public Object goods(@LoginUser String userId, @NotNull String goodsId) {
-        return orderService.goods(userId, goodsId);
+    @ApiOperation(value = "待评价订单商品信息")
+    public ResponseUtil goods(@LoginUser String userId, @NotNull String goodsId) {
+        return ResponseUtil.ok(orderService.goods(userId, goodsId));
     }
 
     /**
@@ -167,8 +181,9 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("comment")
-    public Object comment(@LoginUser String userId, @Valid @RequestBody OrderCommentBody body) {
-        return orderService.comment(userId, body);
+    @ApiOperation(value = "评价订单商品")
+    public ResponseUtil comment(@LoginUser String userId, @Valid @RequestBody OrderCommentBody body) {
+        return ResponseUtil.ok(orderService.comment(userId, body));
     }
 
     /**
@@ -178,8 +193,9 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("admin/refund")
-    public Object adminRefund(@LoginUser String userId, @Valid @RequestBody OrderAdminRefundBody body) {
-        return orderService.adminRefund(userId , body);
+    @ApiOperation(value = "订单退款")
+    public ResponseUtil adminRefund(@LoginUser String userId, @Valid @RequestBody OrderAdminRefundBody body) {
+        return ResponseUtil.ok(orderService.adminRefund(userId , body));
     }
 
     /**
@@ -189,19 +205,21 @@ public class WxOrderController {
      * @return 订单退款操作结果
      */
     @PostMapping("admin/cancel")
-    public Object adminCancel(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.adminCancel(userId, orderId);
+    @ApiOperation(value = "商家取消订单")
+    public ResponseUtil adminCancel(@LoginUser String userId, @JsonBody String orderId) {
+        return ResponseUtil.ok(orderService.adminCancel(userId, orderId));
     }
 
     /**
-     * 发货
+     * 商家订单确认，用户待使用
      *
      * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      */
     @PostMapping("admin/ship")
-    public Object adminShip(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
-        return orderService.adminShip(userId , body);
+    @ApiOperation(value = "商家订单确认，用户待使用")
+    public ResponseUtil adminShip(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
+        return ResponseUtil.ok(orderService.adminUse(userId , body));
     }
 
 
