@@ -39,11 +39,6 @@ public class CarServiceCouponUser implements Serializable {
      */
     @TableField("`coupon_id`")
     private String couponId;
-
-    /**
-     * 保险服务项id
-     */
-    private String serviceId;
     /**
      * 使用状态, 如果是0则未使用；如果是1则已使用；如果是2则已过期；如果是3则已经下架；
      */

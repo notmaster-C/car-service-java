@@ -27,7 +27,6 @@ import org.click.carservice.core.express.service.ExpressService;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.service.*;
-import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.impl.OrderCommentTask;
 import org.click.carservice.core.tasks.impl.OrderUnconfirmedTask;
@@ -45,14 +44,12 @@ import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
-import org.click.carservice.db.service.ICarServiceOrderVerificationService;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.*;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -139,10 +136,6 @@ public class WxWebOrderService {
     private WxRewardService rewardService;
     @Autowired
     private RewardCoreService rewardCoreService;
-    @Autowired
-    private StorageService storageService;
-    @Autowired
-    private ICarServiceOrderVerificationService iCarServiceOrderVerificationService;
 
     /**
      * 订单列表
@@ -367,7 +360,6 @@ public class WxWebOrderService {
             if (order.getActualPrice().compareTo(BigDecimal.ZERO) <= 0 || !SystemConfig.isAutoPay()) {
                 //下单成功
                 orderCoreService.orderPaySuccess(order);
-                orderService.createQrcode(order.getId());
             } else {
                 //计算订单总金额
                 allPrice = allPrice.add(order.getActualPrice());
@@ -397,7 +389,7 @@ public class WxWebOrderService {
      */
     public Object prepay(String userId, List<String> orderIds, HttpServletRequest request) {
         AttachResult attach = new AttachResult();
-//        attach.setTenantId(TenantContextHolder.getLocalTenantId());
+        attach.setTenantId(TenantContextHolder.getLocalTenantId());
         attach.setOrderIds(orderIds);
         String toJson = JacksonUtil.toJson(attach);
         if (toJson == null || toJson.length() > 128){
@@ -511,12 +503,12 @@ public class WxWebOrderService {
             return WxPayNotifyResponse.fail(e.getMessage());
         }
 
-//        String tenantId = JacksonUtil.parseString(result.getAttach(), "tenantId");
-//        TenantContextHolder.setLocalTenantId(tenantId);
-//        if (tenantId == null){
-//            ActionLogHandler.logOrderFail("支付回调","未找到当前租户");
-//            return WxPayNotifyResponse.fail("未找到当前租户");
-//        }
+        String tenantId = JacksonUtil.parseString(result.getAttach(), "tenantId");
+        TenantContextHolder.setLocalTenantId(tenantId);
+        if (tenantId == null){
+            ActionLogHandler.logOrderFail("支付回调","未找到当前租户");
+            return WxPayNotifyResponse.fail("未找到当前租户");
+        }
 
         //获取自定义参数
         List<String> orderIds = JacksonUtil.parseStringList(result.getAttach(), "orderIds");
@@ -566,7 +558,6 @@ public class WxWebOrderService {
             //添加支付信息,添加订单联合支付总费用orderPrice
             order.setOrderPrice(allPrice);
             order.setPayId(result.getTransactionId());
-            orderService.createQrcode(order.getId());
             orderCoreService.orderPaySuccess(order);
         }
 
@@ -659,13 +650,11 @@ public class WxWebOrderService {
      *
      * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
-     * @param file   核销照片，MultipartFile
      * @return 订单操作结果
      */
-    public Object confirm(String userId, String orderId, MultipartFile file) {
+    public Object confirm(String userId, String orderId) {
         //获取订单
         CarServiceOrder order = orderService.findById(userId, orderId);
-        CarServiceOrderVerification carServiceOrderVerification = new CarServiceOrderVerification();
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -687,21 +676,11 @@ public class WxWebOrderService {
         if (brand == null){
             return ResponseUtil.fail("店铺信息获取失败");
         }
-        //存放照片到数据库
-        String storageId=storageService.store(file).getId();
+
         //更新订单
         Integer comments = orderGoodsService.getComments(orderId);
         order.setComments(comments.shortValue());
         order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
-        //保存订单核销记录
-        carServiceOrderVerification.setUserId(order.getUserId());
-        carServiceOrderVerification.setGoodsId(order.getGoodsId());
-        carServiceOrderVerification.setOrderSn(order.getId());
-        carServiceOrderVerification.setAddress(order.getAddress());
-        carServiceOrderVerification.setVerificationTime(LocalDateTime.now());
-        carServiceOrderVerification.setStorageId(storageId);
-        iCarServiceOrderVerificationService.add(carServiceOrderVerification);
-
         order.setConfirmTime(LocalDateTime.now());
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("订单数据失效");
@@ -968,55 +947,15 @@ public class WxWebOrderService {
     }
 
     /**
-     * v0发货
-     * 商品扫码核销后待验收
+     * 发货
      * 1. 检测当前订单是否能够发货
-     * 2. 设置订单待验收状态
+     * 2. 设置订单发货状态
      *
      * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      * 成功则 { errno: 0, errmsg: '成功' }
      * 失败则 { errno: XXX, errmsg: XXX }
      */
-    public Object adminUse(String userId, OrderAdminShipBody body) {
-
-        String orderId = body.getOrderId();
-
-
-        CarServiceBrand brand = brandService.findByUserId(userId);
-        if (brand == null) {
-            return ResponseUtil.fail("未找到店铺");
-        }
-
-        CarServiceOrder order = orderService.findByBrandId(brand.getId() , orderId);
-        if (order == null) {
-            return ResponseUtil.fail("未找到订单");
-        }
-
-        // 如果订单不是已付款状态，则不能发货
-        if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不是已付款状态，不能使用");
-        }
-        order.setShipTime(LocalDateTime.now());
-        order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
-        if (orderService.updateVersionSelective(order) == 0) {
-            throw new RuntimeException("网络繁忙，请刷新重试");
-        }
-
-        //添加确认收货定时任务
-        taskService.addTask(new OrderUnconfirmedTask(order));
-
-        //订单发货订阅通知
-        CarServiceUser user = userService.findById(order.getUserId());
-        subscribeMessageService.shipSubscribe(user.getOpenid(),order);
-
-        //记录操作日志
-        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
-
-        return ResponseUtil.ok();
-    }
-
-
     public Object adminShip(String userId, OrderAdminShipBody body) {
         String shipSn = body.getShipSn();
         String orderId = body.getOrderId();
@@ -1034,7 +973,7 @@ public class WxWebOrderService {
 
         // 如果订单不是已付款状态，则不能发货
         if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不是已付款状态，不能使用");
+            return ResponseUtil.fail( "订单不能发货");
         }
 
         order.setShipSn(shipSn);
@@ -1057,5 +996,4 @@ public class WxWebOrderService {
 
         return ResponseUtil.ok();
     }
-
 }

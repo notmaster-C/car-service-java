@@ -102,18 +102,9 @@ public class AuthenticationInfo {
         if (!StringUtils.hasText(password)) {
             throw new RuntimeException("密码不能为空");
         }
-        //判断验证码是否正确
-        if (StringUtils.hasText(code)){
-            if (CaptchaManager.isCachedCaptcha(username, code)) {
-                throw new RuntimeException("验证码校验失败");
-            }
-        }
         //获取数据库账号消息
         List<CarServiceAdmin> adminList = commonService.findAdmin(username);
-        if(adminList.size()>1){
-            throw new RuntimeException(username  +"的用户数量大于一" );
-        }
-//        Assert.state(adminList.size() < 2, "存在两个相同账户");
+        Assert.state(adminList.size() < 2, "存在两个相同账户");
         if (adminList.size() == 0) {
             throw new RuntimeException("找不到用户（" + username + "）的帐号信息");
         }
@@ -128,6 +119,12 @@ public class AuthenticationInfo {
         admin.setLastLoginTime(LocalDateTime.now());
         if (adminService.updateVersionSelective(admin) == 0){
             throw new RuntimeException("网络繁忙,请重试");
+        }
+        //判断验证码是否正确
+        if (StringUtils.hasText(code)){
+            if (CaptchaManager.isCachedCaptcha(username, code)) {
+                throw new RuntimeException("验证码校验失败");
+            }
         }
         ActionLogHandler.logAuthSucceed("账号授权登录");
         //退出登陆

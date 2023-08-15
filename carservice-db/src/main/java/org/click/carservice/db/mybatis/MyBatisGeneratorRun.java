@@ -29,7 +29,7 @@ public class MyBatisGeneratorRun {
         //公共包路径
         String outputDir = System.getProperty("user.dir") + "/carservice-db/src/main";
         //创建代码生成器
-        FastAutoGenerator.create("jdbc:mysql://127.0.0.1:3306/car_service", "root", "123456")
+        FastAutoGenerator.create("jdbc:mysql://127.0.0.1:3306/carservice_plus", "root", "123456")
                 // 全局配置
                 .globalConfig(builder -> {
                     // 设置作者
@@ -69,10 +69,10 @@ public class MyBatisGeneratorRun {
                     // 请输入表名，多个英文逗号分隔？所有输入 all
                     builder.addTablePrefix("carservice_");
                     // 设置需要生成的表名
-                    builder.addInclude(getTables("car_service_order_verification"))
+                    builder.addInclude(getTables("all"))
                             // Entity 策略配置
                             .entityBuilder()
-                            .formatFileName("%s")
+                            .formatFileName("carservice%s")
                             .versionColumnName("version")
                             .versionPropertyName("version")
                             .logicDeleteColumnName("deleted")

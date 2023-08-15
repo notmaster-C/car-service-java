@@ -44,99 +44,83 @@ public class CarServiceBrand implements Serializable {
      * 品牌商名称
      */
     @TableField("`name`")
-    @ApiModelProperty("品牌商名称")
     private String name;
     /**
      * 品牌商简介
      */
     @TableField("`depict`")
-    @ApiModelProperty("品牌商简介")
     private String depict;
     /**
      * 品牌商邮箱
      */
     @TableField("`mail`")
-    @ApiModelProperty("邮箱")
     private String mail;
     /**
      * 品牌商页的品牌商图片
      */
     @TableField("`pic_url`")
-    @ApiModelProperty("图片地址")
     private String picUrl;
     /**
      * 自提地址
      */
     @TableField("`address`")
-    @ApiModelProperty("自提地址")
     private String address;
     /**
      * 品牌商的商品低价，仅用于页面展示
      */
     @TableField("`floor_price`")
-    @ApiModelProperty("品牌商的商品低价，仅用于页面展示")
     private BigDecimal floorPrice;
     /**
      * 访问量
      */
     @TableField("`look_count`")
-    @ApiModelProperty("访问量")
     private Long lookCount;
     /**
      * 点赞量
      */
     @TableField("`like_count`")
-    @ApiModelProperty("点赞量")
     private Long likeCount;
     /**
      * 评论数量
      */
     @TableField("`comment_count`")
-    @ApiModelProperty("评论数量")
     private Long commentCount;
     /**
      * 0 可用, 1 禁用, 2 注销
      */
     @TableField("`status`")
-    @ApiModelProperty("0 可用, 1 禁用, 2 注销")
     private Byte status;
     /**
      * 权重用于排序
      */
     @TableField("`weight`")
-    @ApiModelProperty("权重用于排序")
     private Integer weight;
     /**
      * 创建时间
      */
     @TableField(value = "`add_time`", fill = FieldFill.INSERT)
-    @ApiModelProperty("创建时间")
     private LocalDateTime addTime;
     /**
      * 更新时间
      */
     @TableField(value = "`update_time`", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
     /**
      * 逻辑删除
      */
     @TableField("`deleted`")
     @TableLogic
-    @ApiModelProperty("逻辑删除")
     private Boolean deleted;
     /**
      * 租户ID，用于分割多个租户
      */
     @TableField("`tenant_id`")
-    @ApiModelProperty("租户ID，用于分割多个租户")
     private String tenantId;
     /**
      * 更新版本号
      */
     @TableField("`version`")
     @Version
-    @ApiModelProperty("更新版本号")
     private Integer version;
 
     /////////////////////////////////

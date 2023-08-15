@@ -177,5 +177,4 @@ public class CarServiceOrderGoods implements Serializable {
      * 更新版本号
      */
     public static final String VERSION = "`version`";
-
 }

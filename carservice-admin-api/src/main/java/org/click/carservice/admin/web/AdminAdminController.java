@@ -1,16 +1,15 @@
 package org.click.carservice.admin.web;
 /**
- * Copyright (c) [ysling] [927069313@qq.com]
- * [litemall-plus] is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
+ *  Copyright (c) [ysling] [927069313@qq.com]
+ *  [litemall-plus] is licensed under Mulan PSL v2.
+ *  You can use this software according to the terms and conditions of the Mulan PSL v2.
+ *  You may obtain a copy of Mulan PSL v2 at:
+ *              http://license.coscl.org.cn/MulanPSL2
+ *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *  See the Mulan PSL v2 for more details.
  */
-
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
@@ -19,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.db.entity.PageResult;
-import org.click.carservice.db.enums.UserRole;
-import org.click.carservice.wx.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
@@ -32,11 +29,9 @@ import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.admin.service.AdminAdminService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,9 +48,6 @@ public class AdminAdminController {
     @Autowired
     private AdminAdminService adminService;
 
-    @Autowired
-    private WxUserService wxUserService;
-
     /**
      * 查询
      */
@@ -65,15 +57,15 @@ public class AdminAdminController {
     public ResponseUtil<PageResult<AdminListResult>> list(AdminListBody body) {
         List<CarServiceAdmin> adminList = adminService.querySelective(body);
         ArrayList<AdminListResult> resultList = new ArrayList<>();
-        for (CarServiceAdmin admin : adminList) {
+        for (CarServiceAdmin admin :adminList) {
             AdminListResult result = new AdminListResult();
-            BeanUtil.copyProperties(admin, result);
+            BeanUtil.copyProperties(admin , result);
             String token = StpUtil.getTokenValueByLoginId(admin.getId());
             result.setLoginToken(token);
             result.setCheckLogin(token != null);
             resultList.add(result);
         }
-        return ResponseUtil.okList(resultList, adminList);
+        return ResponseUtil.okList(resultList , adminList);
     }
 
     /**
@@ -95,7 +87,7 @@ public class AdminAdminController {
     @PostMapping("/logout")
     public Object logout(@JsonBody Integer id) {
         List<String> tokenList = StpUtil.getTokenValueListByLoginId(id);
-        for (String token : tokenList) {
+        for (String token :tokenList) {
             StpUtil.logoutByTokenValue(token);
         }
         return ResponseUtil.ok();
@@ -117,12 +109,8 @@ public class AdminAdminController {
         if (adminList.size() > 0) {
             return ResponseUtil.fail(ResponseStatus.USER_ERROR_A0204);
         }
-        if (!adminService.saveAdmin(admin)) {
+        if (!adminService.saveAdmin(admin)){
             return ResponseUtil.fail("管理员添加失败");
-        }
-        //如果权限列表中有商户，就添加一个前台商户账号
-        if (Arrays.asList(admin.getRoleIds()).contains(UserRole.Role_commercialTenant.getId())) {
-            wxUserService.addByAdmin(admin);
         }
         ActionLogHandler.logAuthSucceed("添加管理员", username);
         return ResponseUtil.ok(admin);
@@ -144,7 +132,7 @@ public class AdminAdminController {
         }
         // 不允许管理员通过编辑接口修改密码
         admin.setPassword(null);
-        if (adminService.updateVersionSelective(admin) == 0) {
+        if (adminService.updateVersionSelective(admin) == 0){
             throw new RuntimeException("网络繁忙,请重试");
         }
         ActionLogHandler.logAuthSucceed("编辑管理员", admin.getUsername());
