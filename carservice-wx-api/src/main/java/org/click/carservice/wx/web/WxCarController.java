@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -30,6 +32,13 @@ public class WxCarController {
     @ApiOperation(value = "用户id查询用户所拥有的车辆牌照信息")
     public ResponseUtil<List<CarServiceCar>> list(@LoginUser String userId) {
         return ResponseUtil.ok(carService.queryByUid(userId));
+    }
+
+    @PostMapping("/detail")
+    @ApiOperation(value = "id查询车牌详情")
+    public ResponseUtil<CarServiceCar> detail(@LoginUser String userId, @RequestBody String id) {
+        CarServiceCar carServiceCar = carService.detail(userId, id);
+        return ResponseUtil.ok(carServiceCar);
     }
 
     /**
@@ -61,9 +70,9 @@ public class WxCarController {
     /**
      * 删除用户车牌信息
      */
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete")
     @ApiOperation("删除用户车牌信息")
-    public ResponseUtil remove(@LoginUser String userId, @PathVariable String id) {
+    public ResponseUtil remove(@LoginUser String userId, @RequestBody String id) {
         return ResponseUtil.ok(carService.deleteCarServiceCarById(userId, id));
     }
 
@@ -73,9 +82,9 @@ public class WxCarController {
      * @param id
      * @return
      */
-    @PostMapping("/setDefault/{id}")
+    @PostMapping("/setDefault")
     @ApiOperation("设置默认牌照")
-    public ResponseUtil<Integer> setDefaultCar(@LoginUser String userId, @PathVariable String id){
+    public ResponseUtil<Integer> setDefaultCar(@LoginUser String userId, @RequestBody String id){
         return ResponseUtil.ok(carService.setDefaultCar(userId, id));
     }
 

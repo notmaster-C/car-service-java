@@ -2,6 +2,7 @@ package org.click.carservice.db.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -78,6 +79,7 @@ public class CarServiceCar implements Serializable {
 
     /** 逻辑删除 */
     @ApiModelProperty("逻辑删除")
+    @TableLogic(value = "0", delval = "1")
     private Integer deleted;
 
     /** 租户ID，用于分割多个租户 */
