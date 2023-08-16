@@ -16,7 +16,7 @@ import java.util.Optional;
  * 车牌业务
  */
 @Service
-@CacheConfig(cacheNames = "car_service_cart")
+@CacheConfig(cacheNames = "car_service_car")
 public class WxCarService extends CarServiceCarServiceImpl {
 
     /**
@@ -61,5 +61,15 @@ public class WxCarService extends CarServiceCarServiceImpl {
      */
     public void edit(String userId, CarServiceCar carServiceCar) {
         updateById(carServiceCar);
+    }
+
+    /**
+     * id查询详情
+     * @param userId
+     * @param id
+     * @return
+     */
+    public CarServiceCar detail(String userId, String id) {
+        return selectCarServiceCarById(id);
     }
 }

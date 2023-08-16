@@ -31,7 +31,7 @@ public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapp
      * @param id 用户车牌信息主键
      * @return 用户车牌信息
      */
-    public CarServiceCar selectCarServiceCarById(Long id)
+    public CarServiceCar selectCarServiceCarById(String id)
     {
         CarServiceCar carServiceCar = this.getBaseMapper().selectById(id);
         return carServiceCar;
