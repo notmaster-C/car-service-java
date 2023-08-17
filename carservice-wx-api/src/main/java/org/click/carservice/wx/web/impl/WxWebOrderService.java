@@ -27,6 +27,7 @@ import org.click.carservice.core.express.service.ExpressService;
 import org.click.carservice.core.handler.ActionLogHandler;
 import org.click.carservice.core.notify.service.NotifyMailService;
 import org.click.carservice.core.service.*;
+import org.click.carservice.core.storage.service.StorageService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.impl.OrderCommentTask;
 import org.click.carservice.core.tasks.impl.OrderUnconfirmedTask;
@@ -44,12 +45,16 @@ import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
+import org.click.carservice.db.service.ICarServiceOrderVerificationService;
+import org.click.carservice.db.validator.order.Order;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.*;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -136,6 +141,11 @@ public class WxWebOrderService {
     private WxRewardService rewardService;
     @Autowired
     private RewardCoreService rewardCoreService;
+    @Autowired
+    private StorageService storageService;
+
+    @Autowired
+    private ICarServiceOrderVerificationService iCarServiceOrderVerificationService;
 
     /**
      * 订单列表
@@ -248,11 +258,12 @@ public class WxWebOrderService {
         String cartId = body.getCartId();
         String message = body.getMessage();
         String couponId = body.getCouponId();
-        String addressId = body.getAddressId();
+//        String addressId = body.getAddressId();
         String userCouponId = body.getUserCouponId();
         String rewardLinkId = body.getRewardLinkId();
         String grouponLinkId = body.getGrouponLinkId();
         String grouponRulesId = body.getGrouponRulesId();
+        String mobile = body.getMobile();
 
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && !"0".equals(grouponRulesId)) {
@@ -275,15 +286,15 @@ public class WxWebOrderService {
         }
 
         //判断参数是否错误
-        if (cartId == null || addressId == null || couponId == null) {
+        if (cartId == null || mobile == null || couponId == null) {
             return ResponseUtil.badArgument();
         }
 
         // 收货地址
-        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-        if (checkedAddress == null) {
-            return ResponseUtil.badArgument();
-        }
+//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+//        if (checkedAddress == null) {
+//            return ResponseUtil.badArgument();
+//        }
 
         //选中的商品
         List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
@@ -323,10 +334,10 @@ public class WxWebOrderService {
             order.setOutTradeNo(outTradeNo);
             order.setGoodsId(cartGoods.getGoodsId());
             order.setBrandId(cartGoods.getBrandId());
-            order.setMobile(checkedAddress.getMobile());
-            order.setConsignee(checkedAddress.getName());
+            order.setMobile(mobile);
+//            order.setConsignee(checkedAddress.getName());
             order.setBrandId(cartGoods.getBrandId());
-            order.setAddress(checkedAddress.getAddressAll());
+//            order.setAddress(checkedAddress.getAddressAll());
             order.setOrderStatus(OrderStatus.STATUS_CREATE.getStatus());
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));
@@ -558,6 +569,7 @@ public class WxWebOrderService {
             //添加支付信息,添加订单联合支付总费用orderPrice
             order.setOrderPrice(allPrice);
             order.setPayId(result.getTransactionId());
+            order.setOrderStatus(OrderStatus.STATUS_PAY.getStatus());
             orderCoreService.orderPaySuccess(order);
         }
 
@@ -650,37 +662,49 @@ public class WxWebOrderService {
      *
      * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
+     * @param file   核销照片，MultipartFile
      * @return 订单操作结果
      */
-    public Object confirm(String userId, String orderId) {
+    public Object confirm(String userId, String orderId, MultipartFile file) {
         //获取订单
         CarServiceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrderVerification carServiceOrderVerification = new CarServiceOrderVerification();
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        
+
         //判断订单状态
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isConfirm() || !OrderStatus.isShipStatus(order)) {
-            return ResponseUtil.fail( "订单不能确认收货");
+            return ResponseUtil.fail( "订单不能使用");
         }
-        
+
         //获取商品信息
         CarServiceOrderGoods orderGoods = orderGoodsService.findByOrderId(orderId);
         if (orderGoods == null){
             return ResponseUtil.fail( "商品不存在");
         }
-        
+
         //获取店铺信息
         CarServiceBrand brand = brandService.findById(order.getBrandId());
         if (brand == null){
             return ResponseUtil.fail("店铺信息获取失败");
         }
-
+        //存放照片到数据库
+        String storageId=storageService.store(file).getId();
         //更新订单
         Integer comments = orderGoodsService.getComments(orderId);
         order.setComments(comments.shortValue());
         order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
+        //保存订单核销记录
+        carServiceOrderVerification.setUserId(order.getUserId());
+        carServiceOrderVerification.setGoodsId(order.getGoodsId());
+        carServiceOrderVerification.setOrderSn(order.getId());
+        carServiceOrderVerification.setAddress(order.getAddress());
+        carServiceOrderVerification.setVerificationTime(LocalDateTime.now());
+        carServiceOrderVerification.setStorageId(storageId);
+        iCarServiceOrderVerificationService.add(carServiceOrderVerification);
+
         order.setConfirmTime(LocalDateTime.now());
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("订单数据失效");
@@ -947,19 +971,19 @@ public class WxWebOrderService {
     }
 
     /**
-     * 发货
+     * v0发货
+     * 商品扫码核销后待验收
      * 1. 检测当前订单是否能够发货
-     * 2. 设置订单发货状态
+     * 2. 设置订单待验收状态
      *
      * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      * 成功则 { errno: 0, errmsg: '成功' }
      * 失败则 { errno: XXX, errmsg: XXX }
      */
-    public Object adminShip(String userId, OrderAdminShipBody body) {
-        String shipSn = body.getShipSn();
+    public Object adminUse(String userId, OrderAdminShipBody body) {
+
         String orderId = body.getOrderId();
-        String shipChannel = body.getShipChannel();
 
         CarServiceBrand brand = brandService.findByUserId(userId);
         if (brand == null) {
@@ -973,11 +997,8 @@ public class WxWebOrderService {
 
         // 如果订单不是已付款状态，则不能发货
         if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不能发货");
+            return ResponseUtil.fail( "订单不是已付款状态，不能使用");
         }
-
-        order.setShipSn(shipSn);
-        order.setShipChannel(shipChannel);
         order.setShipTime(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
         if (orderService.updateVersionSelective(order) == 0) {
@@ -992,8 +1013,9 @@ public class WxWebOrderService {
         subscribeMessageService.shipSubscribe(user.getOpenid(),order);
 
         //记录操作日志
-        ActionLogHandler.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
+        ActionLogHandler.logOrderSucceed("发货", "订单时间 " + order.getShipTime());
 
         return ResponseUtil.ok();
     }
+
 }

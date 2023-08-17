@@ -112,13 +112,4 @@ public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapp
         return update(updateWrapper) ? 1 : 0;
     }
 
-    /**
-     * 车牌号获取车牌
-     * @param carNumber
-     * @return
-     */
-    public CarServiceCar selectCarByCarNumber(String carNumber) {
-        LambdaQueryWrapper<CarServiceCar> queryWrapper = Wrappers.lambdaQuery(CarServiceCar.class).eq(CarServiceCar::getCarNumber, carNumber);
-        return getOne(queryWrapper);
-    }
 }

@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 订单流程：下单成功－》支付订单－》发货－》收货
+ * 订单流程：下单成功－》支付订单－》待使用-》待验收－》评价
  * 订单状态：
  * 101 订单生成，未支付；102，下单未支付用户取消；103，下单未支付超期系统自动取消
  * 201 支付完成，商家未发货；202，订单生产，已付款未发货，用户申请退款；203，管理员执行退款操作，确认退款成功；
- * 301 商家发货，用户未确认；
- * 302 用户确认收货，订单结束； 303 用户没有确认收货，但是快递反馈已收货后，超过一定时间，系统自动确认收货，订单结束。
+ * 201 支付完成，待使用；202，订单生产，已付款未发货，用户申请退款；203，管理员执行退款操作，确认退款成功；
+ * 301 商家发货，用户未确认；/V2 使用成功，待验收
+ * 302 用户确认收货，订单结束； /v1 303
+ * 303 用户没有确认收货，但是快递反馈已收货后，超过一定时间，系统自动确认收货，订单结束。/逾期未使用，过期状态
  * <p>
  * 当101用户未付款时，此时用户可以进行的操作是取消或者付款
  * 当201支付完成而商家未发货时，此时用户可以退款
@@ -63,7 +65,7 @@ public enum OrderStatus implements Serializable {
     /**
      * 已付款
      */
-    STATUS_PAY((short) 201, "已付款"),
+    STATUS_PAY((short) 201, "已付款,待使用"),
     /**
      * 已取消(退款中)
      */
@@ -91,13 +93,13 @@ public enum OrderStatus implements Serializable {
     STATUS_GROUPON_SUCCEED((short) 304, "团购成功"),
 
     /**
-     * 已发货
-     */
-    STATUS_SHIP((short) 401, "已发货"),
+     * 待验收
+//     */
+    STATUS_SHIP((short) 401, "已使用，待验收"),
     /**
      * 已收货
      */
-    STATUS_CONFIRM((short) 402, "已收货"),
+    STATUS_CONFIRM((short) 402, "已验收，待评价"),
     /**
      * 已收货(系统)
      */
@@ -371,7 +373,7 @@ public enum OrderStatus implements Serializable {
     }
 
     /**
-     * 判断是否可以发货
+     * 判断是否可以核销
      */
     public static boolean hasShip(CarServiceOrder order) {
         return OrderStatus.isPayStatus(order) || OrderStatus.isBtlPayStatus(order)

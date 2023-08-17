@@ -45,7 +45,7 @@ public class AdminCouponService extends CouponServiceImpl {
         if (!ObjectUtils.allNotNull(name, depict, tag, price)) {
             return ResponseUtil.badArgument();
         }
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
+        if (price.compareTo(BigDecimal.ZERO) <= 0) {
             return ResponseUtil.badArgument();
         }
         return null;
