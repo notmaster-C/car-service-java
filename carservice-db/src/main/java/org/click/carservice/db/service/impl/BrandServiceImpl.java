@@ -1,6 +1,8 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.click.carservice.db.domain.CarServiceBrand;
 import org.click.carservice.db.mapper.BrandMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
@@ -221,5 +223,10 @@ public class BrandServiceImpl extends IBaseServiceImpl<BrandMapper, CarServiceBr
         return super.listMaps(queryWrapper);
     }
 
-
+    @Override
+//    @Cacheable(sync = true)
+    public List<CarServiceBrand> selectByUserId(String userId) {
+        LambdaQueryWrapper<CarServiceBrand> queryWrapper = Wrappers.lambdaQuery(CarServiceBrand.class).eq(CarServiceBrand::getUserId, userId);
+        return list(queryWrapper);
+    }
 }

@@ -5,6 +5,7 @@ import org.click.carservice.db.domain.CarServiceOrderGoods;
 import org.click.carservice.db.mapper.OrderGoodsMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.IOrderGoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,6 +28,9 @@ import java.util.Map;
 @Primary
 @CacheConfig(cacheNames = "carservice_order_goods")
 public class OrderGoodsServiceImpl extends IBaseServiceImpl<OrderGoodsMapper, CarServiceOrderGoods> implements IOrderGoodsService {
+
+    @Autowired
+    private OrderGoodsMapper orderGoodsMapper;
 
 
     @Override
@@ -221,5 +225,8 @@ public class OrderGoodsServiceImpl extends IBaseServiceImpl<OrderGoodsMapper, Ca
         return super.listMaps(queryWrapper);
     }
 
-
+    @Override
+    public List<CarServiceOrderGoods> selectByBrandIds(List<String> ids) {
+        return orderGoodsMapper.selectByBrandIds(ids);
+    }
 }

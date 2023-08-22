@@ -229,6 +229,7 @@ public class UserServiceImpl extends IBaseServiceImpl<UserMapper, CarServiceUser
      * @param mobil
      * @return
      */
+    @Override
     public CarServiceUser selectUserByMobil(String mobil) {
         LambdaQueryWrapper<CarServiceUser> queryWrapper = Wrappers.lambdaQuery(CarServiceUser.class).eq(CarServiceUser::getMobile, mobil);
         return getOne(queryWrapper);

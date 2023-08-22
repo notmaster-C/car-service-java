@@ -12,4 +12,11 @@ import org.click.carservice.db.mybatis.IBaseService;
  */
 public interface IUserService extends IBaseService<CarServiceUser> {
 
+    /**
+     * 手机号查询用户
+     * @param mobil
+     * @return
+     */
+    CarServiceUser selectUserByMobil(String mobil);
+
 }

@@ -33,7 +33,7 @@ import java.util.Set;
 public class AdminPermissionService extends PermissionServiceImpl {
 
 
-    @Cacheable(sync = true)
+//    @Cacheable(sync = true)
     public Set<String> queryByRoleId(String roleId) {
         Set<String> permissions = new HashSet<>();
         if (roleId == null) {
@@ -63,7 +63,7 @@ public class AdminPermissionService extends PermissionServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+//    @Cacheable(sync = true)
     public boolean checkSuperPermission(String roleId) {
         if (roleId == null) {
             return false;

@@ -11,7 +11,13 @@ package org.click.carservice.admin.web;
  * See the Mulan PSL v2 for more details.
  */
 
+import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
+import cn.dev33.satoken.context.SaTokenContext;
+import cn.dev33.satoken.context.model.SaStorage;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +85,7 @@ public class AdminOrderController {
     /**
      * 查询订单
      */
-    @SaCheckPermission("admin:order:list")
+    @SaCheckPermission(value = "admin:order:list", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询")
     @GetMapping("/list")
     public Object list(OrderListBody body) {
@@ -126,7 +132,7 @@ public class AdminOrderController {
     /**
      * 查询物流公司
      */
-    @SaCheckPermission("admin:order:channel")
+    @SaCheckPermission(value = "admin:order:channel", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询物流公司")
     @GetMapping("/channel")
     public Object channel() {
@@ -136,7 +142,7 @@ public class AdminOrderController {
     /**
      * 查询订单数量
      */
-    @SaCheckPermission("admin:order:info")
+    @SaCheckPermission(value = "admin:order:info", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询订单数量")
     @GetMapping("/info")
     public Object info() {
@@ -151,7 +157,7 @@ public class AdminOrderController {
     /**
      * 订单详情
      */
-    @SaCheckPermission("admin:order:read")
+    @SaCheckPermission(value = "admin:order:read", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "详情")
     @GetMapping("/detail")
     public Object detail(@NotNull String id) {
@@ -167,7 +173,7 @@ public class AdminOrderController {
     /**
      * 订单取消
      */
-    @SaCheckPermission("admin:order:cancel")
+    @SaCheckPermission(value = "admin:order:cancel", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单取消")
     @PostMapping("/cancel")
     public Object cancel(@NotNull String id) {
@@ -195,7 +201,7 @@ public class AdminOrderController {
     /**
      * 订单退款
      */
-    @SaCheckPermission("admin:order:refund")
+    @SaCheckPermission(value = "admin:order:refund", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单退款")
     @PostMapping("/refund")
     public Object refund(@Valid @RequestBody OrderRefundBody body) {
@@ -249,7 +255,7 @@ public class AdminOrderController {
     /**
      * 发货
      */
-    @SaCheckPermission("admin:order:ship")
+    @SaCheckPermission(value = "admin:order:ship", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单发货")
     @PostMapping("/ship")
     public Object ship(@Valid @RequestBody OrderShipBody body) {
@@ -289,7 +295,7 @@ public class AdminOrderController {
     /**
      * 线下收款
      */
-    @SaCheckPermission("admin:order:pay")
+    @SaCheckPermission(value = "admin:order:pay", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单收款")
     @PostMapping("/pay")
     public Object pay(@Valid @RequestBody OrderPayBody body) {
@@ -311,7 +317,7 @@ public class AdminOrderController {
     /**
      * 删除订单
      */
-    @SaCheckPermission("admin:order:delete")
+    @SaCheckPermission(value = "admin:order:delete", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单删除")
     @PostMapping("/delete")
     public Object delete(@NotNull String orderId) {
@@ -335,7 +341,7 @@ public class AdminOrderController {
     /**
      * 回复订单商品
      */
-    @SaCheckPermission("admin:order:reply")
+    @SaCheckPermission(value = "admin:order:reply", mode = SaMode.OR, orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单商品回复")
     @PostMapping("/reply")
     public Object reply(@Valid @RequestBody OrderReplyBody body) {

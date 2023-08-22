@@ -138,6 +138,7 @@ public class AdminAdminService extends AdminServiceImpl {
         // 使用用户手机作为用户名
         user.setUsername(admin.getMobile());
         user.setPassword(encodedPassword);
+        user.setUserType(1);
         user.setMobile(admin.getMobile());
         user.setOpenid(admin.getOpenid());
         //todo 为商家创建的账号的头像设置

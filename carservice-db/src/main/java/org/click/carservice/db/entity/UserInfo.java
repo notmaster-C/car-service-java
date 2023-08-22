@@ -37,6 +37,12 @@ public class UserInfo implements Serializable {
      */
     @ApiModelProperty("用户昵称")
     private String nickName;
+
+    /**
+     * 用户类型: 0:普通用户，1:商户
+     */
+    @ApiModelProperty("用户类型: 0:普通用户，1:商户")
+    private Integer userType;
     /**
      * 用户头像
      */

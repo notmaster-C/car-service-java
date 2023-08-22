@@ -34,4 +34,17 @@
         <result column="version" property="version"/>
     </resultMap>
 
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select csg.* from car_service_goods csg
+            join car_service_brand csb on csb.id = csg.brand_id
+        <where>
+            csb.deleted = 0 and csg.deleted = 0 and csb.user_id = #{userId}
+            <if test="ew != null">
+                <if test="ew.nonEmptyOfWhere">
+                    AND
+                </if>
+                ${ew.sqlSegment}
+            </if>
+        </where>
+    </select>
 </mapper>
