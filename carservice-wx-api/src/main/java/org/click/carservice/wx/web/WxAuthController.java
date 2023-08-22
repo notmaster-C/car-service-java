@@ -139,7 +139,6 @@ public class WxAuthController {
         WxLoginResult result = new WxLoginResult();
         result.setUserToken(token);
         result.setUserInfo(userInfo);
-
         return ResponseUtil.ok(result);
     }
 
