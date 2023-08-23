@@ -8,7 +8,7 @@ import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.insurance.model.InsuranceInfoImportBody;
 import org.click.carservice.admin.model.insurance.model.InsuranceServiceImportBody;
 import org.click.carservice.admin.service.AdminInsuranceInfoService;
-import org.click.carservice.core.utils.poi.ExcelUtil;
+import org.click.carservice.db.poi.ExcelUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceInsuranceInfo;
 import org.click.carservice.db.entity.PageResult;

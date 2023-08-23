@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.click.carservice.db.mapper.CarServiceOrderVerificationMapper">
+
+    <resultMap type="org.click.carservice.db.domain.CarServiceOrderVerification" id="CarServiceOrderVerificationResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="orderSn"    column="order_sn"    />
+        <result property="storageId"    column="storage_id"    />
+        <result property="toubaoSn"    column="toubao_sn"    />
+        <result property="address"    column="address"    />
+        <result property="verificationTime"    column="verification_time"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="tenantId"    column="tenant_id"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectCarServiceOrderVerificationVo">
+        select id, user_id, goods_id, order_sn, storage_id, toubao_sn, address, verification_time, add_time, update_time, deleted, tenant_id, version from car_service_order_verification
+    </sql>
+
+    <select id="exportOrderVerification" resultType="org.click.carservice.db.domain.dto.OrderVerificationExportDto">
+        select csb.`name` brand_name, cso.order_sn, csog.goods_name, cso.consignee, cso.mobile, cso.order_status, cso.goods_price, cso.coupon_price, cso.order_price, cso.pay_id, cso.pay_time from car_service_order_goods csog
+            left join car_service_order cso on cso.id = csog.order_id
+            join car_service_brand csb on csb.id = cso.brand_id
+        <where>
+            1 = 1
+            <if test="brandName != null and brandName != ''">
+                and csb.name like concat('%',#{brandName},'%')
+            </if>
+            <if test="orderStatus != null">
+                and cso.order_status = #{orderStatus}
+            </if>
+            <if test="orderSn != null and orderSn != ''">
+                and cso.order_sn = #{orderSn}
+            </if>
+        </where>
+        order by cso.add_time, cso.order_status desc
+    </select>
+</mapper>

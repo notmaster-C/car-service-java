@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.click.carservice.core.annotation.Excel;
+import org.click.carservice.db.annotation.Excel;
 
 @Data
 @NoArgsConstructor
