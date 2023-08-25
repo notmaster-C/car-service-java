@@ -25,7 +25,7 @@ public interface ICarServiceOrderVerificationService extends IBaseService<CarSer
     public List<CarServiceOrderVerification> selectCarServiceOrderVerificationList(CarServiceOrderVerification carServiceOrderVerification);
 
     /**
-     * 导出
+     * 导出对账单
      * @param query
      * @return
      */
