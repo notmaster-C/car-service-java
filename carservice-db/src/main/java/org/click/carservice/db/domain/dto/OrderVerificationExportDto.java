@@ -71,6 +71,9 @@ public class OrderVerificationExportDto {
     @ApiModelProperty("订单状态")
     private Integer orderStatus;
 
+    @ApiModelProperty("订单状态文本")
+    private String orderStatusText;
+
     /**
      * 商品总费用
      */

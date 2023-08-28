@@ -38,7 +38,7 @@ public class AdminInsuranceInfoController
     /**
      * 查询保单信息列表
      */
-//    @SaCheckPermission("admin:insurance:list")
+    @SaCheckPermission("admin:insurance:list")
     @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "查询")
     @GetMapping("/list")
     @ApiOperation("查询保单信息列表")
@@ -50,7 +50,7 @@ public class AdminInsuranceInfoController
     /**
      * 获取保单信息详细信息
      */
-//    @SaCheckPermission("admin:insurance:read")
+    @SaCheckPermission("admin:insurance:read")
     @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "详情")
     @GetMapping(value = "/{id}")
     @ApiOperation("获取保单信息详细信息")
@@ -62,7 +62,7 @@ public class AdminInsuranceInfoController
     /**
      * 新增保单信息
      */
-//    @SaCheckPermission("admin:insurance:creat")
+    @SaCheckPermission("admin:insurance:creat")
     @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "新增")
     @PostMapping("/add")
     @ApiOperation("新增保单信息")
@@ -112,7 +112,7 @@ public class AdminInsuranceInfoController
      * @return
      * @throws Exception
      */
-//    @SaCheckPermission("admin:insurance:import")
+    @SaCheckPermission("admin:insurance:import")
     @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "导入")
     @PostMapping("/importData")
     @ApiOperation("导入保单信息")

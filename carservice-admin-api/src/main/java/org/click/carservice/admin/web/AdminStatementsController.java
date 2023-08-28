@@ -1,11 +1,13 @@
 package org.click.carservice.admin.web;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.dto.OrderVerificationExportDto;
 import org.click.carservice.db.domain.query.OrderVerificationQuery;
 import org.click.carservice.db.entity.PageResult;
+import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.poi.ExcelUtil;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +39,19 @@ public class AdminStatementsController {
      * @param query
      * @return
      */
+    @SaCheckPermission("admin:statement:list")
     @PostMapping("/listOrder")
     @ApiOperation("对账单列表查询")
     public ResponseUtil<PageResult<OrderVerificationExportDto>> list(@RequestBody OrderVerificationQuery query) {
-        return ResponseUtil.okList(orderVerificationService.exportOrderVerification(query));
+        List<OrderVerificationExportDto> list = orderVerificationService.exportOrderVerification(query);
+        list.forEach(data -> data.setOrderStatusText(OrderStatus.parseValue(data.getOrderStatus())));
+        return ResponseUtil.okList(list);
     }
 
     /**
      * 导出对账单
      */
+    @SaCheckPermission("admin:statement:export")
     @PostMapping("/export")
     @ApiOperation("导出对账单")
     public void export(HttpServletResponse response, OrderVerificationQuery query)
