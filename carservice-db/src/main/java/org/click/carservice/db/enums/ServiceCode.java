@@ -5,15 +5,15 @@ package org.click.carservice.db.enums;
  */
 public enum ServiceCode {
 
-    SERVICE_TYPE_WASH("100001", "洗车", "1"),
+    SERVICE_TYPE_WASH("1001001", "洗车", "1"),
 
-    SERVICE_TYPE_MAINTENANCE("100002", "维修", "2"),
+    SERVICE_TYPE_MAINTENANCE("1001002", "维修", "2"),
 
-    SERVICE_TYPE_UPKEEP("100003", "保养", "3");
+    SERVICE_TYPE_UPKEEP("1001003", "保养", "3");
 
 
     /**
-     * 编码
+     * 编码, 商品种类
      */
     private final String code;
 
@@ -87,5 +87,16 @@ public enum ServiceCode {
             }
         }
         throw new IllegalStateException("code不支持");
+    }
+
+    public static String parseCodeByCouponId(String couponId) {
+        if (couponId != null) {
+            for (ServiceCode item : values()) {
+                if (item.couponId.equals(couponId)) {
+                    return item.code;
+                }
+            }
+        }
+        throw new IllegalStateException("depict不支持");
     }
 }

@@ -46,12 +46,10 @@ import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
-import org.click.carservice.db.validator.order.Order;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.*;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,9 +57,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -146,6 +144,9 @@ public class WxWebOrderService {
 
     @Autowired
     private ICarServiceOrderVerificationService iCarServiceOrderVerificationService;
+
+    @Autowired
+    private WxGoodsService goodsService;
 
     /**
      * 订单列表
@@ -304,13 +305,17 @@ public class WxWebOrderService {
 
         // 获取可用的优惠券信息,使用优惠券减免的金额
         BigDecimal couponPrice = BigDecimal.valueOf(0);
+        // 所以分类的商品id
+        List<String> goodsTypeIds = new ArrayList<>();
         // 如果couponId=0则没有优惠券，couponId=-1则不使用优惠券
         if (!"0".equals(couponId) && !"-1".equals(couponId)) {
             CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
             if (coupon == null) {
                 return ResponseUtil.badArgumentValue();
+            } else {
+                // 所有分类的商品id
+                goodsTypeIds = Arrays.asList(coupon.getGoodsIds());
             }
-            couponPrice = coupon.getDiscount();
         }
 
         //获取当前用户信息
@@ -345,9 +350,29 @@ public class WxWebOrderService {
             CarServiceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
             //团购价格默认为零如果有团购直接相加
             order.setGrouponPrice(grouponRules == null ? BigDecimal.valueOf(0) : grouponRules.getDiscount());
-            //将优惠券金额分担给每件商品
-            order.setCouponPrice(couponPrice.divide(BigDecimal.valueOf(checkedGoodsList.size()), 2, RoundingMode.HALF_UP));
-
+//            // 如果没有服务类商品
+//            //将优惠券金额分担给每件商品
+//            if (BigDecimal.valueOf(-1).equals(couponPrice)) {
+//                checkedGoodsList.stream().forEach();
+//            } else {
+//                order.setCouponPrice(couponPrice.divide(BigDecimal.valueOf(checkedGoodsList.size()), 2, RoundingMode.HALF_UP));
+//            }
+//            // 如果有则对应服务使用优惠券
+            // 判断当前商品的种类是否与可使用优惠券的商品种类一致
+            String goodsId = cartGoods.getGoodsId();
+            CarServiceGoods dbGoods = goodsService.findById(goodsId);
+            String typeId = dbGoods.getCategoryId();
+            // 一致则使用优惠券
+            if (goodsTypeIds.contains(typeId)) {
+                // 设置优惠券价格就是商品的价格
+                order.setCouponPrice(cartGoods.getPrice());
+            } else {
+                // 如果使用了优惠券但是优惠券不适用于此商品还是需要报错，防止前端未验证
+                if (!"0".equals(couponId) && !"-1".equals(couponId)) {
+                    throw new RuntimeException("优惠券异常，优惠券不适用当前商品!");
+                }
+                order.setCouponPrice(BigDecimal.ZERO);
+            }
             //添加订单
             orderCoreService.addOrderAndOrderGoods(cartGoods, order , user);
 

@@ -145,24 +145,24 @@ public class OrderCoreService {
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice).subtract(grouponPrice).max(BigDecimal.valueOf(0));
 
         // 余额减免
-        BigDecimal integralPrice = BigDecimal.valueOf(0);
-        if (slipCoreService.isDeduction(user) == null){
-            BigDecimal userIntegral = user.getIntegral();
-            if (actualPrice.compareTo(userIntegral) >= 0){
-                actualPrice = actualPrice.subtract(userIntegral);
-                integralPrice = userIntegral;
-            }else {
-                integralPrice = actualPrice;
-                actualPrice = BigDecimal.valueOf(0);
-            }
-            slipCoreService.subtractIntegral(user, order.getOrderSn(), integralPrice, DealType.TYPE_ORDER);
-        }
+//        BigDecimal integralPrice = BigDecimal.valueOf(0);
+//        if (slipCoreService.isDeduction(user) == null){
+//            BigDecimal userIntegral = user.getIntegral();
+//            if (actualPrice.compareTo(userIntegral) >= 0){
+//                actualPrice = actualPrice.subtract(userIntegral);
+//                integralPrice = userIntegral;
+//            }else {
+//                integralPrice = actualPrice;
+//                actualPrice = BigDecimal.valueOf(0);
+//            }
+//            slipCoreService.subtractIntegral(user, order.getOrderSn(), integralPrice, DealType.TYPE_ORDER);
+//        }
 
         order.setCouponPrice(couponPrice);
         order.setGrouponPrice(grouponPrice);
         order.setGoodsPrice(checkedGoodsPrice);
         order.setFreightPrice(freightPrice);
-        order.setIntegralPrice(integralPrice);
+//        order.setIntegralPrice(integralPrice);
         order.setOrderPrice(orderTotalPrice);
         order.setActualPrice(actualPrice);
         // 添加订单表项
