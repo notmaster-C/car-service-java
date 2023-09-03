@@ -17,6 +17,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -72,5 +73,23 @@ public class QRCodeUtil {
         return basePath;
     }
 
-
+    /**
+     * 生成二维码
+     * @param text    文本
+     * @param imgSize    二维码大小
+     */
+    public static byte[] createQRCodeByte(String text, Integer imgSize) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix=qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, imgSize, imgSize);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(bitMatrix,"PNG",outputStream);
+            return outputStream.toByteArray();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

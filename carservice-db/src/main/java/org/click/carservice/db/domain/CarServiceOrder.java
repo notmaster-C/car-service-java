@@ -197,6 +197,11 @@ public class CarServiceOrder implements Serializable {
     @TableField("`tenant_id`")
     private String tenantId;
     /**
+     * 订单二维码路径
+     */
+    @TableField("`qrcode`")
+    private byte[] qrcode;
+    /**
      * 更新版本号
      */
     @TableField("`version`")
@@ -343,6 +348,10 @@ public class CarServiceOrder implements Serializable {
      * 租户ID，用于分割多个租户
      */
     public static final String TENANT_ID = "`tenant_id`";
+    /**
+     * 订单二维码路径
+     */
+    public static final String QRCODE = "`qrcode`";
     /**
      * 更新版本号
      */

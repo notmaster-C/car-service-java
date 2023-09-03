@@ -35,6 +35,7 @@ import org.click.carservice.core.tasks.impl.OrderUnpaidTask;
 import org.click.carservice.core.tasks.service.TaskService;
 import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.JacksonUtil;
+import org.click.carservice.core.utils.QRCodeUtil;
 import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.core.weixin.service.SubscribeMessageService;
@@ -47,7 +48,10 @@ import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
 import org.click.carservice.wx.model.order.body.*;
-import org.click.carservice.wx.model.order.result.*;
+import org.click.carservice.wx.model.order.result.AttachResult;
+import org.click.carservice.wx.model.order.result.OrderDetailResult;
+import org.click.carservice.wx.model.order.result.OrderInfo;
+import org.click.carservice.wx.model.order.result.OrderSubmitResult;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -952,7 +956,58 @@ public class WxWebOrderService {
         return ResponseUtil.ok();
     }
 
+    /**
+     * 生成订单二维码
+     * <p>
+     * 1. 检测当前订单是否付款能够生成；
+     * 2. 检测当前订单是否已经有二维码；
+     * 3. 生成二维码；
+     * 4. 返回二维码；
+     *
+     * @param orderId   订单信息，{ orderId：xxx }
+     * @return 取消订单操作结果
+     */
+    public Object createQrcode( String orderId) {
+        CarServiceOrder order =orderService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.fail("未找到订单");
+        }
+        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY)){
+            return ResponseUtil.fail("订单状态不是已付款");
+        }
+        if (!order.getQrcode().equals("") || order.getQrcode()!=null){
+            return ResponseUtil.fail("订单已有二维码");
+        }
+       byte[] qrcode=QRCodeUtil.createQRCodeByte(orderId,300);
+        order.setQrcode(qrcode);
+        return ResponseUtil.ok(order.getQrcode());
+    }
 
+    /**
+     * 获取订单二维码
+     * <p>
+     * 1. 检测当前订单是否付款能够生成；
+     * 2. 检测当前订单是否已经有二维码；
+     * 3. 生成二维码；
+     * 4. 返回二维码；
+     *
+     * @param orderId   订单信息，{ orderId：xxx }
+     * @return 取消订单操作结果
+     */
+    public Object getQrcode( String orderId) {
+        CarServiceOrder order =orderService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.fail("未找到订单");
+        }
+        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY)){
+            return ResponseUtil.fail("订单状态不是已付款");
+        }
+        if (order.getQrcode().equals("") || order.getQrcode()==null){
+            return ResponseUtil.fail("订单无二维码,可能已使用");
+        }
+        byte[] qrcode=order.getQrcode();
+        return ResponseUtil.ok(qrcode);
+    }
     /**
      * 管理员取消订单
      * <p>
@@ -1026,6 +1081,8 @@ public class WxWebOrderService {
         }
         order.setShipTime(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
+        order.setQrcode(null);
+
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("网络繁忙，请刷新重试");
         }

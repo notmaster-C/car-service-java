@@ -10,12 +10,12 @@ package org.click.carservice.wx.web;
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.annotation.JsonBody;
 import org.click.carservice.core.redis.annotation.RequestRateLimiter;
-import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.wx.annotation.LoginUser;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.web.impl.WxWebOrderService;
@@ -223,5 +223,20 @@ public class WxOrderController {
     public Object confirm(@LoginUser String userId, @JsonBody String orderId, MultipartFile file) {
         return orderService.confirm(userId, orderId,file);
     }
-
+    /**
+     * 订单生成二维码
+     *
+     * @param orderId   订单信息，{ orderId：xxx }
+     * @return 订单操作结果
+     */
+    @PostMapping("createQrcode")
+    @ApiOperation(value = "订单生成二维码")
+    public Object createQrcode( @JsonBody String orderId) {
+        return orderService.createQrcode(orderId);
+    }
+    @PostMapping("getQrcode")
+    @ApiOperation(value = "获取订单二维码")
+    public Object getQrcode( @JsonBody String orderId) {
+        return orderService.getQrcode(orderId);
+    }
 }

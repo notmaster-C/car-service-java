@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.tasks.impl.OrderUnpaidTask;
 import org.click.carservice.core.tasks.service.TaskService;
+import org.click.carservice.core.utils.QRCodeUtil;
 import org.click.carservice.db.domain.*;
 import org.click.carservice.db.enums.*;
 import org.click.carservice.db.service.*;
@@ -100,6 +101,8 @@ public class OrderCoreService {
                 //跟新订单状态
                 order.setPayTime(LocalDateTime.now());
                 order.setOrderStatus(OrderStatus.STATUS_BTL_PAY.getStatus());
+                //设置订单二维码
+                order.setQrcode(QRCodeUtil.createQRCodeByte(order.getId(),300));
                 if (orderService.updateVersionSelective(order) == 0){
                     throw new RuntimeException("订单更新失败，请刷新重试");
                 }
