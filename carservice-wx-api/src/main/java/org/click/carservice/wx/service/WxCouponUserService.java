@@ -30,7 +30,7 @@ import java.util.List;
 public class WxCouponUserService extends CouponUserServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countUserAndCoupon(String userId, String couponId) {
         QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCouponUser.USER_ID, userId);
@@ -39,7 +39,7 @@ public class WxCouponUserService extends CouponUserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countCoupon(String couponId) {
         QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCouponUser.COUPON_ID, couponId);
@@ -47,7 +47,7 @@ public class WxCouponUserService extends CouponUserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCouponUser> queryList(String userId, CouponListBody body) {
         QueryWrapper<CarServiceCouponUser> wrapper = startPage(body);
         if (userId != null) {
@@ -60,7 +60,7 @@ public class WxCouponUserService extends CouponUserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCouponUser> queryAll(String userId) {
         QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCouponUser.USER_ID, userId);

@@ -69,7 +69,7 @@ public class WxGoodsCommentService extends GoodsCommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsComment> querySelective(GoodsCommentListBody body) {
         QueryWrapper<CarServiceGoodsComment> wrapper = startPage(body);
         wrapper.eq(CarServiceGoodsComment.GOODS_ID, body.getGoodsId());
@@ -80,7 +80,7 @@ public class WxGoodsCommentService extends GoodsCommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsComment> queryCommentList(String goodsId, Integer page, Integer limit) {
         QueryWrapper<CarServiceGoodsComment> wrapper = startPage(new PageBody(page, limit));
         wrapper.eq(CarServiceGoodsComment.GOODS_ID, goodsId);
@@ -88,7 +88,7 @@ public class WxGoodsCommentService extends GoodsCommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(String goodsId, Boolean hasPicture) {
         QueryWrapper<CarServiceGoodsComment> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoodsComment.GOODS_ID, goodsId);

@@ -32,13 +32,13 @@ public class BrandServiceImpl extends IBaseServiceImpl<BrandMapper, CarServiceBr
 
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> queryAll(Wrapper<CarServiceBrand> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
@@ -170,61 +170,61 @@ public class BrandServiceImpl extends IBaseServiceImpl<BrandMapper, CarServiceBr
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand getOne(Wrapper<CarServiceBrand> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count() {
         return super.count();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count(Wrapper<CarServiceBrand> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> list(Wrapper<CarServiceBrand> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> list() {
         return super.list();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<Map<String, Object>> listMaps(Wrapper<CarServiceBrand> queryWrapper) {
         return super.listMaps(queryWrapper);
     }
 
     @Override
-//    @Cacheable(sync = true)
+//    //@Cacheable(sync = true)
     public List<CarServiceBrand> selectByUserId(String userId) {
         LambdaQueryWrapper<CarServiceBrand> queryWrapper = Wrappers.lambdaQuery(CarServiceBrand.class).eq(CarServiceBrand::getUserId, userId);
         return list(queryWrapper);

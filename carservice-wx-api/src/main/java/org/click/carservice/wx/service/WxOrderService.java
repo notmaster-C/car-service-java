@@ -36,7 +36,7 @@ import java.util.List;
 public class WxOrderService extends OrderServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceOrder findById(String userId, String orderId) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.USER_ID, userId);
@@ -44,7 +44,7 @@ public class WxOrderService extends OrderServiceImpl {
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(String userId) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.USER_ID, userId);
@@ -52,7 +52,7 @@ public class WxOrderService extends OrderServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(List<Short> orderStatus) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         if (orderStatus != null && orderStatus.size() > 0) {
@@ -64,7 +64,7 @@ public class WxOrderService extends OrderServiceImpl {
     /**
      * 判断订单号是否存在
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Boolean countByOrderSn(String userId, String orderSn) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.USER_ID, userId);
@@ -75,7 +75,7 @@ public class WxOrderService extends OrderServiceImpl {
     /**
      * 判断订单号是否存在
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceOrder findBySn(String userId, String orderSn) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.USER_ID, userId);
@@ -84,7 +84,7 @@ public class WxOrderService extends OrderServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceOrder findByBrandId(String brandId, String orderId) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.ID, orderId);
@@ -103,7 +103,7 @@ public class WxOrderService extends OrderServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceOrder> queryByOrderStatus(String userId, List<Short> orderStatus, OrderListBody body) {
         QueryWrapper<CarServiceOrder> wrapper = startPage(body);
         wrapper.eq(CarServiceOrder.USER_ID, userId);
@@ -114,7 +114,7 @@ public class WxOrderService extends OrderServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceOrder> queryByBrandOrderStatus(String brandId, List<Short> orderStatus, BrandOrderListBody body) {
         QueryWrapper<CarServiceOrder> wrapper = startPage(body);
         wrapper.eq(CarServiceOrder.BRAND_ID, brandId);
@@ -128,7 +128,7 @@ public class WxOrderService extends OrderServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public UserOrderInfo orderInfo(String userId) {
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrder.USER_ID, userId);

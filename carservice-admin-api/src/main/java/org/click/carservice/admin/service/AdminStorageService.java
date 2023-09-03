@@ -32,7 +32,7 @@ import java.util.List;
 public class AdminStorageService extends StorageServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceStorage> querySelective(StorageListBody body) {
         QueryWrapper<CarServiceStorage> wrapper = startPage(body);
         if (StringUtils.hasText(body.getKey())) {

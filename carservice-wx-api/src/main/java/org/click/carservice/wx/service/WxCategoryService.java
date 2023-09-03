@@ -29,7 +29,7 @@ import java.util.List;
 public class WxCategoryService extends CategoryServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryL1() {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCategory.LEVEL, "L1");
@@ -38,7 +38,7 @@ public class WxCategoryService extends CategoryServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryByPid(String pid) {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCategory.PID, pid);
@@ -47,7 +47,7 @@ public class WxCategoryService extends CategoryServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryL2ByIds(List<String> ids) {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.in(CarServiceCategory.ID, ids);
@@ -57,7 +57,7 @@ public class WxCategoryService extends CategoryServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryChannel() {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCategory.LEVEL, "L1");

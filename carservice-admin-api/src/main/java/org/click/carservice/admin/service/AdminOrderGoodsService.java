@@ -29,14 +29,14 @@ import java.util.List;
 @CacheConfig(cacheNames = "carservice_order_goods")
 public class AdminOrderGoodsService extends OrderGoodsServiceImpl {
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceOrderGoods> queryByOid(String orderId) {
         QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceOrderGoods findByOrderId(String orderId) {
         QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrderGoods.ORDER_ID , orderId);

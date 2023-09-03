@@ -30,13 +30,13 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, CarServi
 
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceDynamic findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> queryAll(Wrapper<CarServiceDynamic> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
@@ -168,55 +168,55 @@ public class DynamicServiceImpl extends IBaseServiceImpl<DynamicMapper, CarServi
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceDynamic getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceDynamic getOne(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count() {
         return super.count();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> list(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> list() {
         return super.list();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<Map<String, Object>> listMaps(Wrapper<CarServiceDynamic> queryWrapper) {
         return super.listMaps(queryWrapper);
     }

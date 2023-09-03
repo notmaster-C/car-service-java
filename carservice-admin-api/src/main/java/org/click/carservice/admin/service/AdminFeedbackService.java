@@ -32,7 +32,7 @@ import java.util.List;
 public class AdminFeedbackService extends FeedbackServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceFeedback> querySelective(FeedbackListBody body) {
         QueryWrapper<CarServiceFeedback> wrapper = startPage(body);
         if (body.getUserId() != null) {

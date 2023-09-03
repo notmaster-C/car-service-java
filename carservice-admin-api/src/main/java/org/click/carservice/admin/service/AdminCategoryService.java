@@ -51,7 +51,7 @@ public class AdminCategoryService extends CategoryServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryL1() {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCategory.LEVEL, "L1");
@@ -60,7 +60,7 @@ public class AdminCategoryService extends CategoryServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCategory> queryByPid(String pid) {
         QueryWrapper<CarServiceCategory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCategory.PID, pid);

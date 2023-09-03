@@ -30,13 +30,13 @@ public class CommentServiceImpl extends IBaseServiceImpl<CommentMapper, CarServi
 
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceComment findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> queryAll(Wrapper<CarServiceComment> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
@@ -168,55 +168,55 @@ public class CommentServiceImpl extends IBaseServiceImpl<CommentMapper, CarServi
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceComment getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceComment getOne(Wrapper<CarServiceComment> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count() {
         return super.count();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count(Wrapper<CarServiceComment> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> list(Wrapper<CarServiceComment> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> list() {
         return super.list();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<Map<String, Object>> listMaps(Wrapper<CarServiceComment> queryWrapper) {
         return super.listMaps(queryWrapper);
     }

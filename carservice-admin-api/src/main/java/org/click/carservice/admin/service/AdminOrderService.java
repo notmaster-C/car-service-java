@@ -32,7 +32,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "carservice_order")
 public class AdminOrderService extends OrderServiceImpl {
 
-//    @Cacheable(sync = true)
+//    //@Cacheable(sync = true)
     public List<CarServiceOrder> querySelective(OrderListBody body) {
         QueryWrapper<CarServiceOrder> wrapper = startPage(body);
         // 根据当前管理系统用户id获取到小程序商户id,从而查询到用户的所有订单
@@ -64,7 +64,7 @@ public class AdminOrderService extends OrderServiceImpl {
         return queryAll(wrapper);
     }
 
-//    @Cacheable(sync = true)
+//    //@Cacheable(sync = true)
     public Integer statusCount(List<Short> orderStatus) {
         if (orderStatus == null || orderStatus.size() <= 0) {
             return 0;

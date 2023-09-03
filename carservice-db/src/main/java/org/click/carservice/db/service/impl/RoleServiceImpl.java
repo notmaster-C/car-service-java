@@ -30,13 +30,13 @@ public class RoleServiceImpl extends IBaseServiceImpl<RoleMapper, CarServiceRole
 
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceRole findById(String id) {
         return getBaseMapper().selectById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> queryAll(Wrapper<CarServiceRole> queryWrapper) {
         return getBaseMapper().selectList(queryWrapper);
     }
@@ -168,55 +168,55 @@ public class RoleServiceImpl extends IBaseServiceImpl<RoleMapper, CarServiceRole
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceRole getById(Serializable id) {
         return super.getById(id);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> listByMap(Map<String, Object> columnMap) {
         return super.listByMap(columnMap);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceRole getOne(Wrapper<CarServiceRole> queryWrapper) {
         return super.getOne(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count() {
         return super.count();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public long count(Wrapper<CarServiceRole> queryWrapper) {
         return super.count(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> list(Wrapper<CarServiceRole> queryWrapper) {
         return super.list(queryWrapper);
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> list() {
         return super.list();
     }
 
     @Override
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<Map<String, Object>> listMaps(Wrapper<CarServiceRole> queryWrapper) {
         return super.listMaps(queryWrapper);
     }

@@ -90,7 +90,7 @@ public class AdminTenantService extends TenantServiceImpl {
         }
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceTenant findAppid(String appid) {
         QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceTenant.APP_ID, appid);
@@ -98,14 +98,14 @@ public class AdminTenantService extends TenantServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceTenant findAddress(String address) {
         QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceTenant.ADDRESS, address);
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceTenant> querySelective(TenantListBody body) {
         QueryWrapper<CarServiceTenant> wrapper = startPage(body);
         if (body.getAddress() != null) {

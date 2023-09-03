@@ -42,7 +42,7 @@ public class AdminKeywordService extends KeywordServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceKeyword> querySelective(KeywordListBody body) {
         QueryWrapper<CarServiceKeyword> wrapper = startPage(body);
         if (StringUtils.hasText(body.getKeyword())) {

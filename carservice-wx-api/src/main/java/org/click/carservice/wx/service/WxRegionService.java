@@ -29,7 +29,7 @@ import java.util.List;
 public class WxRegionService extends RegionServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRegion> getAll() {
         QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceRegion.TYPE, 4);
@@ -37,7 +37,7 @@ public class WxRegionService extends RegionServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRegion> queryByPid(String pid) {
         QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceRegion.PID, pid);

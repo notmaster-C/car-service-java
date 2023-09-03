@@ -30,7 +30,7 @@ import java.util.List;
 public class AdminDealingSlipService extends DealingSlipServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDealingSlip> querySelective(DealingSlipListBody body) {
         QueryWrapper<CarServiceDealingSlip> wrapper = startPage(body);
         if (body.getUserId() != null) {

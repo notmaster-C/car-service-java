@@ -32,7 +32,7 @@ import java.util.List;
 public class WxCollectService extends CollectServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Boolean count(String userId, CollectType type, String goodsId) {
         if (userId == null) {
             return false;
@@ -46,7 +46,7 @@ public class WxCollectService extends CollectServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCollect> queryByType(String userId, CollectListBody body) {
         QueryWrapper<CarServiceCollect> wrapper = startPage(body);
         wrapper.eq(CarServiceCollect.USER_ID, userId);
@@ -58,7 +58,7 @@ public class WxCollectService extends CollectServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceCollect queryByTypeAndValue(String userId, Byte type, String valueId) {
         QueryWrapper<CarServiceCollect> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCollect.USER_ID, userId);

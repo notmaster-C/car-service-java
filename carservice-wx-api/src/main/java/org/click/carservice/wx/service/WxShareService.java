@@ -65,7 +65,7 @@ public class WxShareService extends ShareServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countAndShare(String inviterId) {
         QueryWrapper<CarServiceShare> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceShare.INVITER_ID, inviterId);
@@ -75,7 +75,7 @@ public class WxShareService extends ShareServiceImpl {
     /**
      * 根据状态获取用户所有分享记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceShare> queryInviterId(String inviterId, Short status) {
         QueryWrapper<CarServiceShare> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceShare.INVITER_ID, inviterId);
@@ -86,7 +86,7 @@ public class WxShareService extends ShareServiceImpl {
     /**
      * 获取用户所有分享记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceShare> queryInviterId(String inviterId) {
         QueryWrapper<CarServiceShare> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceShare.INVITER_ID, inviterId);

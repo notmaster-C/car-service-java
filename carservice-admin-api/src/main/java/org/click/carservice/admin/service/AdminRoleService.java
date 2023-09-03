@@ -50,7 +50,7 @@ public class AdminRoleService extends RoleServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> querySelective(RoleListBody body) {
         QueryWrapper<CarServiceRole> wrapper = startPage(body);
         if (StringUtils.hasText(body.getName())) {
@@ -60,7 +60,7 @@ public class AdminRoleService extends RoleServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public boolean checkExist(String name) {
         QueryWrapper<CarServiceRole> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceRole.NAME, name);
@@ -68,7 +68,7 @@ public class AdminRoleService extends RoleServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRole> queryAll() {
         return list();
     }

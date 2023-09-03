@@ -54,28 +54,28 @@ public class AdminGrouponRulesService extends GrouponRulesServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceGrouponRules findByGid(String goodsId) {
         QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countByGoodsId(String goodsId) {
         QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return Math.toIntExact(count(wrapper));
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> queryByGoodsId(String goodsId) {
         QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> querySelective(GrouponRuleListBody body) {
         QueryWrapper<CarServiceGrouponRules> wrapper = startPage(body);
         if (StringUtils.hasText(body.getGoodsId())) {

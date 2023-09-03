@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminCouponUserService extends CouponUserServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCouponUser> querySelective(CouponUserListBody body) {
         QueryWrapper<CarServiceCouponUser> wrapper = startPage(body);
         if (body.getUserId() != null) {

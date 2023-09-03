@@ -30,7 +30,7 @@ import java.util.List;
 public class WxKeywordService extends KeywordServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceKeyword queryDefault() {
         QueryWrapper<CarServiceKeyword> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceKeyword.IS_DEFAULT, true);
@@ -38,7 +38,7 @@ public class WxKeywordService extends KeywordServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceKeyword> queryHots() {
         QueryWrapper<CarServiceKeyword> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceKeyword.IS_HOT, true);
@@ -47,7 +47,7 @@ public class WxKeywordService extends KeywordServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceKeyword> queryByKeyword(SearchListBody body) {
         QueryWrapper<CarServiceKeyword> wrapper = startPage(body);
         wrapper.like(CarServiceKeyword.KEYWORD, body.getKeyword());

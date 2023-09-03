@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 public class WxLikeService extends LikeServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
         QueryWrapper<CarServiceLike> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceLike.VALUE_ID, valueId);
@@ -39,7 +39,7 @@ public class WxLikeService extends LikeServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Boolean count(LikeType constant, String valueId, String userId) {
         if (userId == null) {
             return false;
@@ -53,7 +53,7 @@ public class WxLikeService extends LikeServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceLike query(Short type, String valueId, String userId) {
         QueryWrapper<CarServiceLike> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceLike.TYPE, type);

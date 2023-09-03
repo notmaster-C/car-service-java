@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminLogService extends LogServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceLog> querySelective(LogListBody body) {
         QueryWrapper<CarServiceLog> wrapper = startPage(body);
         if (body.getType() != null) {

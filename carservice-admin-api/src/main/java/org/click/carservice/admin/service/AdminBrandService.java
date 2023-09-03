@@ -58,7 +58,7 @@ public class AdminBrandService extends BrandServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> all() {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.STATUS, BrandStatus.STATUS_NORMAL.getStatus());
@@ -67,7 +67,7 @@ public class AdminBrandService extends BrandServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> querySelective(BrandListBody body) {
         QueryWrapper<CarServiceBrand> wrapper = startPage(body);
         if (!Objects.isNull(body.getId())) {
@@ -80,7 +80,7 @@ public class AdminBrandService extends BrandServiceImpl {
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand findByBrandName(String name) {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.NAME, name);

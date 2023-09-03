@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminFootprintService extends FootprintServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceFootprint> querySelective(FootprintListBody body) {
         QueryWrapper<CarServiceFootprint> wrapper = startPage(body);
         if (StringUtils.hasText(body.getUserId())) {

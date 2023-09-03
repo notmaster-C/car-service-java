@@ -34,7 +34,7 @@ import java.util.List;
 public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceNoticeAdmin> querySelective(NoticeAdminListBody body) {
         QueryWrapper<CarServiceNoticeAdmin> wrapper = startPage(body);
         wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, body.getAdminId());
@@ -51,7 +51,7 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceNoticeAdmin find(String noticeId, String adminId) {
         QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
@@ -94,7 +94,7 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countUnread(String adminId) {
         QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceNoticeAdmin.ADMIN_ID, adminId);
@@ -103,7 +103,7 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceNoticeAdmin> queryByNoticeId(String noticeId) {
         QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);
@@ -127,7 +127,7 @@ public class AdminNoticeAdminService extends NoticeAdminServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countReadByNoticeId(String noticeId) {
         QueryWrapper<CarServiceNoticeAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceNoticeAdmin.NOTICE_ID, noticeId);

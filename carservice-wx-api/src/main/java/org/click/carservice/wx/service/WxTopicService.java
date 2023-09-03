@@ -32,13 +32,13 @@ import java.util.List;
 public class WxTopicService extends TopicServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceTopic> queryList(PageBody body) {
         return queryAll(startPage(body));
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceTopic> queryList(TopicListBody body) {
         QueryWrapper<CarServiceTopic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {
@@ -49,7 +49,7 @@ public class WxTopicService extends TopicServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceTopic> queryRelatedList(String id, Integer limit) {
         QueryWrapper<CarServiceTopic> wrapper = startPage(new PageBody(limit));
         wrapper.notIn(CarServiceTopic.ID, id);

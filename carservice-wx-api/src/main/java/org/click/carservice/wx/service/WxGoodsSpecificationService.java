@@ -35,7 +35,7 @@ import java.util.Map;
 public class WxGoodsSpecificationService extends GoodsSpecificationServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsSpecification> queryByGid(String goodsId) {
         QueryWrapper<CarServiceGoodsSpecification> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoodsSpecification.GOODS_ID, goodsId);
@@ -43,7 +43,7 @@ public class WxGoodsSpecificationService extends GoodsSpecificationServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<GoodsSpecificationVo> getSpecificationVoList(String goodsId) {
         List<CarServiceGoodsSpecification> goodsSpecificationList = queryByGid(goodsId);
         Map<String, GoodsSpecificationVo> map = new HashMap<>();

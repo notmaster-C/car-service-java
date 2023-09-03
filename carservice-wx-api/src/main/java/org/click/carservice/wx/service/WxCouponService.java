@@ -65,7 +65,7 @@ public class WxCouponService extends CouponServiceImpl {
     /**
      * 查询
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCoupon> queryList(PageBody body) {
         QueryWrapper<CarServiceCoupon> wrapper = startPage(body);
         wrapper.eq(CarServiceCoupon.TYPE, CouponType.TYPE_COMMON.getStatus());
@@ -74,7 +74,7 @@ public class WxCouponService extends CouponServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCoupon> queryAvailableList(String userId, Integer limit) {
         //分页
         PageBody body = new PageBody(limit);
@@ -99,7 +99,7 @@ public class WxCouponService extends CouponServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceCoupon findByCode(String code) {
         QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCoupon.CODE, code);

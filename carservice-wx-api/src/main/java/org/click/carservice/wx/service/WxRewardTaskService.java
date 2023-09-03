@@ -43,7 +43,7 @@ public class WxRewardTaskService extends RewardTaskServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRewardTask> querySelective(String goodsId, PageBody body) {
         QueryWrapper<CarServiceRewardTask> wrapper = startPage(body);
         if (StringUtils.hasText(goodsId)) {
@@ -53,7 +53,7 @@ public class WxRewardTaskService extends RewardTaskServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRewardTask> queryByReward(Integer limit) {
         QueryWrapper<CarServiceRewardTask> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());
@@ -61,7 +61,7 @@ public class WxRewardTaskService extends RewardTaskServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRewardTask> querySelective(PageBody body) {
         QueryWrapper<CarServiceRewardTask> wrapper = startPage(body);
         wrapper.eq(CarServiceRewardTask.STATUS, RewardTaskStatus.TASK_STATUS_ON.getStatus());

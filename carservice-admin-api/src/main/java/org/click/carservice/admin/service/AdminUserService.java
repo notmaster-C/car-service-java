@@ -34,7 +34,7 @@ import java.util.List;
 public class AdminUserService extends UserServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public UserInfo findUserVoById(String userId) {
         CarServiceUser user = getById(userId);
         UserInfo userInfo = new UserInfo();
@@ -48,7 +48,7 @@ public class AdminUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceUser> querySelective(UserListBody body) {
         QueryWrapper<CarServiceUser> wrapper = startPage(body);
         if (body.getUserId() != null) {

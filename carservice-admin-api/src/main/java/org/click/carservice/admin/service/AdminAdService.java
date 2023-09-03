@@ -46,7 +46,7 @@ public class AdminAdService extends AdServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAd> querySelective(AdListBody body) {
         QueryWrapper<CarServiceAd> wrapper = startPage(body);
         if (StringUtils.hasText(body.getName())) {

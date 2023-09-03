@@ -36,7 +36,7 @@ public class WxDealingSlipService extends DealingSlipServiceImpl {
      * @param outBatchNo 转账单号
      * @return true
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Boolean isByOutBatchNo(String userId, String outBatchNo) {
         QueryWrapper<CarServiceDealingSlip> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceDealingSlip.USER_ID, userId);
@@ -45,7 +45,7 @@ public class WxDealingSlipService extends DealingSlipServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDealingSlip> querySelective(String userId, String openId, PageBody body) {
         QueryWrapper<CarServiceDealingSlip> wrapper = startPage(body);
         if (userId != null) {

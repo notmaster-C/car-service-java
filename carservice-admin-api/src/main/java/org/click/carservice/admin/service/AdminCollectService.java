@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminCollectService extends CollectServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCollect> querySelective(CollectListBody body) {
         QueryWrapper<CarServiceCollect> wrapper = startPage(body);
         wrapper.eq(CarServiceCollect.CANCEL, false);

@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminRewardService extends RewardServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceReward> querySelective(RewardJoinBody body) {
         QueryWrapper<CarServiceReward> wrapper = startPage(body);
         if (body.getUserId() != null) {

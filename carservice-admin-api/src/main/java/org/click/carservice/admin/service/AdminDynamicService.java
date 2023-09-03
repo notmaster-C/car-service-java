@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminDynamicService extends DynamicServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> querySelective(DynamicListBody body) {
         QueryWrapper<CarServiceDynamic> wrapper = startPage(body);
         if (body.getUserId() != null) {

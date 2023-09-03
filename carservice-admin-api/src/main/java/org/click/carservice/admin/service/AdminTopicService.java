@@ -61,7 +61,7 @@ public class AdminTopicService extends TopicServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceTopic> querySelective(TopicListBody body) {
         QueryWrapper<CarServiceTopic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {

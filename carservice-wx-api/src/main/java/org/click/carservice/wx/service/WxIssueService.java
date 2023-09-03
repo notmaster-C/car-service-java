@@ -33,12 +33,12 @@ import java.util.List;
 public class WxIssueService extends IssueServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceIssue> getGoodsIssue() {
         return queryAll(startPage(new PageBody(4)));
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceIssue> querySelective(IssueListBody body) {
         QueryWrapper<CarServiceIssue> wrapper = startPage(body);
         if (StringUtils.hasText(body.getQuestion())) {

@@ -34,7 +34,7 @@ public class WxMessageService extends MessageServiceImpl {
     /**
      * 获取历史消息
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceMessage> getHistoryMessage(String sendUserId, HistoryMessageBody body) {
         QueryWrapper<CarServiceMessage> wrapper = startPage(body);
         wrapper.eq(CarServiceMessage.SEND_USER_ID, sendUserId)
@@ -50,7 +50,7 @@ public class WxMessageService extends MessageServiceImpl {
      * @param receiveUserId 接收者用户id
      * @return 消息集合
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceMessage> queryByReceiveUserId(String receiveUserId) {
         QueryWrapper<CarServiceMessage> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceMessage.RECEIVE_USER_ID, receiveUserId);
@@ -62,7 +62,7 @@ public class WxMessageService extends MessageServiceImpl {
      * @param sendUserId 发送者用户id
      * @return 消息集合
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceMessage> queryBySendUserId(String sendUserId) {
         QueryWrapper<CarServiceMessage> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceMessage.SEND_USER_ID, sendUserId);

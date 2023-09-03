@@ -39,7 +39,7 @@ import java.util.List;
 public class WxUserService extends UserServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public UserInfo findUserVoById(String userId) {
         CarServiceUser user = findById(userId);
         UserInfo userInfo = new UserInfo();
@@ -52,7 +52,7 @@ public class WxUserService extends UserServiceImpl {
         return userInfo;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceUser queryByOid(String openId) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.OPENID, openId);
@@ -60,7 +60,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceUser findByShare(String userId) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.ID, userId);
@@ -68,7 +68,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countUser(String inviter) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.INVITER, inviter);
@@ -76,7 +76,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceUser> queryByInviter(String inviter) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.INVITER, inviter);
@@ -84,7 +84,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceUser> queryByUsername(String username) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.USERNAME, username);
@@ -92,7 +92,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public boolean checkByUsername(String username) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.USERNAME, username);
@@ -100,7 +100,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceUser> queryByMobile(String mobile) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.MOBILE, mobile);
@@ -108,7 +108,7 @@ public class WxUserService extends UserServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceUser> queryByOpenid(String openid) {
         QueryWrapper<CarServiceUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceUser.OPENID, openid);

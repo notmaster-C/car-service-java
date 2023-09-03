@@ -30,7 +30,7 @@ import java.util.List;
 public class WxRewardService extends RewardServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countReward(String taskId) {
         QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceReward.TASK_ID, taskId);
@@ -38,7 +38,7 @@ public class WxRewardService extends RewardServiceImpl {
         return Math.toIntExact(count(wrapper));
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countAndReward(String userId, String taskId) {
         QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceReward.USER_ID, userId);
@@ -49,7 +49,7 @@ public class WxRewardService extends RewardServiceImpl {
     /**
      * 获取分享者记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceReward findSharer(String userId, String taskId) {
         QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceReward.USER_ID, userId);
@@ -61,7 +61,7 @@ public class WxRewardService extends RewardServiceImpl {
     /**
      * 获取用户所有分享记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceReward> querySharerUserId(String userId) {
         QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceReward.USER_ID, userId);
@@ -72,7 +72,7 @@ public class WxRewardService extends RewardServiceImpl {
     /**
      * 获取某个赏金活动参与的记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceReward> queryJoinRecord(String rewardId) {
         QueryWrapper<CarServiceReward> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceReward.REWARD_ID, rewardId);

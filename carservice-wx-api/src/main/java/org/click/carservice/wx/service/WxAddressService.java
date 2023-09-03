@@ -31,7 +31,7 @@ import java.util.List;
 public class WxAddressService extends AddressServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAddress> queryByUid(String userId) {
         QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAddress.USER_ID, userId);
@@ -39,7 +39,7 @@ public class WxAddressService extends AddressServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAddress query(String userId, String id) {
         QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAddress.USER_ID, userId);
@@ -48,7 +48,7 @@ public class WxAddressService extends AddressServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public void deleteByUser(String userId, String id) {
         QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAddress.USER_ID, userId);
@@ -56,7 +56,7 @@ public class WxAddressService extends AddressServiceImpl {
         remove(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAddress findDefault(String userId) {
         QueryWrapper<CarServiceAddress> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAddress.USER_ID, userId);

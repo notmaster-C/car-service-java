@@ -32,7 +32,7 @@ import java.util.List;
 public class WxFootprintService extends FootprintServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceFootprint> queryByAddTime(String userId, PageBody body) {
         QueryWrapper<CarServiceFootprint> wrapper = startPage(body);
         wrapper.eq(CarServiceFootprint.USER_ID, userId);
@@ -40,7 +40,7 @@ public class WxFootprintService extends FootprintServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceFootprint findById(String userId, String id) {
         QueryWrapper<CarServiceFootprint> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceFootprint.USER_ID, userId);
@@ -48,7 +48,7 @@ public class WxFootprintService extends FootprintServiceImpl {
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceFootprint findByGoodId(String userId, String goodId) {
         QueryWrapper<CarServiceFootprint> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceFootprint.USER_ID, userId);

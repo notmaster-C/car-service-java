@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminSearchHistoryService extends SearchHistoryServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceSearchHistory> querySelective(HistoryListBody body) {
         QueryWrapper<CarServiceSearchHistory> wrapper = startPage(body);
         if (StringUtils.hasText(body.getUserId())) {

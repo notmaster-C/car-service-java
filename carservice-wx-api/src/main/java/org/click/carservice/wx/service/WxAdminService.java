@@ -29,7 +29,7 @@ import java.util.List;
 public class WxAdminService extends AdminServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAdmin findByOpenId(String openId) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.OPENID, openId);
@@ -37,21 +37,21 @@ public class WxAdminService extends AdminServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAdmin> findByTenantId(String tenantId) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.TENANT_ID, tenantId);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAdmin> findAdmin(String username) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.USERNAME, username);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAdmin findByMobile(String mobile) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.MOBILE, mobile);

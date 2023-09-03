@@ -32,7 +32,7 @@ import java.util.List;
 public class WxDynamicService extends DynamicServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceDynamic> querySelective(DynamicListBody body) {
         QueryWrapper<CarServiceDynamic> wrapper = startPage(body);
         if (StringUtils.hasText(body.getContent())) {

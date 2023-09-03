@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminGoodsCommentService extends GoodsCommentServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsComment> querySelective(CommentListBody body) {
         QueryWrapper<CarServiceGoodsComment> wrapper = startPage(body);
         if (StringUtils.hasText(body.getUserId())) {

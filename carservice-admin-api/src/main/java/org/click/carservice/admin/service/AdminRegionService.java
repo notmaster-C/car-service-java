@@ -29,14 +29,14 @@ import java.util.List;
 public class AdminRegionService extends RegionServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRegion> getAll() {
         QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
         wrapper.ne(CarServiceRegion.TYPE, 4);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRegion> queryByPid(String parentId) {
         QueryWrapper<CarServiceRegion> wrapper = new QueryWrapper<>();
         wrapper.ne(CarServiceRegion.PID, parentId);

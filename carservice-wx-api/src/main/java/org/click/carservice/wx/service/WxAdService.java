@@ -29,7 +29,7 @@ import java.util.List;
 public class WxAdService extends AdServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAd> queryIndex() {
         QueryWrapper<CarServiceAd> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAd.POSITION, 1);

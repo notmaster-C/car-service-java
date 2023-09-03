@@ -30,7 +30,7 @@ import java.util.List;
 public class AdminGrouponService extends GrouponServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGroupon> querySelective(GrouponListBody body) {
         QueryWrapper<CarServiceGroupon> wrapper = startPage(body);
         if (body.getUserId() != null) {

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class AdminCommentService extends CommentServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
         QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceComment.VALUE_ID, valueId);

@@ -62,7 +62,7 @@ public class WxBrandService extends BrandServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> queryList(BrandListBody body) {
         QueryWrapper<CarServiceBrand> wrapper = startPage(body);
         wrapper.eq(CarServiceBrand.STATUS, BrandStatus.STATUS_NORMAL.getStatus());
@@ -73,7 +73,7 @@ public class WxBrandService extends BrandServiceImpl {
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceBrand> queryByUserId(String userId) {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.USER_ID, userId);
@@ -81,14 +81,14 @@ public class WxBrandService extends BrandServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand findByUserId(String userId) {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.USER_ID, userId);
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand findByUserId(String userId , String brandId) {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.USER_ID , userId);
@@ -96,7 +96,7 @@ public class WxBrandService extends BrandServiceImpl {
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceBrand findByBrandName(String name) {
         QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceBrand.NAME, name);

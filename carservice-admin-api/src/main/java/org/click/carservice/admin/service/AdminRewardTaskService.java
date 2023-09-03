@@ -43,7 +43,7 @@ public class AdminRewardTaskService extends RewardTaskServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceRewardTask findByGid(String goodsId) {
         QueryWrapper<CarServiceRewardTask> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceRewardTask.GOODS_ID, goodsId);
@@ -57,14 +57,14 @@ public class AdminRewardTaskService extends RewardTaskServiceImpl {
         remove(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countByGoodsId(String goodsId) {
         QueryWrapper<CarServiceRewardTask> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceRewardTask.GOODS_ID, goodsId);
         return Math.toIntExact(count(wrapper));
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceRewardTask> querySelective(RewardListBody body) {
         QueryWrapper<CarServiceRewardTask> wrapper = startPage(body);
         if (StringUtils.hasText(body.getGoodsId())) {

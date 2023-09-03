@@ -29,7 +29,7 @@ import java.util.List;
 public class AdminGoodsProductService extends GoodsProductServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsProduct> queryByGid(String gid) {
         QueryWrapper<CarServiceGoodsProduct> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoodsProduct.GOODS_ID, gid);

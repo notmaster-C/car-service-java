@@ -34,7 +34,7 @@ import java.util.Objects;
 public class WxCartService extends CartServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceCart queryExist(String goodsId, String productId, String userId) {
         QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCart.GOODS_ID, goodsId);
@@ -65,7 +65,7 @@ public class WxCartService extends CartServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCart> queryByUid(String userId) {
         QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCart.USER_ID, userId);
@@ -73,7 +73,7 @@ public class WxCartService extends CartServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCart> queryByUidAndChecked(String userId) {
         QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCart.USER_ID, userId);
@@ -90,7 +90,7 @@ public class WxCartService extends CartServiceImpl {
         return remove(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceCart findById(String userId, String id) {
         QueryWrapper<CarServiceCart> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCart.USER_ID, userId);
@@ -113,7 +113,7 @@ public class WxCartService extends CartServiceImpl {
     /**
      * 获取选择商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCart> getCheckedGoods(String userId, String cartId) {
         if (cartId == null || cartId.equals("0")) {
             return queryByUidAndChecked(userId);

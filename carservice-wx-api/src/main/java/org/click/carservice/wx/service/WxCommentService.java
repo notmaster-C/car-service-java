@@ -31,7 +31,7 @@ import java.util.List;
 public class WxCommentService extends CommentServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer count(Short type, String valueId) {
         QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceComment.TYPE, type);
@@ -40,7 +40,7 @@ public class WxCommentService extends CommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer replyCount(String commentId) {
         QueryWrapper<CarServiceComment> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceComment.REPLY_ID, commentId);
@@ -48,7 +48,7 @@ public class WxCommentService extends CommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> queryReplySelective(CommentReplyListBody body) {
         QueryWrapper<CarServiceComment> wrapper = startPage(body);
         wrapper.eq(CarServiceComment.REPLY_ID, body.getCommentId());
@@ -57,7 +57,7 @@ public class WxCommentService extends CommentServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceComment> querySelective(CommentListBody body) {
         QueryWrapper<CarServiceComment> wrapper = startPage(body);
         wrapper.eq(CarServiceComment.TYPE, body.getCommentType());

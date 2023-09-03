@@ -65,7 +65,7 @@ public class AdminCouponService extends CouponServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceCoupon findByCode(String code) {
         QueryWrapper<CarServiceCoupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCoupon.CODE, code);
@@ -81,7 +81,7 @@ public class AdminCouponService extends CouponServiceImpl {
         }
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceCoupon> querySelective(CouponListBody body) {
         QueryWrapper<CarServiceCoupon> wrapper = startPage(body);
         if (body.getType() != null) {

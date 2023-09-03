@@ -148,7 +148,7 @@ public class WxGrouponService extends GrouponServiceImpl {
     /**
      * 获取某个团购活动参与的记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGroupon> queryJoinRecord(String grouponId) {
         QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
@@ -161,7 +161,7 @@ public class WxGrouponService extends GrouponServiceImpl {
     /**
      * 根据ID查询记录
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceGroupon queryById(String userId, String id) {
         QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGroupon.USER_ID, userId);
@@ -169,7 +169,7 @@ public class WxGrouponService extends GrouponServiceImpl {
         return getOne(wrapper, false);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceGroupon findByOrderId(String orderId) {
         QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGroupon.ORDER_ID, orderId);
@@ -180,7 +180,7 @@ public class WxGrouponService extends GrouponServiceImpl {
     /**
      * 返回某个发起的团购参与人数
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer countGroupon(String grouponId) {
         QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGroupon.GROUPON_ID, grouponId);
@@ -188,7 +188,7 @@ public class WxGrouponService extends GrouponServiceImpl {
         return Math.toIntExact(count(wrapper));
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public boolean hasJoin(String userId, String grouponId) {
         QueryWrapper<CarServiceGroupon> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGroupon.USER_ID, userId);

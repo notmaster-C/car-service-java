@@ -30,7 +30,7 @@ import java.util.List;
 public class WxGoodsAttributeService extends GoodsAttributeServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoodsAttribute> queryByGid(String goodsId) {
         QueryWrapper<CarServiceGoodsAttribute> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoodsAttribute.GOODS_ID, goodsId);

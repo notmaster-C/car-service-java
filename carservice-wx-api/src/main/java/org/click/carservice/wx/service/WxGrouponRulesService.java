@@ -32,7 +32,7 @@ import java.util.List;
 public class WxGrouponRulesService extends GrouponRulesServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> queryOnByGoodsId(String goodsId) {
         QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
@@ -40,7 +40,7 @@ public class WxGrouponRulesService extends GrouponRulesServiceImpl {
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> queryByGoodsId(String goodsId) {
         QueryWrapper<CarServiceGrouponRules> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGrouponRules.GOODS_ID, goodsId);
@@ -48,7 +48,7 @@ public class WxGrouponRulesService extends GrouponRulesServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> queryByGroupon(Integer limit) {
         QueryWrapper<CarServiceGrouponRules> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
@@ -56,7 +56,7 @@ public class WxGrouponRulesService extends GrouponRulesServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGrouponRules> queryList(PageBody body) {
         QueryWrapper<CarServiceGrouponRules> wrapper = startPage(body);
         wrapper.eq(CarServiceGrouponRules.STATUS, GrouponRuleStatus.RULE_STATUS_ON.getStatus());
@@ -64,7 +64,7 @@ public class WxGrouponRulesService extends GrouponRulesServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public boolean isExpired(CarServiceGrouponRules rules) {
         return (rules == null || rules.getExpireTime().isBefore(LocalDateTime.now()));
     }

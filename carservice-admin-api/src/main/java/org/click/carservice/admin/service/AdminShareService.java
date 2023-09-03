@@ -30,7 +30,7 @@ import java.util.List;
 public class AdminShareService extends ShareServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceShare> querySelective(ShareListBody body) {
         QueryWrapper<CarServiceShare> wrapper = startPage(body);
         if (body.getInviterId() != null) {

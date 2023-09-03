@@ -32,7 +32,7 @@ import java.util.List;
 public class AdminAftersaleService extends AftersaleServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAfterSale findById(String userId, String id) {
         QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAfterSale.ID, id);
@@ -40,7 +40,7 @@ public class AdminAftersaleService extends AftersaleServiceImpl {
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAfterSale> querySelective(AftersaleListBody body) {
         QueryWrapper<CarServiceAfterSale> wrapper = startPage(body);
         if (body.getStatus() != null) {

@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 public class WxOrderGoodsService extends OrderGoodsServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer getComments(String orderId) {
         QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);
@@ -36,14 +36,14 @@ public class WxOrderGoodsService extends OrderGoodsServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public boolean checkExist(String goodsId) {
         QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrderGoods.GOODS_ID, goodsId);
         return exists(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceOrderGoods findByOrderId(String orderId) {
         QueryWrapper<CarServiceOrderGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceOrderGoods.ORDER_ID, orderId);

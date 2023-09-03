@@ -75,21 +75,21 @@ public class AdminAdminService extends AdminServiceImpl {
         return saveOrUpdate(admin);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAdmin> findAdmin(String username) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.USERNAME, username);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAdmin> findByTenantId(String tenantId) {
         QueryWrapper<CarServiceAdmin> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAdmin.TENANT_ID, tenantId);
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAdmin> querySelective(AdminListBody body) {
         QueryWrapper<CarServiceAdmin> wrapper = startPage(body);
         if (StringUtils.hasText(body.getMail())) {

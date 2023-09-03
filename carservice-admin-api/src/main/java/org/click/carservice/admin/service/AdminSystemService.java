@@ -34,7 +34,7 @@ import java.util.Map;
 public class AdminSystemService extends SystemServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Map<String, String> listMail() {
         QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
         wrapper.like(CarServiceSystem.NAME, "mall_");
@@ -47,7 +47,7 @@ public class AdminSystemService extends SystemServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Map<String, String> listWx() {
         QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
         wrapper.like(CarServiceSystem.NAME, "wx_");
@@ -60,7 +60,7 @@ public class AdminSystemService extends SystemServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Map<String, String> listOrder() {
         QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
         wrapper.like(CarServiceSystem.NAME, "order_");
@@ -73,7 +73,7 @@ public class AdminSystemService extends SystemServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Map<String, String> listExpress() {
         QueryWrapper<CarServiceSystem> wrapper = new QueryWrapper<>();
         wrapper.like(CarServiceSystem.NAME, "express_");

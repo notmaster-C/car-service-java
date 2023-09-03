@@ -13,6 +13,7 @@ package org.click.carservice.wx.web;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
@@ -269,16 +270,23 @@ public class WxAuthController {
         WxAuthResult wxAuth = wxAuthService.wxAuth(wxCode);
         String openId = wxAuth.getOpenId();
         String sessionKey = wxAuth.getSessionKey();
-//        String mobile = wxAuthService.getPhoneNumber(phoneCode);
+        String mobile = "";
+        try {
+            mobile = wxAuthService.getPhoneNumber(phoneCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("微信获取电话接口调用失败");
+        }
         String phone = String.valueOf(request.getHeader("phone"));
-        String mobile = StrUtil.isNotBlank(phone) ? phone : "17396228815";
+        mobile = StrUtil.isBlank(mobile) ? StrUtil.isNotBlank(phone) ? phone : "17396228815" : mobile;
         userInfo.setOpenId(openId);
 //        String mobile = "17396228815";
         userInfo.setOpenId(openId);
         //获取用户信息
 //        CarServiceUser user = userService.queryByOid(openId);
-        CarServiceUser user=userService.queryByMobile(mobile).get(0);
-        if (user == null) {
+        List<CarServiceUser> carServiceUsers = userService.queryByMobile(mobile);
+        CarServiceUser user;
+        if (CollUtil.isEmpty(carServiceUsers)) {
             user = new CarServiceUser();
             user.setUsername(mobile);
             user.setPassword(mobile);
@@ -295,8 +303,9 @@ public class WxAuthController {
             user.setSessionKey(sessionKey);
             userService.add(user);
             // 新用户发送注册优惠券
-            couponAssignService.assignForRegister(user.getId());
+//            couponAssignService.assignForRegister(user.getId());
         } else {
+            user = carServiceUsers.get(0);
             if (user.getStatus().equals(UserStatus.STATUS_DISABLED.getStatus())) {
                 return ResponseUtil.fail("账号被禁用");
             }

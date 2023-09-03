@@ -32,7 +32,7 @@ import java.util.List;
 public class WxAftersaleService extends AftersaleServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAfterSale findById(String userId, String id) {
         QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAfterSale.ID, id);
@@ -40,7 +40,7 @@ public class WxAftersaleService extends AftersaleServiceImpl {
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAfterSale> querySelective(String userId, AftersaleListBody body) {
         QueryWrapper<CarServiceAfterSale> wrapper = startPage(body);
         wrapper.eq(CarServiceAfterSale.USER_ID, userId);
@@ -50,7 +50,7 @@ public class WxAftersaleService extends AftersaleServiceImpl {
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Boolean countByAftersaleSn(String userId, String aftersaleSn) {
         QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAfterSale.USER_ID, userId);
@@ -66,7 +66,7 @@ public class WxAftersaleService extends AftersaleServiceImpl {
         remove(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceAfterSale findByOrderId(String userId, String orderId) {
         QueryWrapper<CarServiceAfterSale> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceAfterSale.USER_ID, userId);

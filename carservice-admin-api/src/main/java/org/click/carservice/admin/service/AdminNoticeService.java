@@ -42,7 +42,7 @@ public class AdminNoticeService extends NoticeServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceNotice> querySelective(NoticeListBody body) {
         QueryWrapper<CarServiceNotice> wrapper = startPage(body);
         if (StringUtils.hasText(body.getTitle())) {

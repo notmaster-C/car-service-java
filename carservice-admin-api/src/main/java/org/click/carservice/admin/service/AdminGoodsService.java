@@ -44,7 +44,7 @@ public class AdminGoodsService extends GoodsServiceImpl {
     /**
      * 获取店铺下的所有商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByBrand(String brandId) {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoods.BRAND_ID, brandId);
@@ -57,7 +57,7 @@ public class AdminGoodsService extends GoodsServiceImpl {
      * 管理后台查询商品信息
      */
 
-//    @Cacheable(sync = true)
+//    //@Cacheable(sync = true)
     public List<CarServiceGoods> querySelective(GoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         wrapper.orderByDesc(CarServiceGoods.WEIGHT);
@@ -109,7 +109,7 @@ public class AdminGoodsService extends GoodsServiceImpl {
     /**
      * 更具商品ID列表查询商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByIds(String[] ids) {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         wrapper.in(CarServiceGoods.ID, Arrays.asList(ids));

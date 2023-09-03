@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminAddressService extends AddressServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceAddress> querySelective(AddressListBody body) {
         QueryWrapper<CarServiceAddress> wrapper = startPage(body);
         if (body.getUserId() != null) {

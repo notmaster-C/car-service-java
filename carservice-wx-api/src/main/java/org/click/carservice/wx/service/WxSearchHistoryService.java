@@ -31,7 +31,7 @@ import java.util.List;
 public class WxSearchHistoryService extends SearchHistoryServiceImpl {
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceSearchHistory findByKeyword(String userId, String keyword) {
         QueryWrapper<CarServiceSearchHistory> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceSearchHistory.USER_ID, userId);
@@ -40,7 +40,7 @@ public class WxSearchHistoryService extends SearchHistoryServiceImpl {
     }
 
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceSearchHistory> queryByUid(String userId) {
         if (userId == null) {
             return new ArrayList<>();

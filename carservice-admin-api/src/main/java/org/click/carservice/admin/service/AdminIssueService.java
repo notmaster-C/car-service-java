@@ -46,7 +46,7 @@ public class AdminIssueService extends IssueServiceImpl {
         return null;
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceIssue> querySelective(IssueListBody body) {
         QueryWrapper<CarServiceIssue> wrapper = startPage(body);
         if (StringUtils.hasText(body.getQuestion())) {

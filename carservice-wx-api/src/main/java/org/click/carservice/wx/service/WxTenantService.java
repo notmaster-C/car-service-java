@@ -36,14 +36,14 @@ public class WxTenantService extends TenantServiceImpl {
     private WxProperties properties;
 
 
-    //    @Cacheable(sync = true)
+    //    //@Cacheable(sync = true)
     public CarServiceTenant findAppid(String appid) {
         QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceTenant.APP_ID, appid);
         return getOne(wrapper);
     }
 
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceTenant findAddress(String address) {
         QueryWrapper<CarServiceTenant> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceTenant.ADDRESS, address);

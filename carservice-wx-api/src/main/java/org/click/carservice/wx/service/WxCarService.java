@@ -24,7 +24,7 @@ public class WxCarService extends CarServiceCarServiceImpl {
      * @param userId
      * @return
      */
-//    @Cacheable(sync = true)
+//    //@Cacheable(sync = true)
     public List<CarServiceCar> queryByUid(String userId) {
         LambdaQueryWrapper<CarServiceCar> queryWrapper = Wrappers.lambdaQuery(CarServiceCar.class).eq(CarServiceCar::getUserId, userId).orderByDesc(CarServiceCar::getAddTime);
         return list(queryWrapper);

@@ -38,7 +38,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取热卖商品已上架
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByHot(Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.IS_HOT, true);
@@ -50,7 +50,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取新品上市已上架
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByNew(Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.IS_NEW, true);
@@ -62,7 +62,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取团购商品已上架
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByGroupon(Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.IS_GROUPON, true);
@@ -74,7 +74,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 分页获取所有已上架商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByAll(Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
@@ -86,7 +86,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取店铺下已上架的商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByBrand(String brandId, Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.BRAND_ID, brandId);
@@ -99,7 +99,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取店铺下的商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByBrand(BrandGoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
@@ -111,7 +111,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取分类下已上架的商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByCategory(String catId, Integer limit) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(new PageBody(limit));
         wrapper.eq(CarServiceGoods.CATEGORY_ID, catId);
@@ -124,7 +124,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 小程序搜索商品信息
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> querySelective(GoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         if (body.getCategoryId() != null && !body.getCategoryId().equals("0")) {
@@ -155,7 +155,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取某个商品信息，已上架商品，仅展示相关内容
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public CarServiceGoods findByIdVO(String id) {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoods.ID, id);
@@ -167,7 +167,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 获取所有在售物品总数
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public Integer queryOnSale() {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
@@ -178,7 +178,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 按分类获取已上架商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<String> getCatIds(String brandId, String keywords, Boolean isHot, Boolean isNew) {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         if (!Objects.isNull(brandId)) {
@@ -207,7 +207,7 @@ public class WxGoodsService extends GoodsServiceImpl {
     /**
      * 更具商品ID列表查询商品
      */
-    @Cacheable(sync = true)
+    //@Cacheable(sync = true)
     public List<CarServiceGoods> queryByIds(String[] ids) {
         QueryWrapper<CarServiceGoods> wrapper = new QueryWrapper<>();
         wrapper.in(CarServiceGoods.ID, Arrays.asList(ids));
