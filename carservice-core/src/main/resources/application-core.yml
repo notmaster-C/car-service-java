@@ -8,12 +8,12 @@ carservice:
     mch-id: 1621104141
     mch-key: 5ee396fab2f3b732a4e5748f708ef445
     api-v3-key: 6gzdzj3osemyrsy8bv3yj6abi1xjxux7
-    notify-url: https://www.ysling.com.cn/wx/order/pay-notify
+    notify-url: http://43.139.87.174/api/wx/order/pay-status
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
-    key-path: D:/微信支付/WXCertUtil/cert/1621104141_20220218_cert/apiclient_cert.p12
-    private-cert-path: D:/微信支付/WXCertUtil/cert/1621104141_20220218_cert/apiclient_cert.pem
-    private-key-path: D:/微信支付/WXCertUtil/cert/1621104141_20220218_cert/apiclient_key.pem
+    key-path: /home/projects/config/cert/apiclient_cert.p12
+    private-cert-path: /home/projects/config/cert/apiclient_cert.pem
+    private-key-path: /home/projects/config/cert/apiclient_key.pem
 
   #通知相关配置
   notify:
