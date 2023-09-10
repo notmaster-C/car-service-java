@@ -41,6 +41,8 @@ public class WxWebHomeService {
     @Autowired
     private WxCouponService couponService;
     @Autowired
+    private WxBrandService brandService;
+    @Autowired
     private WxRewardService rewardService;
     @Autowired
     private RewardCoreService rewardCoreService;
@@ -87,7 +89,16 @@ public class WxWebHomeService {
                 }
             }
         );
-
+//
+//        // 商铺列表
+//        FutureTask<List<CarServiceBrand>> brandListTask = new FutureTask<>(
+//                new InheritableCallable<List<CarServiceBrand>>(){
+//                    @Override
+//                    public List<CarServiceBrand> runTask() {
+//                        return brandService.queryList(CarServiceBrand);
+//                    }
+//                }
+//        );
         // 新品首发
         FutureTask<List<CarServiceGoods>> newGoodsListTask = new FutureTask<>(
             new InheritableCallable<List<CarServiceGoods>>(){
