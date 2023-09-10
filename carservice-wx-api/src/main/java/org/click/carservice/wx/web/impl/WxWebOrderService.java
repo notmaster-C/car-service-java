@@ -972,7 +972,7 @@ public class WxWebOrderService {
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY)){
+        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY) || !order.getOrderStatus().equals(OrderStatus.STATUS_BTL_PAY)){
             return ResponseUtil.fail("订单状态不是已付款");
         }
         if (!order.getQrcode().equals("") || order.getQrcode()!=null){
@@ -999,7 +999,7 @@ public class WxWebOrderService {
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY)){
+        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY) || !order.getOrderStatus().equals(OrderStatus.STATUS_BTL_PAY)){
             return ResponseUtil.fail("订单状态不是已付款");
         }
         if (order.getQrcode().equals("") || order.getQrcode()==null){
