@@ -23,6 +23,8 @@ public class CartCheckoutBody implements Serializable {
      */
     private String addressId;
 
+    private String carId;
+
     /**
      * 优惠券ID：
      * 如果优惠券ID是空，则自动选择合适的优惠券。

@@ -168,6 +168,8 @@ public class OrderCoreService {
 //        order.setIntegralPrice(integralPrice);
         order.setOrderPrice(orderTotalPrice);
         order.setActualPrice(actualPrice);
+        order.setConsignee(user.getNickName());
+        order.setMobile(user.getMobile());
         // 添加订单表项
         orderService.add(order);
 

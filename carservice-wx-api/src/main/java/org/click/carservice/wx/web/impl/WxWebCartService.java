@@ -328,6 +328,7 @@ public class WxWebCartService {
         String cartId = body.getCartId();
         String couponId = body.getCouponId();
         String addressId = body.getAddressId();
+        String carId = body.getCarId();
         String userCouponId = body.getUserCouponId();
         String grouponRulesId = body.getGrouponRulesId();
 
@@ -372,9 +373,9 @@ public class WxWebCartService {
         String tmpCouponId = "0";
         String tmpUserCouponId = "0";
         int tmpCouponLength = 0;
-        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId);
+        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId, carId);
         for(CarServiceCouponUser couponUser : couponUserList){
-            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), couponUser.getId(), checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), couponUser.getId(), carId, checkedGoodsList);
             if(coupon == null){
                 continue;
             }
@@ -400,7 +401,7 @@ public class WxWebCartService {
             couponId = tmpCouponId;
             userCouponId = tmpUserCouponId;
         } else {
-            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, carId, checkedGoodsList);
             // 用户选择的优惠券有问题，则选择合适优惠券，否则使用用户选择的优惠券
             if (coupon == null){
                 couponPrice = tmpCouponPrice;

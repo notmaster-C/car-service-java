@@ -70,7 +70,7 @@ public class WxWebCouponService {
     /**
      * 当前购物车下单商品订单可用优惠券
      */
-    public Object selectList(String userId, String cartId) {
+    public Object selectList(String userId, String cartId, String carId) {
         if (Objects.isNull(userId)) {
             return ResponseUtil.unlogin();
         }
@@ -80,10 +80,10 @@ public class WxWebCouponService {
             return ResponseUtil.badArgument();
         }
         // 计算优惠券可用情况
-        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId);
+        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId, carId);
         List<CouponResult> couponVoList = couponService.change(couponUserList);
         for (CouponResult cv : couponVoList) {
-            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, cv.getCid(), cv.getId(), checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, cv.getCid(), cv.getId(), carId, checkedGoodsList);
             cv.setAvailable(coupon != null);
         }
         return ResponseUtil.okList(couponVoList);

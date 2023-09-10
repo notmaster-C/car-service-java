@@ -34,6 +34,9 @@ public class CarServiceCouponUser implements Serializable {
      */
     @TableField("`user_id`")
     private String userId;
+
+    @TableField("car_id")
+    private String carId;
     /**
      * 优惠券ID
      */
@@ -109,6 +112,7 @@ public class CarServiceCouponUser implements Serializable {
      * 用户ID
      */
     public static final String USER_ID = "`user_id`";
+    public static final String CAR_ID = "`car_id`";
     /**
      * 优惠券ID
      */

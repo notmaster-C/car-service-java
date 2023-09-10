@@ -20,7 +20,7 @@ public class InsuranceServiceImportBody {
 
         /** 服务类型 */
         @ApiModelProperty("服务类型")
-        @Excel(name = "服务类型", combo = {"100001", "100002", "100003"})
+        @Excel(name = "服务类型", combo = {"1001001", "1001002", "1001003"})
         private String serviceCode;
 
         /** 服务总次数 */

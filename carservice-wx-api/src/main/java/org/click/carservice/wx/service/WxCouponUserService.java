@@ -11,6 +11,7 @@ package org.click.carservice.wx.service;
  * See the Mulan PSL v2 for more details.
  */
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.service.impl.CouponUserServiceImpl;
@@ -61,9 +62,10 @@ public class WxCouponUserService extends CouponUserServiceImpl {
 
 
     //@Cacheable(sync = true)
-    public List<CarServiceCouponUser> queryAll(String userId) {
+    public List<CarServiceCouponUser> queryAll(String userId, String carId) {
         QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCouponUser.USER_ID, userId);
+        wrapper.eq(StrUtil.isNotBlank(carId), "car_id", carId);
         return queryAll(wrapper);
     }
 

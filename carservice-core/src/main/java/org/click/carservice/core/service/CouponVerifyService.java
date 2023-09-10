@@ -12,6 +12,7 @@ package org.click.carservice.core.service;
  */
 
 
+import cn.hutool.core.util.StrUtil;
 import org.click.carservice.db.domain.CarServiceCart;
 import org.click.carservice.db.domain.CarServiceCoupon;
 import org.click.carservice.db.domain.CarServiceCouponUser;
@@ -47,7 +48,7 @@ public class CouponVerifyService {
     /**
      * 检测优惠券是否适合
      */
-    public CarServiceCoupon checkCoupon(String userId, String couponId, String userCouponId, List<CarServiceCart> cartList) {
+    public CarServiceCoupon checkCoupon(String userId, String couponId, String userCouponId, String carId, List<CarServiceCart> cartList) {
         CarServiceCoupon coupon = couponService.findById(couponId);
         if (coupon == null || coupon.getDeleted()) {
             return null;
@@ -62,6 +63,11 @@ public class CouponVerifyService {
 
         if (couponUser == null) {
             return null;
+        } else {
+            // 判断优惠券是否是指定车辆的优惠券
+            if (StrUtil.isNotBlank(couponUser.getCarId()) && !couponUser.getCarId().equals(carId)) {
+                throw new RuntimeException("使用的优惠券与此车牌不匹配!");
+            }
         }
 
         // 检查是否超期

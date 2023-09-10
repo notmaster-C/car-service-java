@@ -26,6 +26,11 @@ public class OrderSubmitBody implements Serializable {
      * 用户地址ID
      */
     private String addressId;
+
+    /**
+     * 车辆id
+     */
+    private String carId;
     /**
      * 用户电话
      */

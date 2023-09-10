@@ -39,6 +39,7 @@ public class AdminInsuranceService extends CarServiceInsuranceServiceServiceImpl
             String couponId = ServiceCode.parseCouponId(serviceCode);
             carServiceCouponUser.setCouponId(couponId);
             carServiceCouponUser.setUserId(info.getUserId());
+            carServiceCouponUser.setCarId(info.getCarId());
             carServiceCouponUser.setServiceId(service.getId());
             carServiceCouponUser.setStartTime(LocalDateTimeUtil.of(info.getInsureTime()));
             carServiceCouponUser.setEndTime(LocalDateTimeUtil.of(info.getInsureEndTime()));

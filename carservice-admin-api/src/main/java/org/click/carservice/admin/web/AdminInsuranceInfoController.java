@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2023-08-04
  */
 @RestController
-@RequestMapping("/info")
+@RequestMapping("/admin/info")
 @Api(value = "管理端-保单信息", tags = "管理端-保单信息")
 public class AdminInsuranceInfoController
 {

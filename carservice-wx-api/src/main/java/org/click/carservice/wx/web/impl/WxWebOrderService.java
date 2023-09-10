@@ -46,7 +46,9 @@ import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
+import org.click.carservice.db.service.ICarServiceCarService;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
+import org.click.carservice.db.service.impl.CarServiceCarServiceImpl;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.AttachResult;
 import org.click.carservice.wx.model.order.result.OrderDetailResult;
@@ -151,6 +153,9 @@ public class WxWebOrderService {
 
     @Autowired
     private WxGoodsService goodsService;
+
+    @Autowired
+    private WxCarService carService;
 
     /**
      * 订单列表
@@ -264,6 +269,7 @@ public class WxWebOrderService {
         String message = body.getMessage();
         String couponId = body.getCouponId();
         String addressId = body.getAddressId();
+        String carId = body.getCarId();
         String userCouponId = body.getUserCouponId();
         String rewardLinkId = body.getRewardLinkId();
         String grouponLinkId = body.getGrouponLinkId();
@@ -296,9 +302,13 @@ public class WxWebOrderService {
         }
 
         // 收货地址
-        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-        if (checkedAddress == null) {
-            return ResponseUtil.badArgument();
+//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+//        if (checkedAddress == null) {
+//            return ResponseUtil.badArgument();
+//        }
+        CarServiceCar car = carService.detail(userId, carId);
+        if (car == null) {
+            throw new RuntimeException("车辆与使用人不匹配");
         }
 
         //选中的商品
@@ -313,7 +323,7 @@ public class WxWebOrderService {
         List<String> goodsTypeIds = new ArrayList<>();
         // 如果couponId=0则没有优惠券，couponId=-1则不使用优惠券
         if (!"0".equals(couponId) && !"-1".equals(couponId)) {
-            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, checkedGoodsList);
+            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, carId, checkedGoodsList);
             if (coupon == null) {
                 return ResponseUtil.badArgumentValue();
             } else {
@@ -344,9 +354,9 @@ public class WxWebOrderService {
             order.setGoodsId(cartGoods.getGoodsId());
             order.setBrandId(cartGoods.getBrandId());
             order.setMobile(mobile);
-            order.setConsignee(checkedAddress.getName());
+//            order.setConsignee(checkedAddress.getName());
             order.setBrandId(cartGoods.getBrandId());
-            order.setAddress(checkedAddress.getAddressAll());
+//            order.setAddress(checkedAddress.getAddressAll());
             order.setOrderStatus(OrderStatus.STATUS_CREATE.getStatus());
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));

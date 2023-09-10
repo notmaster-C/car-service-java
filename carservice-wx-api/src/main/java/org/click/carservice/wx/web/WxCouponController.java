@@ -56,8 +56,8 @@ public class WxCouponController {
      * 当前购物车下单商品订单可用优惠券
      */
     @GetMapping("select")
-    public Object selectList(@LoginUser String userId, String cartId) {
-        return couponService.selectList(userId , cartId);
+    public Object selectList(@LoginUser String userId, String cartId, String carId) {
+        return couponService.selectList(userId , cartId, carId);
     }
 
     /**
