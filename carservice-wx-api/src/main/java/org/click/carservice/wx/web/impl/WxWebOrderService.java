@@ -46,9 +46,7 @@ import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
-import org.click.carservice.db.service.ICarServiceCarService;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
-import org.click.carservice.db.service.impl.CarServiceCarServiceImpl;
 import org.click.carservice.wx.model.order.body.*;
 import org.click.carservice.wx.model.order.result.AttachResult;
 import org.click.carservice.wx.model.order.result.OrderDetailResult;
@@ -302,13 +300,9 @@ public class WxWebOrderService {
         }
 
         // 收货地址
-//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-//        if (checkedAddress == null) {
-//            return ResponseUtil.badArgument();
-//        }
-        CarServiceCar car = carService.detail(userId, carId);
-        if (car == null) {
-            throw new RuntimeException("车辆与使用人不匹配");
+        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+        if (checkedAddress == null) {
+            return ResponseUtil.badArgument();
         }
 
         //选中的商品
@@ -735,6 +729,7 @@ public class WxWebOrderService {
         Integer comments = orderGoodsService.getComments(orderId);
         order.setComments(comments.shortValue());
         order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
+        order.setQrcode(null);
         //保存订单核销记录
         carServiceOrderVerification.setUserId(order.getUserId());
         carServiceOrderVerification.setGoodsId(order.getGoodsId());
@@ -982,15 +977,16 @@ public class WxWebOrderService {
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY) || !order.getOrderStatus().equals(OrderStatus.STATUS_BTL_PAY)){
-            return ResponseUtil.fail("订单状态不是已付款");
-        }
-        if (!order.getQrcode().equals("") || order.getQrcode()!=null){
+        if ( order.getQrcode()!=null){
             return ResponseUtil.fail("订单已有二维码");
         }
-       byte[] qrcode=QRCodeUtil.createQRCodeByte(orderId,300);
-        order.setQrcode(qrcode);
-        return ResponseUtil.ok(order.getQrcode());
+        if (order.getOrderStatus().toString().equals(OrderStatus.STATUS_PAY.getStatus().toString()) || order.getOrderStatus().toString().equals(OrderStatus.STATUS_BTL_PAY.getStatus().toString())){
+            byte[] qrcode=QRCodeUtil.createQRCodeByte(orderId,300);
+            order.setQrcode(qrcode);
+            if(orderService.updateById(order))return ResponseUtil.ok(order.getQrcode());
+            else ResponseUtil.fail("订单二维码更新失败！请联系管理员");
+        }
+        return ResponseUtil.fail("订单状态不是已付款");
     }
 
     /**
@@ -1009,10 +1005,7 @@ public class WxWebOrderService {
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if (!order.getOrderStatus().equals(OrderStatus.STATUS_PAY) || !order.getOrderStatus().equals(OrderStatus.STATUS_BTL_PAY)){
-            return ResponseUtil.fail("订单状态不是已付款");
-        }
-        if (order.getQrcode().equals("") || order.getQrcode()==null){
+        if (order.getQrcode()==null){
             return ResponseUtil.fail("订单无二维码,可能已使用");
         }
         byte[] qrcode=order.getQrcode();
@@ -1054,7 +1047,7 @@ public class WxWebOrderService {
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("更新数据已失效");
         }
-
+        order.setQrcode(null);
         // 返还订单
         orderCoreService.orderRelease(order);
         return ResponseUtil.ok();
