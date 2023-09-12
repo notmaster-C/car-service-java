@@ -56,6 +56,7 @@ import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -299,11 +300,11 @@ public class WxWebOrderService {
             return ResponseUtil.badArgument();
         }
 
-        // 收货地址
-        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-        if (checkedAddress == null) {
-            return ResponseUtil.badArgument();
-        }
+//        // 收货地址
+//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+//        if (checkedAddress == null) {
+//            return ResponseUtil.badArgument();
+//        }
 
         //选中的商品
         List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
@@ -693,14 +694,13 @@ public class WxWebOrderService {
      * 1. 检测当前订单是否能够确认收货；
      * 2. 设置订单确认收货状态。
      *
-     * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
      * @param file   核销照片，MultipartFile
      * @return 订单操作结果
      */
-    public Object confirm(String userId, String orderId, MultipartFile file) {
+    public Object confirm(String orderId,@RequestParam("file")  MultipartFile file) {
         //获取订单
-        CarServiceOrder order = orderService.findById(userId, orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         CarServiceOrderVerification carServiceOrderVerification = new CarServiceOrderVerification();
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
@@ -1022,13 +1022,13 @@ public class WxWebOrderService {
      * @param orderId   订单信息，{ orderId：xxx }
      * @return 取消订单操作结果
      */
-    public Object adminCancel(String userId, String orderId) {
-        CarServiceBrand brand = brandService.findByUserId(userId);
-        if (brand == null) {
-            return ResponseUtil.fail("未找到店铺");
-        }
+    public Object adminCancel(String orderId) {
+//        CarServiceBrand brand = brandService.findByUserId(userId);
+//        if (brand == null) {
+//            return ResponseUtil.fail("未找到店铺");
+//        }
 
-        CarServiceOrder order = orderService.findByBrandId(brand.getId() , orderId);
+        CarServiceOrder order = orderService.findById( orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -1059,21 +1059,20 @@ public class WxWebOrderService {
      * 1. 检测当前订单是否能够发货
      * 2. 设置订单待验收状态
      *
-     * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      * 成功则 { errno: 0, errmsg: '成功' }
      * 失败则 { errno: XXX, errmsg: XXX }
      */
-    public Object adminUse(String userId, OrderAdminShipBody body) {
+    public Object adminUse(String orderId) {
 
-        String orderId = body.getOrderId();
+//        String orderId = body.getOrderId();
 
-        CarServiceBrand brand = brandService.findByUserId(userId);
-        if (brand == null) {
-            return ResponseUtil.fail("未找到店铺");
-        }
+//        CarServiceBrand brand = brandService.findByUserId(userId);
+//        if (brand == null) {
+//            return ResponseUtil.fail("未找到店铺");
+//        }
 
-        CarServiceOrder order = orderService.findByBrandId(brand.getId() , orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }

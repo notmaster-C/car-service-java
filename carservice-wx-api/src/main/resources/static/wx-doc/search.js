@@ -71,7 +71,7 @@ api[0].list[1].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/aftersale/cancel',
-    desc: '取消售后    如果管理员还没有审核，用户可以取消自己的售后申请',
+    desc: '取消售后',
 });
 api[0].list[1].list.push({
     order: '5',
@@ -107,59 +107,65 @@ api[0].list[2].list.push({
 api[0].list[2].list.push({
     order: '2',
     deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/auth/login_by_default',
+    desc: '小程序用户名密码登录',
+});
+api[0].list[2].list.push({
+    order: '3',
+    deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/login',
     desc: '账号登录',
 });
 api[0].list[2].list.push({
-    order: '3',
+    order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/captcha/mobile',
     desc: '请求手机验证码  TODO  这里需要一定机制防止短信验证码被滥用',
 });
 api[0].list[2].list.push({
-    order: '4',
+    order: '5',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/captcha/mail',
     desc: '请求邮箱验证码  TODO  这里需要一定机制防止短信验证码被滥用',
 });
 api[0].list[2].list.push({
-    order: '5',
+    order: '6',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/login_by_weixin',
     desc: '微信登录',
 });
 api[0].list[2].list.push({
-    order: '6',
+    order: '7',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/register',
     desc: '账号注册',
 });
 api[0].list[2].list.push({
-    order: '7',
+    order: '8',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/reset',
     desc: '账号密码重置',
 });
 api[0].list[2].list.push({
-    order: '8',
-    deprecated: 'false',
+    order: '9',
+    deprecated: 'true',
     url: 'https://www.click.com.cn/wx/auth/resetPhone',
     desc: '账号手机号码重置',
 });
 api[0].list[2].list.push({
-    order: '9',
+    order: '10',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/profile',
     desc: '账号信息更新',
 });
 api[0].list[2].list.push({
-    order: '10',
+    order: '11',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/bindPhone',
     desc: '微信手机号码绑定',
 });
 api[0].list[2].list.push({
-    order: '11',
+    order: '12',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/auth/logout',
     desc: '退出登陆',
@@ -180,113 +186,162 @@ api[0].list[3].list.push({
 api[0].list[3].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/brand/detail',
+    url: 'https://www.click.com.cn/wx/brand/read',
     desc: '店铺详情',
 });
 api[0].list[3].list.push({
     order: '3',
     deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/brand/detail',
+    desc: '店铺详情',
+});
+api[0].list[3].list.push({
+    order: '4',
+    deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/save',
     desc: '添加或修改店铺',
 });
 api[0].list[3].list.push({
-    order: '4',
+    order: '5',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/order',
     desc: '店铺订单列表',
 });
 api[0].list[3].list.push({
-    order: '5',
+    order: '6',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/init',
     desc: '商品上传参数初始化',
 });
 api[0].list[3].list.push({
-    order: '6',
+    order: '7',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/category',
     desc: '分类列表',
 });
 api[0].list[3].list.push({
-    order: '7',
+    order: '8',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/list',
     desc: '店铺商品列表',
 });
 api[0].list[3].list.push({
-    order: '8',
+    order: '9',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/brand/goods/detail',
+    desc: '店铺商品详情',
+});
+api[0].list[3].list.push({
+    order: '10',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/update',
     desc: '编辑店铺商品',
 });
 api[0].list[3].list.push({
-    order: '9',
+    order: '11',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/delete',
     desc: '删除店铺商品',
 });
 api[0].list[3].list.push({
-    order: '10',
+    order: '12',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/brand/goods/create',
     desc: '添加店铺商品',
 });
-api[0].list[3].list.push({
-    order: '11',
-    deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/brand/goods/detail',
-    desc: '店铺商品详情',
-});
 api[0].list.push({
-    alias: 'WxCartController',
+    alias: 'WxCarController',
     order: '5',
-    link: '用户购物车服务',
-    desc: '用户购物车服务',
+    link: '微信-车牌控制器',
+    desc: '微信-车牌控制器',
     list: []
 })
 api[0].list[4].list.push({
     order: '1',
     deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/list',
+    desc: '',
+});
+api[0].list[4].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/detail',
+    desc: '',
+});
+api[0].list[4].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/add',
+    desc: '新增车牌信息',
+});
+api[0].list[4].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/edit',
+    desc: '修改车牌',
+});
+api[0].list[4].list.push({
+    order: '5',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/delete',
+    desc: '删除用户车牌信息',
+});
+api[0].list[4].list.push({
+    order: '6',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/car/setDefault',
+    desc: '设置默认牌照',
+});
+api[0].list.push({
+    alias: 'WxCartController',
+    order: '6',
+    link: '用户购物车服务',
+    desc: '用户购物车服务',
+    list: []
+})
+api[0].list[5].list.push({
+    order: '1',
+    deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/index',
     desc: '用户购物车信息',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/add',
     desc: '加入商品到购物车  &lt;p&gt;  如果已经存在购物车货品，则增加数量；  否则添加新的购物车货品项。',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/fast/add',
     desc: '立即购买  &lt;p&gt;  和add方法的区别在于：  1. 如果购物车内已经存在购物车货品，前者的逻辑是数量添加，这里的逻辑是数量覆盖  2. 添加成功以后，前者的逻辑是返回当前购物车商品数量，这里的逻辑是返回对应购物车项的ID',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/update',
     desc: '修改购物车商品货品数量',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '5',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/checked',
-    desc: '购物车商品货品勾选状态  &lt;p&gt;  如果原来没有勾选，则设置勾选状态；如果商品已经勾选，则设置非勾选状态。',
+    desc: '购物车商品货品勾选状态',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '6',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/delete',
     desc: '购物车商品删除',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '7',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/count',
-    desc: '购物车商品货品数量  &lt;p&gt;  如果用户没有登录，则返回空数据。',
+    desc: '购物车商品货品数量',
 });
-api[0].list[4].list.push({
+api[0].list[5].list.push({
     order: '8',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/cart/checkout',
@@ -294,36 +349,36 @@ api[0].list[4].list.push({
 });
 api[0].list.push({
     alias: 'WxCatalogController',
-    order: '6',
+    order: '7',
     link: '类目服务',
     desc: '类目服务',
     list: []
 })
-api[0].list[5].list.push({
+api[0].list[6].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/catalog/index',
     desc: '分类详情',
 });
-api[0].list[5].list.push({
+api[0].list[6].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/catalog/all',
     desc: '所有分类数据',
 });
-api[0].list[5].list.push({
+api[0].list[6].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/catalog/current',
     desc: '当前分类栏目',
 });
-api[0].list[5].list.push({
+api[0].list[6].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/catalog/first',
     desc: '所有一级分类目录',
 });
-api[0].list[5].list.push({
+api[0].list[6].list.push({
     order: '5',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/catalog/second',
@@ -331,49 +386,49 @@ api[0].list[5].list.push({
 });
 api[0].list.push({
     alias: 'WxCollectController',
-    order: '7',
+    order: '8',
     link: '用户收藏服务',
     desc: '用户收藏服务',
     list: []
 })
-api[0].list[6].list.push({
+api[0].list[7].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/collect/list',
     desc: '用户收藏列表',
 });
-api[0].list[6].list.push({
+api[0].list[7].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/collect/update',
-    desc: '用户收藏添加或删除  &lt;p&gt;  如果商品没有收藏，则添加收藏；如果商品已经收藏，则删除收藏状态。',
+    desc: '用户收藏添加和取消',
 });
 api[0].list.push({
     alias: 'WxCommentController',
-    order: '8',
+    order: '9',
     link: '用户评论服务',
     desc: '用户评论服务',
     list: []
 })
-api[0].list[7].list.push({
+api[0].list[8].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/comment/list',
     desc: '评论列表',
 });
-api[0].list[7].list.push({
+api[0].list[8].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/comment/reply-list',
     desc: '回复评论列表',
 });
-api[0].list[7].list.push({
+api[0].list[8].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/comment/count',
     desc: '评论数量',
 });
-api[0].list[7].list.push({
+api[0].list[8].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/comment/submit',
@@ -381,36 +436,36 @@ api[0].list[7].list.push({
 });
 api[0].list.push({
     alias: 'WxCouponController',
-    order: '9',
+    order: '10',
     link: '优惠券服务',
     desc: '优惠券服务',
     list: []
 })
-api[0].list[8].list.push({
+api[0].list[9].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/coupon/list',
     desc: '优惠券列表',
 });
-api[0].list[8].list.push({
+api[0].list[9].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/coupon/user',
     desc: '个人优惠券列表',
 });
-api[0].list[8].list.push({
+api[0].list[9].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/coupon/select',
     desc: '当前购物车下单商品订单可用优惠券',
 });
-api[0].list[8].list.push({
+api[0].list[9].list.push({
     order: '4',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/coupon/receive',
     desc: '优惠券领取',
 });
-api[0].list[8].list.push({
+api[0].list[9].list.push({
     order: '5',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/coupon/exchange',
@@ -418,24 +473,24 @@ api[0].list[8].list.push({
 });
 api[0].list.push({
     alias: 'WxDynamicController',
-    order: '10',
+    order: '11',
     link: '动态信息',
     desc: '动态信息',
     list: []
 })
-api[0].list[9].list.push({
+api[0].list[10].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/dynamic/list',
     desc: '动态列表',
 });
-api[0].list[9].list.push({
+api[0].list[10].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/dynamic/submit',
     desc: '发布日常',
 });
-api[0].list[9].list.push({
+api[0].list[10].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/dynamic/delete',
@@ -443,37 +498,37 @@ api[0].list[9].list.push({
 });
 api[0].list.push({
     alias: 'WxExpressController',
-    order: '11',
+    order: '12',
     link: '物流查询接口',
     desc: '物流查询接口',
     list: []
 })
-api[0].list[10].list.push({
+api[0].list[11].list.push({
     order: '1',
-    deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/express/api-track',
-    desc: '通过快递鸟查询物流',
-});
-api[0].list[10].list.push({
-    order: '2',
-    deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/express/logistics',
-    desc: '获取微信物流查询插件token',
-});
-api[0].list[10].list.push({
-    order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/express/channel',
     desc: '查询物流公司',
 });
+api[0].list[11].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/express/api-track',
+    desc: '通过快递鸟查询物流',
+});
+api[0].list[11].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/express/logistics',
+    desc: '获取微信物流查询插件token',
+});
 api[0].list.push({
     alias: 'WxFeedbackController',
-    order: '12',
+    order: '13',
     link: '意见反馈服务',
     desc: '意见反馈服务',
     list: []
 })
-api[0].list[11].list.push({
+api[0].list[12].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/feedback/submit',
@@ -481,41 +536,22 @@ api[0].list[11].list.push({
 });
 api[0].list.push({
     alias: 'WxFootprintController',
-    order: '13',
+    order: '14',
     link: '用户访问足迹服务',
     desc: '用户访问足迹服务',
     list: []
 })
-api[0].list[12].list.push({
+api[0].list[13].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/footprint/list',
     desc: '用户足迹列表',
 });
-api[0].list[12].list.push({
+api[0].list[13].list.push({
     order: '2',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/footprint/delete',
     desc: '删除用户足迹',
-});
-api[0].list.push({
-    alias: 'WxGoodsCommentController',
-    order: '14',
-    link: '用户商品评论服务',
-    desc: '用户商品评论服务',
-    list: []
-})
-api[0].list[13].list.push({
-    order: '1',
-    deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/goods/comment/count',
-    desc: '评论数量',
-});
-api[0].list[13].list.push({
-    order: '2',
-    deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/goods/comment/list',
-    desc: '评论列表',
 });
 api[0].list.push({
     alias: 'WxGoodsController',
@@ -528,7 +564,7 @@ api[0].list[14].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/goods/detail',
-    desc: '商品详情  &lt;p&gt;  用户可以不登录。  如果用户登录，则记录用户足迹以及返回用户收藏信息。',
+    desc: '商品详情',
 });
 api[0].list[14].list.push({
     order: '2',
@@ -553,6 +589,18 @@ api[0].list[14].list.push({
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/goods/count',
     desc: '在售的商品总数',
+});
+api[0].list[14].list.push({
+    order: '6',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/goods/comment/count',
+    desc: '评论数量',
+});
+api[0].list[14].list.push({
+    order: '7',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/goods/comment/list',
+    desc: '评论列表',
 });
 api[0].list.push({
     alias: 'WxGrouponController',
@@ -721,7 +769,7 @@ api[0].list[22].list.push({
 api[0].list[22].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/order/pay-notify',
+    url: 'https://www.click.com.cn/wx/order/pay-status',
     desc: '微信付款成功或失败回调接口  &lt;p&gt;   TODO   注意，这里pay-notify是示例地址，建议开发者应该设立一个隐蔽的回调地址',
 });
 api[0].list[22].list.push({
@@ -733,44 +781,56 @@ api[0].list[22].list.push({
 api[0].list[22].list.push({
     order: '8',
     deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/order/confirm',
-    desc: '确认收货',
-});
-api[0].list[22].list.push({
-    order: '9',
-    deprecated: 'false',
     url: 'https://www.click.com.cn/wx/order/delete',
     desc: '删除订单',
 });
 api[0].list[22].list.push({
-    order: '10',
+    order: '9',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/order/goods',
     desc: '待评价订单商品信息',
 });
 api[0].list[22].list.push({
-    order: '11',
+    order: '10',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/order/comment',
     desc: '评价订单商品',
 });
 api[0].list[22].list.push({
-    order: '12',
+    order: '11',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/order/admin/refund',
     desc: '订单退款',
 });
 api[0].list[22].list.push({
-    order: '13',
+    order: '12',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/order/admin/cancel',
     desc: '商家取消订单',
 });
 api[0].list[22].list.push({
+    order: '13',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/order/admin/Use',
+    desc: '订单使用,订单待使用-》订单待验收',
+});
+api[0].list[22].list.push({
     order: '14',
     deprecated: 'false',
-    url: 'https://www.click.com.cn/wx/order/admin/ship',
-    desc: '发货',
+    url: 'https://www.click.com.cn/wx/order/confirm',
+    desc: '订单使用后，用户验收确认收货',
+});
+api[0].list[22].list.push({
+    order: '15',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/order/createQrcode',
+    desc: '订单生成二维码',
+});
+api[0].list[22].list.push({
+    order: '16',
+    deprecated: 'false',
+    url: 'https://www.click.com.cn/wx/order/getQrcode',
+    desc: '',
 });
 api[0].list.push({
     alias: 'WxRewardController',
@@ -808,7 +868,7 @@ api[0].list[24].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/search/index',
-    desc: '搜索页面信息  &lt;p&gt;  如果用户已登录，则给出用户历史搜索记录；  如果没有登录，则给出空历史搜索记录。',
+    desc: '搜索页面信息',
 });
 api[0].list[24].list.push({
     order: '2',
@@ -883,7 +943,7 @@ api[0].list[27].list.push({
     order: '1',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/user/index',
-    desc: '用户个人页面数据  &lt;p&gt;  目前是用户订单统计信息',
+    desc: '用户个人页面数据',
 });
 api[0].list[27].list.push({
     order: '2',
@@ -895,7 +955,7 @@ api[0].list[27].list.push({
     order: '3',
     deprecated: 'false',
     url: 'https://www.click.com.cn/wx/user/share',
-    desc: '用户个人分享记录  &lt;p&gt;  目前是用户订单统计信息',
+    desc: '用户个人分享记录',
 });
 api[0].list[27].list.push({
     order: '4',
@@ -916,7 +976,6 @@ api[0].list[27].list.push({
     desc: '余额提现',
 });
 document.onkeydown = keyDownSearch;
-
 function keyDownSearch(e) {
     const theEvent = e;
     const code = theEvent.keyCode || theEvent.which || theEvent.charCode;
@@ -983,12 +1042,12 @@ function keyDownSearch(e) {
         if (searchValue === '') {
             const liClass = "";
             const display = "display: none";
-            html = buildAccordion(api, liClass, display);
+            html = buildAccordion(api,liClass,display);
             document.getElementById('accordion').innerHTML = html;
         } else {
             const liClass = "open";
             const display = "display: block";
-            html = buildAccordion(searchGroup, liClass, display);
+            html = buildAccordion(searchGroup,liClass,display);
             document.getElementById('accordion').innerHTML = html;
         }
         const Accordion = function (el, multiple) {
@@ -1017,18 +1076,18 @@ function buildAccordion(apiGroups, liClass, display) {
             let apiData = apiGroups[0].list;
             let order = apiGroups[0].order;
             for (let j = 0; j < apiData.length; j++) {
-                html += '<li class="' + liClass + '">';
-                html += '<a class="dd" href="#_' + order + '_' + apiData[j].order + '_' + apiData[j].link + '">' + apiData[j].order + '.&nbsp;' + apiData[j].desc + '</a>';
-                html += '<ul class="sectlevel2" style="' + display + '">';
+                html += '<li class="'+liClass+'">';
+                html += '<a class="dd" href="#_'+order+'_'+apiData[j].order+'_' + apiData[j].link + '">' + apiData[j].order + '.&nbsp;' + apiData[j].desc + '</a>';
+                html += '<ul class="sectlevel2" style="'+display+'">';
                 let doc = apiData[j].list;
                 for (let m = 0; m < doc.length; m++) {
                     let spanString;
                     if (doc[m].deprecated === 'true') {
-                        spanString = '<span class="line-through">';
+                        spanString='<span class="line-through">';
                     } else {
-                        spanString = '<span>';
+                        spanString='<span>';
                     }
-                    html += '<li><a href="#_' + order + '_' + apiData[j].order + '_' + doc[m].order + '_' + doc[m].desc + '">' + apiData[j].order + '.' + doc[m].order + '.&nbsp;' + spanString + doc[m].desc + '<span></a> </li>';
+                    html += '<li><a href="#_'+order+'_' + apiData[j].order + '_' + doc[m].order + '_' + doc[m].desc + '">' + apiData[j].order + '.' + doc[m].order + '.&nbsp;' + spanString + doc[m].desc + '<span></a> </li>';
                 }
                 html += '</ul>';
                 html += '</li>';
@@ -1036,25 +1095,25 @@ function buildAccordion(apiGroups, liClass, display) {
         } else {
             for (let i = 0; i < apiGroups.length; i++) {
                 let apiGroup = apiGroups[i];
-                html += '<li class="' + liClass + '">';
-                html += '<a class="dd" href="#_' + apiGroup.order + '_' + apiGroup.name + '">' + apiGroup.order + '.&nbsp;' + apiGroup.name + '</a>';
+                html += '<li class="'+liClass+'">';
+                html += '<a class="dd" href="#_'+apiGroup.order+'_' + apiGroup.name + '">' + apiGroup.order + '.&nbsp;' + apiGroup.name + '</a>';
                 html += '<ul class="sectlevel1">';
 
                 let apiData = apiGroup.list;
                 for (let j = 0; j < apiData.length; j++) {
-                    html += '<li class="' + liClass + '">';
-                    html += '<a class="dd" href="#_' + apiGroup.order + '_' + apiData[j].order + '_' + apiData[j].link + '">' + apiGroup.order + '.' + apiData[j].order + '.&nbsp;' + apiData[j].desc + '</a>';
-                    html += '<ul class="sectlevel2" style="' + display + '">';
+                    html += '<li class="'+liClass+'">';
+                    html += '<a class="dd" href="#_'+apiGroup.order+'_'+ apiData[j].order + '_'+ apiData[j].link + '">' +apiGroup.order+'.'+ apiData[j].order + '.&nbsp;' + apiData[j].desc + '</a>';
+                    html += '<ul class="sectlevel2" style="'+display+'">';
                     let doc = apiData[j].list;
                     for (let m = 0; m < doc.length; m++) {
-                        let spanString;
-                        if (doc[m].deprecated === 'true') {
-                            spanString = '<span class="line-through">';
-                        } else {
-                            spanString = '<span>';
-                        }
-                        html += '<li><a href="#_' + apiGroup.order + '_' + apiData[j].order + '_' + doc[m].order + '_' + doc[m].desc + '">' + apiGroup.order + '.' + apiData[j].order + '.' + doc[m].order + '.&nbsp;' + spanString + doc[m].desc + '<span></a> </li>';
-                    }
+                       let spanString;
+                       if (doc[m].deprecated === 'true') {
+                           spanString='<span class="line-through">';
+                       } else {
+                           spanString='<span>';
+                       }
+                       html += '<li><a href="#_'+apiGroup.order+'_' + apiData[j].order + '_' + doc[m].order + '_' + doc[m].desc + '">'+apiGroup.order+'.' + apiData[j].order + '.' + doc[m].order + '.&nbsp;' + spanString + doc[m].desc + '<span></a> </li>';
+                   }
                     html += '</ul>';
                     html += '</li>';
                 }
