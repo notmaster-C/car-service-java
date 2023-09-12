@@ -93,15 +93,18 @@ public enum OrderStatus implements Serializable {
     /**
      * 已发货
      */
-    STATUS_SHIP((short) 401, "已发货"),
+//    STATUS_SHIP((short) 401, "已发货"),
+    STATUS_SHIP((short) 401, "已使用"),
     /**
      * 已收货
      */
-    STATUS_CONFIRM((short) 402, "已收货"),
+    STATUS_CONFIRM((short) 402, "已确认"),
+//    STATUS_CONFIRM((short) 402, "已收货"),
     /**
      * 已收货(系统)
      */
-    STATUS_AUTO_CONFIRM((short) 403, "已收货(系统)"),
+    STATUS_AUTO_CONFIRM((short) 403, "已确认(系统)"),
+//    STATUS_AUTO_CONFIRM((short) 403, "已收货(系统)"),
     /**
      * 评价已超时
      */
