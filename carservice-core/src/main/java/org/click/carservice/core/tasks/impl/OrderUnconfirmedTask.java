@@ -49,6 +49,7 @@ public class OrderUnconfirmedTask extends TaskRunnable {
     public OrderUnconfirmedTask(CarServiceOrder order) {
         super(idPrefix + order.getId(), defaultSeconds, order.getTenantId(), taskName);
         this.orderId = order.getId();
+        order.setQrcode(null);
     }
 
     @Override

@@ -196,32 +196,30 @@ public class WxOrderController {
      */
     @PostMapping("admin/cancel")
     @ApiOperation(value = "商家取消订单")
-    public Object adminCancel(@LoginUser String userId, @JsonBody String orderId) {
-        return orderService.adminCancel(userId, orderId);
+    public Object adminCancel( @JsonBody String orderId) {
+        return orderService.adminCancel(orderId);
     }
 
     /**
      * 订单使用,订单待使用-》订单待验收
      *
-     * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
      * @return 订单操作结果
      */
     @PostMapping("admin/Use")
     @ApiOperation(value = "订单使用")
-    public Object adminUse(@LoginUser String userId, @Valid @RequestBody OrderAdminShipBody body) {
-        return orderService.adminUse(userId , body);
+    public Object adminUse(@JsonBody String orderId) {
+        return orderService.adminUse(orderId);
     }
     /**
      * 订单使用后，用户验收确认收货
      *
-     * @param userId 用户ID
      * @param orderId   订单信息，{ orderId：xxx }
      * @return 订单操作结果
      */
     @PostMapping("confirm")
     @ApiOperation(value = "订单核销-订单使用后，用户验收确认收货")
-    public Object confirm(@LoginUser String userId, @JsonBody String orderId, MultipartFile file) {
-        return orderService.confirm(userId, orderId,file);
+    public Object confirm( @JsonBody String orderId, @RequestParam("file") MultipartFile file) {
+        return orderService.confirm(orderId,file);
     }
     /**
      * 订单生成二维码
