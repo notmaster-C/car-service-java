@@ -8,7 +8,7 @@ carservice:
     mch-id: 1650336466
     mch-key: AboRjGjLaStiCYWvMUJA4xXmbzvy7Lx2
     api-v3-key: Xw3zjPksyGIYgbwbxlbCwTOKo2twUs6c
-    notify-url: http://localhost/api/wx/order/pay-status
+    notify-url: http://120.46.71.65/api/wx/order/pay-status
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
     key-path: /home/projects/config/cert/apiclient_cert.p12
@@ -94,7 +94,8 @@ carservice:
     local:
       storagePath: storage
       # 这个地方应该是wx模块的WxStorageController的fetch方法对应的地址
-      address: http://localhost/api/wx/storage/fetch/
+#      address: http://localhost/api/wx/storage/fetch/
+      address: http://120.46.71.65/api/wx/storage/fetch/
     #      address: http://localhost:6913/wx/storage/fetch/
     # 阿里云对象存储配置信息
     aliyun:
