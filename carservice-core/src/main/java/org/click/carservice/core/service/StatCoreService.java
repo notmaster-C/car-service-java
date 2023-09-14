@@ -63,6 +63,7 @@ public class StatCoreService {
                 , "ROUND(SUM(actual_price)/COUNT(DISTINCT user_id),2) AS pcr"
         );
         wrapper.groupBy("SUBSTR(add_time, 1, 10)");
+//        todo 数据权限，DataScopeConfig.dataScope(wrapper);
         ArrayList<Short> status = new ArrayList<>();
         status.add(OrderStatus.STATUS_SHIP.getStatus());
         status.add(OrderStatus.STATUS_CONFIRM.getStatus());
@@ -81,6 +82,11 @@ public class StatCoreService {
                 , "SUM(number*price) AS amount"
         );
         wrapper.groupBy("SUBSTR(add_time, 1, 10)");
+        // todo 数据权限：只查询本商铺的订单
+//        List<String> ids = new ArrayList<>();
+//        if (DataScopeConfig.getOrderGoodsIds(ids)) {
+//            wrapper.in(CarServiceOrderGoods.ID, ids);
+//        }
         return orderGoodsService.listMaps(wrapper);
     }
 

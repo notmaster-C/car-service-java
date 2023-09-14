@@ -1,6 +1,9 @@
 package org.click.carservice.db.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.mapper.UserMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
@@ -221,5 +224,14 @@ public class UserServiceImpl extends IBaseServiceImpl<UserMapper, CarServiceUser
         return super.listMaps(queryWrapper);
     }
 
-
+    /**
+     * 手机号查询用户
+     * @param mobil
+     * @return
+     */
+    @Override
+    public CarServiceUser selectUserByMobil(String mobil) {
+        LambdaQueryWrapper<CarServiceUser> queryWrapper = Wrappers.lambdaQuery(CarServiceUser.class).eq(CarServiceUser::getMobile, mobil);
+        return getOne(queryWrapper);
+    }
 }

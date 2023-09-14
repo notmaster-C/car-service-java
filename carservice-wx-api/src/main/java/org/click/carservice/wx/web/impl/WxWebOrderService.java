@@ -258,7 +258,7 @@ public class WxWebOrderService {
         String cartId = body.getCartId();
         String message = body.getMessage();
         String couponId = body.getCouponId();
-//        String addressId = body.getAddressId();
+        String addressId = body.getAddressId();
         String userCouponId = body.getUserCouponId();
         String rewardLinkId = body.getRewardLinkId();
         String grouponLinkId = body.getGrouponLinkId();
@@ -291,10 +291,10 @@ public class WxWebOrderService {
         }
 
         // 收货地址
-//        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
-//        if (checkedAddress == null) {
-//            return ResponseUtil.badArgument();
-//        }
+        CarServiceAddress checkedAddress = addressService.query(userId, addressId);
+        if (checkedAddress == null) {
+            return ResponseUtil.badArgument();
+        }
 
         //选中的商品
         List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
@@ -335,9 +335,9 @@ public class WxWebOrderService {
             order.setGoodsId(cartGoods.getGoodsId());
             order.setBrandId(cartGoods.getBrandId());
             order.setMobile(mobile);
-//            order.setConsignee(checkedAddress.getName());
+            order.setConsignee(checkedAddress.getName());
             order.setBrandId(cartGoods.getBrandId());
-//            order.setAddress(checkedAddress.getAddressAll());
+            order.setAddress(checkedAddress.getAddressAll());
             order.setOrderStatus(OrderStatus.STATUS_CREATE.getStatus());
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));

@@ -23,4 +23,15 @@
         <result column="version" property="version"/>
     </resultMap>
 
+    <select id="selectByBrandIds" resultMap="BaseResultMap">
+        select * from car_service_order_goods
+            <where>
+                deleted = 0
+                <if test="ids != null">
+                    <foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </if>
+            </where>
+    </select>
 </mapper>

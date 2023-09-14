@@ -71,7 +71,7 @@ public class AdminGoodsController {
     /**
      * 查询商品
      */
-    @SaCheckPermission("admin:goods:list")
+    @SaCheckPermission(value = "admin:goods:list", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "查询")
     @GetMapping("/list")
     public Object list(GoodsListBody body) {
@@ -122,7 +122,7 @@ public class AdminGoodsController {
     /**
      * 编辑商品
      */
-    @SaCheckPermission("admin:goods:update")
+    @SaCheckPermission(value = "admin:goods:update", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "编辑商品")
     @PostMapping("/update")
     public Object update(@Valid @RequestBody GoodsAllinone goodsAllinone) {
@@ -132,7 +132,7 @@ public class AdminGoodsController {
     /**
      * 删除商品
      */
-    @SaCheckPermission("admin:goods:delete")
+    @SaCheckPermission(value = "admin:goods:delete", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "删除商品")
     @PostMapping("/delete")
     public Object delete(@Valid @RequestBody CarServiceGoods goods) {
@@ -142,7 +142,7 @@ public class AdminGoodsController {
     /**
      * 商品上下架
      */
-    @SaCheckPermission("admin:goods:on-sale")
+    @SaCheckPermission(value = "admin:goods:on-sale", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "商品上下架")
     @PostMapping("/on-sale")
     public Object updateStatus(@Valid @RequestBody CarServiceGoods goods) {
@@ -184,7 +184,7 @@ public class AdminGoodsController {
     /**
      * 添加商品
      */
-    @SaCheckPermission("admin:goods:create")
+    @SaCheckPermission(value = "admin:goods:create", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "添加商品")
     @PostMapping("/create")
     public Object create(@Valid @RequestBody GoodsAllinone goodsAllinone) {
@@ -194,7 +194,7 @@ public class AdminGoodsController {
     /**
      * 商品详情
      */
-    @SaCheckPermission("admin:goods:read")
+    @SaCheckPermission(value = "admin:goods:read", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"商场管理", "商品管理"}, button = "商品详情")
     @GetMapping("/detail")
     public Object detail(@NotNull String id) {

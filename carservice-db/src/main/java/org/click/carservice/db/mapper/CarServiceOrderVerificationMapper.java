@@ -2,6 +2,10 @@ package org.click.carservice.db.mapper;
 
 import org.click.carservice.db.domain.CarServiceOrderVerification;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.click.carservice.db.domain.dto.OrderVerificationExportDto;
+import org.click.carservice.db.domain.query.OrderVerificationQuery;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CarServiceOrderVerificationMapper extends BaseMapper<CarServiceOrderVerification> {
 
+    List<OrderVerificationExportDto> exportOrderVerification(OrderVerificationQuery query);
 }

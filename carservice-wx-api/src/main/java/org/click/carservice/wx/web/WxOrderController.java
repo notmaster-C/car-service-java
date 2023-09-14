@@ -219,7 +219,7 @@ public class WxOrderController {
      * @return 订单操作结果
      */
     @PostMapping("confirm")
-    @ApiOperation(value = "订单使用后，用户验收确认收货")
+    @ApiOperation(value = "订单核销-订单使用后，用户验收确认收货")
     public ResponseUtil confirm(@LoginUser String userId, @JsonBody String orderId, MultipartFile file) {
         return ResponseUtil.ok(orderService.confirm(userId, orderId,file));
     }

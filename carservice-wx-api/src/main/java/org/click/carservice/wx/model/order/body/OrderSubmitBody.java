@@ -28,6 +28,10 @@ public class OrderSubmitBody implements Serializable {
 //    private String addressId;
     private String mobile;
     /**
+     * 用户电话
+     */
+    private String mobile;
+    /**
      * 用户优惠券ID
      */
     private String userCouponId;

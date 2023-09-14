@@ -1,4 +1,4 @@
-package org.click.carservice.core.utils;
+package org.click.carservice.db;
 /**
  * Copyright (c) [click] [927069313@qq.com]
  * [carservice-plus] is licensed under Mulan PSL v2.

@@ -11,7 +11,9 @@ package org.click.carservice.admin.service;
  * See the Mulan PSL v2 for more details.
  */
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.click.carservice.core.config.DataScopeConfig;
 import org.click.carservice.admin.model.order.body.OrderListBody;
 import org.click.carservice.db.domain.CarServiceOrder;
 import org.click.carservice.db.service.impl.OrderServiceImpl;
@@ -30,10 +32,11 @@ import java.util.List;
 @CacheConfig(cacheNames = "carservice_order")
 public class AdminOrderService extends OrderServiceImpl {
 
-
-    @Cacheable(sync = true)
+//    @Cacheable(sync = true)
     public List<CarServiceOrder> querySelective(OrderListBody body) {
         QueryWrapper<CarServiceOrder> wrapper = startPage(body);
+        // 根据当前管理系统用户id获取到小程序商户id,从而查询到用户的所有订单
+        if (DataScopeConfig.dataScope(wrapper)) return CollUtil.empty(List.class);
         if (body.getBrandId() != null) {
             wrapper.eq(CarServiceOrder.BRAND_ID, body.getBrandId());
         }
@@ -61,12 +64,13 @@ public class AdminOrderService extends OrderServiceImpl {
         return queryAll(wrapper);
     }
 
-    @Cacheable(sync = true)
+//    @Cacheable(sync = true)
     public Integer statusCount(List<Short> orderStatus) {
         if (orderStatus == null || orderStatus.size() <= 0) {
             return 0;
         }
         QueryWrapper<CarServiceOrder> wrapper = new QueryWrapper<>();
+        if (DataScopeConfig.dataScope(wrapper)) return 0;
         wrapper.in(CarServiceOrder.ORDER_STATUS, orderStatus);
         return Math.toIntExact(count(wrapper));
     }

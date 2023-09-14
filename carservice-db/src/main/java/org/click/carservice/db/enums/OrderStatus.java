@@ -160,6 +160,18 @@ public enum OrderStatus implements Serializable {
         this.depict = depict;
     }
 
+    public static String parseValue(Integer code) {
+        if (code != null) {
+            for (OrderStatus item : values()) {
+
+                if (Short.toUnsignedInt(item.status) == code) {
+                    return item.depict;
+                }
+            }
+        }
+        throw new IllegalStateException("code不支持");
+    }
+
     /**
      * 根据状态获取描述
      *

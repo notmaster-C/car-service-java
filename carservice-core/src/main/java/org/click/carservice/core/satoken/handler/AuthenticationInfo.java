@@ -10,10 +10,11 @@ import org.click.carservice.core.utils.captcha.CaptchaManager;
 import org.click.carservice.core.utils.http.GlobalWebUtil;
 import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.db.domain.CarServiceAdmin;
+import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.service.IAdminService;
+import org.click.carservice.db.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ public class AuthenticationInfo {
     private static CommonService commonService;
     private static IAdminService adminService;
 
+    private static IUserService userService;
+
     @Autowired
     public void setCommonService(CommonService commonService){
         AuthenticationInfo.commonService = commonService;
@@ -38,6 +41,11 @@ public class AuthenticationInfo {
     @Autowired
     public void setAdminService(IAdminService adminService){
         AuthenticationInfo.adminService = adminService;
+    }
+
+    @Autowired
+    public void setUserService(IUserService userService) {
+        AuthenticationInfo.userService = userService;
     }
 
     /**
@@ -131,6 +139,12 @@ public class AuthenticationInfo {
         StpUtil.logout(admin.getId());
         //账号登陆
         StpUtil.login(admin.getId());
+        // 判断用户是否商户，是则存储小程序商户id到session
+        if (StpUtil.getRoleList().contains("商户")) {
+            String mobile = admin.getMobile();
+            CarServiceUser carServiceUser = userService.selectUserByMobil(mobile);
+            StpUtil.getSession().set("carServiceUserId", carServiceUser.getId());
+        }
         //对象拷贝
         return admin;
     }

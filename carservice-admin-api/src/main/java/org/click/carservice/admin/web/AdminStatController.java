@@ -42,7 +42,7 @@ public class AdminStatController {
     /**
      * 用户统计
      */
-    @SaCheckPermission("admin:stat:user")
+    @SaCheckPermission(value = "admin:stat:user", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"统计管理", "用户统计"}, button = "查询")
     @GetMapping("/user")
     public Object statUser() {
@@ -57,7 +57,7 @@ public class AdminStatController {
     /**
      * 订单统计
      */
-    @SaCheckPermission("admin:stat:order")
+    @SaCheckPermission(value = "admin:stat:order", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"统计管理", "订单统计"}, button = "查询")
     @GetMapping("/order")
     public Object statOrder() {
@@ -72,7 +72,7 @@ public class AdminStatController {
     /**
      * 商品统计
      */
-    @SaCheckPermission("admin:stat:goods")
+    @SaCheckPermission(value = "admin:stat:goods", orRole = {"商户"})
     @RequiresPermissionsDesc(menu = {"统计管理", "商品统计"}, button = "查询")
     @GetMapping("/goods")
     public Object statGoods() {
