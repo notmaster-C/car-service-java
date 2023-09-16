@@ -11,6 +11,7 @@ package org.click.carservice.wx.web.impl;
  *  See the Mulan PSL v2 for more details.
  */
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.service.CommonService;
 import org.click.carservice.core.service.CouponVerifyService;
@@ -29,8 +30,10 @@ import org.click.carservice.wx.service.WxCouponUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 优惠券服务
@@ -81,6 +84,19 @@ public class WxWebCouponService {
         }
         // 计算优惠券可用情况
         List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId, carId);
+        // 筛选符合购物车商品的优惠券
+        if (CollUtil.isNotEmpty(couponUserList)) {
+            // 获取到商品id
+            List<String> goodsIds = checkedGoodsList.stream().map(CarServiceCart::getGoodsId).collect(Collectors.toList());
+            // 根据商品id获取到优惠券id
+            List<CarServiceCoupon> coupons = new ArrayList<>();
+            for (String goodsId : goodsIds) {
+                coupons.addAll(couponService.queryByGoodsId(goodsId));
+            }
+            List<String> couponsIds = coupons.stream().map(CarServiceCoupon::getId).collect(Collectors.toList());
+            // 过滤掉不符合要求的优惠券
+            couponUserList = couponUserList.stream().filter(data -> couponsIds.contains(data.getCouponId())).collect(Collectors.toList());
+        }
         List<CouponResult> couponVoList = couponService.change(couponUserList);
         for (CouponResult cv : couponVoList) {
             CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, cv.getCid(), cv.getId(), carId, checkedGoodsList);
