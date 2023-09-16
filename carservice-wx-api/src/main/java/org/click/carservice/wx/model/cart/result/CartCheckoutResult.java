@@ -49,7 +49,7 @@ public class CartCheckoutResult implements Serializable {
     /**
      * 优惠券可用数量
      */
-    private Integer availableCouponLength;
+    private long availableCouponLength;
     /**
      * 选中商品金额
      */

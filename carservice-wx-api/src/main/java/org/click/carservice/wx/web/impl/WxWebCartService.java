@@ -18,12 +18,14 @@ import org.click.carservice.core.service.DealingSlipCoreService;
 import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.*;
+import org.click.carservice.db.entity.PageResult;
 import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.wx.model.cart.body.CartCheckedBody;
 import org.click.carservice.wx.model.cart.body.CartCheckoutBody;
 import org.click.carservice.wx.model.cart.result.CartCheckoutResult;
 import org.click.carservice.wx.model.cart.result.CartIndexResult;
 import org.click.carservice.wx.model.cart.result.CartTotalResult;
+import org.click.carservice.wx.model.coupon.result.CouponResult;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +63,8 @@ public class WxWebCartService {
     private WxCouponUserService couponUserService;
     @Autowired
     private CouponVerifyService couponVerifyService;
+    @Autowired
+    private WxWebCouponService wxWebCouponService;
 
     /**
      * 用户购物车信息
@@ -372,22 +376,9 @@ public class WxWebCartService {
         BigDecimal tmpCouponPrice = new BigDecimal("0.00");
         String tmpCouponId = "0";
         String tmpUserCouponId = "0";
-        int tmpCouponLength = 0;
-        List<CarServiceCouponUser> couponUserList = couponUserService.queryAll(userId, carId);
-        for(CarServiceCouponUser couponUser : couponUserList){
-            CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), couponUser.getId(), carId, checkedGoodsList);
-            if(coupon == null){
-                continue;
-            }
-            tmpCouponLength++;
-            if(tmpCouponPrice.compareTo(coupon.getDiscount()) < 0){
-                tmpCouponPrice = coupon.getDiscount();
-                tmpCouponId = coupon.getId();
-                tmpUserCouponId = couponUser.getId();
-            }
-        }
         // 获取优惠券减免金额，优惠券可用数量
-        Integer availableCouponLength = tmpCouponLength;
+        ResponseUtil<PageResult<CouponResult>> couponResult = (ResponseUtil<PageResult<CouponResult>>) wxWebCouponService.selectList(userId, cartId, carId);
+        long availableCouponLength = couponResult.getData().getTotal();
         BigDecimal couponPrice = BigDecimal.valueOf(0);
         // 这里存在三种情况
         // 1. 用户不想使用优惠券，则不处理

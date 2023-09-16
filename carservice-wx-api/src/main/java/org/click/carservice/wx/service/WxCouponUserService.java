@@ -66,6 +66,7 @@ public class WxCouponUserService extends CouponUserServiceImpl {
         QueryWrapper<CarServiceCouponUser> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCouponUser.USER_ID, userId);
         wrapper.eq(StrUtil.isNotBlank(carId), "car_id", carId);
+        wrapper.eq(CarServiceCouponUser.STATUS, 0);
         return queryAll(wrapper);
     }
 
