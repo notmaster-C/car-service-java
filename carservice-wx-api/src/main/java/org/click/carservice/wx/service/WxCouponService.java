@@ -11,7 +11,9 @@ package org.click.carservice.wx.service;
  * See the Mulan PSL v2 for more details.
  */
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.click.carservice.db.domain.CarServiceCoupon;
 import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.entity.PageBody;
@@ -115,4 +117,13 @@ public class WxCouponService extends CouponServiceImpl {
         }
     }
 
+    /**
+     * 优惠券商品id获取优惠券
+     * @param goodsId
+     * @return
+     */
+    public List<CarServiceCoupon> queryByGoodsId(String goodsId) {
+        LambdaQueryWrapper<CarServiceCoupon> queryWrapper = Wrappers.lambdaQuery(CarServiceCoupon.class).like(CarServiceCoupon::getGoodsIds, goodsId);
+        return list(queryWrapper);
+    }
 }
