@@ -183,60 +183,60 @@ public class TaskJob {
      * <p>
      * 定时时间是每天凌晨5点。
      */
-    @Scheduled(cron = "0 0 5 * * ?")
-    public void checkCouponExpired() {
-        TaskHandler taskHandler = new TaskHandler("优惠券是否已经过期", getTenantIds()) {
-            @Override
-            public Integer runTask() {
-                //查询所有已经过期优惠券
-                List<CarServiceCoupon> couponList = taskJobService.queryCouponExpired();
-                for (CarServiceCoupon coupon : couponList) {
-                    LocalDateTime expire = coupon.getEndTime();
-                    LocalDateTime now = LocalDateTime.now();
-                    if (expire.isBefore(now)) {
-                        // 已经过期，则加入延迟队列
-                        taskService.addTask(new CouponExpiredTask(coupon, 0));
-                    } else {
-                        // 还没过期，则加入延迟队列
-                        long delay = ChronoUnit.MILLIS.between(now, expire);
-                        log.info(String.format("系统定时任务 -> [查询-优惠券是否已经过期][超时时间=%s毫秒]", delay));
-                        taskService.addTask(new CouponExpiredTask(coupon, delay));
-                    }
-                }
-                return couponList.size();
-            }
-        };
-        taskHandler.run();
-    }
+//    @Scheduled(cron = "0 0 5 * * ?")
+//    public void checkCouponExpired() {
+//        TaskHandler taskHandler = new TaskHandler("优惠券是否已经过期", getTenantIds()) {
+//            @Override
+//            public Integer runTask() {
+//                //查询所有已经过期优惠券
+//                List<CarServiceCoupon> couponList = taskJobService.queryCouponExpired();
+//                for (CarServiceCoupon coupon : couponList) {
+//                    LocalDateTime expire = coupon.getEndTime();
+//                    LocalDateTime now = LocalDateTime.now();
+//                    if (expire.isBefore(now)) {
+//                        // 已经过期，则加入延迟队列
+//                        taskService.addTask(new CouponExpiredTask(coupon, 0));
+//                    } else {
+//                        // 还没过期，则加入延迟队列
+//                        long delay = ChronoUnit.MILLIS.between(now, expire);
+//                        log.info(String.format("系统定时任务 -> [查询-优惠券是否已经过期][超时时间=%s毫秒]", delay));
+//                        taskService.addTask(new CouponExpiredTask(coupon, delay));
+//                    }
+//                }
+//                return couponList.size();
+//            }
+//        };
+//        taskHandler.run();
+//    }
 
     /**
      * 检查用户优惠券是否已经过期
      * <p>
      * 定时时间是每天凌晨6点。
      */
-    @Scheduled(cron = "0 0 6 * * ?")
-    public void checkCouponUserExpired() {
-        TaskHandler taskHandler = new TaskHandler("用户优惠券是否已经过期", getTenantIds()) {
-            @Override
-            public Integer runTask() {
-                //查询所有已经过期优惠券
-                List<CarServiceCouponUser> couponList = taskJobService.queryCouponUserExpired();
-                for (CarServiceCouponUser couponUser : couponList) {
-                    LocalDateTime expire = couponUser.getEndTime();
-                    LocalDateTime now = LocalDateTime.now();
-                    if (expire.isBefore(now)) {
-                        // 已经过期，则加入延迟队列
-                        taskService.addTask(new CouponUserExpiredTask(couponUser, 0));
-                    } else {
-                        // 还没过期，则加入延迟队列
-                        long delay = ChronoUnit.MILLIS.between(now, expire);
-                        log.info(String.format("系统定时任务 -> [查询-用户优惠券是否已经过期][超时时间=%s毫秒]", delay));
-                        taskService.addTask(new CouponUserExpiredTask(couponUser, delay));
-                    }
-                }
-                return couponList.size();
-            }
-        };
-        taskHandler.run();
-    }
+//    @Scheduled(cron = "0 0 6 * * ?")
+//    public void checkCouponUserExpired() {
+//        TaskHandler taskHandler = new TaskHandler("用户优惠券是否已经过期", getTenantIds()) {
+//            @Override
+//            public Integer runTask() {
+//                //查询所有已经过期优惠券
+//                List<CarServiceCouponUser> couponList = taskJobService.queryCouponUserExpired();
+//                for (CarServiceCouponUser couponUser : couponList) {
+//                    LocalDateTime expire = couponUser.getEndTime();
+//                    LocalDateTime now = LocalDateTime.now();
+//                    if (expire.isBefore(now)) {
+//                        // 已经过期，则加入延迟队列
+//                        taskService.addTask(new CouponUserExpiredTask(couponUser, 0));
+//                    } else {
+//                        // 还没过期，则加入延迟队列
+//                        long delay = ChronoUnit.MILLIS.between(now, expire);
+//                        log.info(String.format("系统定时任务 -> [查询-用户优惠券是否已经过期][超时时间=%s毫秒]", delay));
+//                        taskService.addTask(new CouponUserExpiredTask(couponUser, delay));
+//                    }
+//                }
+//                return couponList.size();
+//            }
+//        };
+//        taskHandler.run();
+//    }
 }

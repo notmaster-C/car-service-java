@@ -29,7 +29,7 @@ carservice:
     # 短消息模版通知配置
     # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
     sms:
-      enable: false
+      enable: true
       # 如果是腾讯云短信，则设置active的值tencent
       # 如果是阿里云短信，则设置active的值aliyun
       active: tencent
@@ -43,13 +43,15 @@ carservice:
           templateId: 633779
         - name: refund    #退款通知
           templateId: 633781
+        - name: coupon
+          templateId: SMS_461355685
       tencent:
         appid: 1400367955
         appkey: 80a1522e4aecaceb89d1186059bbddcb
       aliyun:
-        regionId: xxx
-        accessKeyId: xxx
-        accessKeySecret: xxx
+        regionId: cn-hangzhou
+        accessKeyId: LTAI5tSRF9aXQP3JKYBEeN3A
+        accessKeySecret: 84loaK4CywA2QbnAAF7mwIVRIHPe7B
 
   # 快鸟物流查询配置
   express:

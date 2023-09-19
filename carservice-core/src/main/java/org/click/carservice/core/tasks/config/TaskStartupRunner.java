@@ -40,10 +40,10 @@ public class TaskStartupRunner {
         taskJob.checkOrderUnconfirmed();
         //订单团购超时
         taskJob.checkGrouponRuleExpired();
-        //优惠券过期
-        taskJob.checkCouponExpired();
-        //用户优惠券过期
-        taskJob.checkCouponUserExpired();
+//        //优惠券过期
+//        taskJob.checkCouponExpired();
+//        //用户优惠券过期
+//        taskJob.checkCouponUserExpired();
     }
 
 }

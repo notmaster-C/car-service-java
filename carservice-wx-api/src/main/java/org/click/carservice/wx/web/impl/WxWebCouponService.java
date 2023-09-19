@@ -19,9 +19,11 @@ import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceCart;
 import org.click.carservice.db.domain.CarServiceCoupon;
 import org.click.carservice.db.domain.CarServiceCouponUser;
+import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.enums.CouponStatus;
 import org.click.carservice.db.enums.CouponType;
+import org.click.carservice.db.service.impl.GoodsServiceImpl;
 import org.click.carservice.wx.model.coupon.body.CouponListBody;
 import org.click.carservice.wx.model.coupon.result.CouponResult;
 import org.click.carservice.wx.service.WxCartService;
@@ -54,6 +56,8 @@ public class WxWebCouponService {
     @Autowired
     private CommonService commonService;
 
+    @Autowired
+    private GoodsServiceImpl goodsService;
     /**
      * 优惠券列表
      */
@@ -91,7 +95,9 @@ public class WxWebCouponService {
             // 根据商品id获取到优惠券id
             List<CarServiceCoupon> coupons = new ArrayList<>();
             for (String goodsId : goodsIds) {
-                coupons.addAll(couponService.queryByGoodsId(goodsId));
+                // 获取到商品是什么类型的服务
+                CarServiceGoods goods = goodsService.getById(goodsId);
+                coupons.addAll(couponService.queryByGoodsId(goods.getCategoryId()));
             }
             List<String> couponsIds = coupons.stream().map(CarServiceCoupon::getId).collect(Collectors.toList());
             // 过滤掉不符合要求的优惠券
