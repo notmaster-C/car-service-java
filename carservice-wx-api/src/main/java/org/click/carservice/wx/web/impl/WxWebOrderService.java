@@ -1065,39 +1065,41 @@ public class WxWebOrderService {
      */
     public Object adminUse(String orderId) {
 
-//        String orderId = body.getOrderId();
-
-//        CarServiceBrand brand = brandService.findByUserId(userId);
-//        if (brand == null) {
-//            return ResponseUtil.fail("未找到店铺");
-//        }
-
         CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-
+        CarServiceBrand brand = brandService.findById(order.getBrandId());
+        if (brand == null || brand.getStatus()!='0') {
+            return ResponseUtil.fail("未找到店铺或者店铺已禁用！");
+        }
         // 如果订单不是已付款状态，则不能发货
         if(!OrderStatus.hasShip(order)){
             return ResponseUtil.fail( "订单不是已付款状态，不能使用");
         }
-        order.setShipTime(LocalDateTime.now());
-        order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
-        order.setQrcode(null);
-
+        CarServiceGoods goods=  goodsService.findById(order.getGoodsId());
+        if (goods.getIsValuable()==false){
+            order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
+            order.setQrcode(null);
+            //记录操作日志
+            ActionLogHandler.logOrderSucceed("验收完成非高价值商品", "订单时间 " + order.getShipTime());
+            return ResponseUtil.ok();
+        }
         if (orderService.updateVersionSelective(order) == 0) {
             throw new RuntimeException("网络繁忙，请刷新重试");
         }
 
+        order.setShipTime(LocalDateTime.now());
+        order.setOrderStatus(OrderStatus.STATUS_SHIP.getStatus());
+        order.setQrcode(null);
         //添加确认收货定时任务
         taskService.addTask(new OrderUnconfirmedTask(order));
-
         //订单发货订阅通知
-        CarServiceUser user = userService.findById(order.getUserId());
-        subscribeMessageService.shipSubscribe(user.getOpenid(),order);
+//        CarServiceUser user = userService.findById(order.getUserId());
+//        subscribeMessageService.shipSubscribe(user.getOpenid(),order);
 
         //记录操作日志
-        ActionLogHandler.logOrderSucceed("发货", "订单时间 " + order.getShipTime());
+        ActionLogHandler.logOrderSucceed("验收完成高价值商品", "订单时间 " + order.getShipTime());
 
         return ResponseUtil.ok();
     }

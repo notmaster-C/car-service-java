@@ -102,6 +102,11 @@ public class CarServiceGoods implements Serializable {
     @TableField("`is_take_their`")
     private Boolean isTakeTheir;
     /**
+     * 是否高价值商品
+     */
+    @TableField("`is_valuable`")
+    private Boolean isValuable;
+    /**
      * 商品单位，例如件、盒
      */
     @TableField("`unit`")
