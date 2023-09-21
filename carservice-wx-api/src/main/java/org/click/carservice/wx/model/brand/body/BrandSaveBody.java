@@ -53,6 +53,16 @@ public class BrandSaveBody implements Serializable {
     @NotNull(message = "自提地址不能为空")
     private String address;
     /**
+     * 商铺经度
+     */
+    @NotNull(message = "商铺经度不能为空")
+    private float latitude;
+    /**
+     * 商铺纬度
+     */
+    @NotNull(message = "商铺纬度不能为空")
+    private float longitude;
+    /**
      * 更新版本号
      */
     private Integer version;

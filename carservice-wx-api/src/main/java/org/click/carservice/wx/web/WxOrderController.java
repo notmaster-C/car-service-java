@@ -207,8 +207,8 @@ public class WxOrderController {
      */
     @PostMapping("admin/Use")
     @ApiOperation(value = "订单使用")
-    public Object adminUse(@JsonBody String orderId) {
-        return orderService.adminUse(orderId);
+    public Object adminUse(@LoginUser String userId,@JsonBody String orderId) {
+        return orderService.adminUse(userId,orderId);
     }
     /**
      * 订单使用后，用户验收确认收货

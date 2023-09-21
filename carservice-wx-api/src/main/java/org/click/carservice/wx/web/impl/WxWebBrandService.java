@@ -18,7 +18,10 @@ import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.*;
 import org.click.carservice.db.entity.BaseOption;
-import org.click.carservice.db.enums.*;
+import org.click.carservice.db.enums.BrandStatus;
+import org.click.carservice.db.enums.GrouponStatus;
+import org.click.carservice.db.enums.LikeType;
+import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.wx.model.brand.body.BrandListBody;
 import org.click.carservice.wx.model.brand.body.BrandOrderListBody;
 import org.click.carservice.wx.model.brand.body.BrandSaveBody;
@@ -29,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,7 +160,8 @@ public class WxWebBrandService {
                 throw new RuntimeException("店铺添加失败请重试");
             }
             //奖励5毛
-            slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);
+//            slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);
+            user.setUserType(1);
         }
         if (StringUtils.hasText(body.getTrueName())){
             CarServiceUser service = userService.findById(userId);

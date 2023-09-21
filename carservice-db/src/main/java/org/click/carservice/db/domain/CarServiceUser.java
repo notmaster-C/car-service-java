@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * <p>
@@ -71,6 +69,12 @@ public class CarServiceUser implements Serializable {
     @TableField("`gender`")
     @ApiModelProperty("性别：0 未知， 1男， 2女")
     private Byte gender;
+    /**
+     * 是否网约车车主
+     */
+    @TableField("`is_wyccz`")
+    @ApiModelProperty("是否网约车车主")
+    private Byte isWyccz;
     /**
      * 生日
      */

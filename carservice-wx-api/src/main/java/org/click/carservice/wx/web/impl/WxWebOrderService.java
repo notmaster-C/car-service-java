@@ -1063,7 +1063,7 @@ public class WxWebOrderService {
      * 成功则 { errno: 0, errmsg: '成功' }
      * 失败则 { errno: XXX, errmsg: XXX }
      */
-    public Object adminUse(String orderId) {
+    public Object adminUse(String userId,String orderId) {
 
         CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
@@ -1072,6 +1072,9 @@ public class WxWebOrderService {
         CarServiceBrand brand = brandService.findById(order.getBrandId());
         if (brand == null || brand.getStatus()!='0') {
             return ResponseUtil.fail("未找到店铺或者店铺已禁用！");
+        }
+        if(brand.getUserId()!=userId){
+            return ResponseUtil.fail("请对应店铺商家进行核销！");
         }
         // 如果订单不是已付款状态，则不能发货
         if(!OrderStatus.hasShip(order)){

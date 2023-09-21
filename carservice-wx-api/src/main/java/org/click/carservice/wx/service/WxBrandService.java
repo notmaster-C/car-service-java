@@ -20,7 +20,6 @@ import org.click.carservice.db.enums.BrandStatus;
 import org.click.carservice.db.service.impl.BrandServiceImpl;
 import org.click.carservice.wx.model.brand.body.BrandListBody;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -45,8 +44,10 @@ public class WxBrandService extends BrandServiceImpl {
         String picUrl = brand.getPicUrl();
         String depict = brand.getDepict();
         String mail = brand.getMail();
+        Float latitude=brand.getLatitude();
+        Float longitude = brand.getLongitude();
         BigDecimal price = brand.getFloorPrice();
-        if (!ObjectUtils.allNotNull(name, depict, picUrl, mail, price)) {
+        if (!ObjectUtils.allNotNull(name, depict, picUrl, mail, price,latitude,longitude)) {
             return ResponseUtil.fail("请完整填写信息");
         }
         if (RegexUtil.isQQMail(mail)) {

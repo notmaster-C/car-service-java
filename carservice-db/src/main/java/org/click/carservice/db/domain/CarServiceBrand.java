@@ -98,7 +98,7 @@ public class CarServiceBrand implements Serializable {
      * 0 可用, 1 禁用, 2 注销
      */
     @TableField("`status`")
-    @ApiModelProperty("0 可用, 1 禁用, 2 注销")
+    @ApiModelProperty("0 可用, 1 禁用, 2 注销, 3待审核")
     private Byte status;
     /**
      * 权重用于排序
@@ -138,6 +138,18 @@ public class CarServiceBrand implements Serializable {
     @Version
     @ApiModelProperty("更新版本号")
     private Integer version;
+    /**
+     * 店铺经度
+     */
+    @TableField("`latitude`")
+    @ApiModelProperty("店铺经度")
+    private Float latitude;
+    /**
+     * 店铺纬度
+     */
+    @TableField("`longitude`")
+    @ApiModelProperty("店铺纬度")
+    private Float longitude;
 
     /////////////////////////////////
     // 数据库字段常量

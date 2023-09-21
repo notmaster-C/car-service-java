@@ -79,6 +79,11 @@ public class UserInfo implements Serializable {
     @ApiModelProperty("性别")
     private Byte gender;
     /**
+     * 是否网约车车主
+     */
+    @ApiModelProperty("是否网约车车主")
+    private Byte isWyccz;
+    /**
      * 语言
      */
     @ApiModelProperty("语言")
