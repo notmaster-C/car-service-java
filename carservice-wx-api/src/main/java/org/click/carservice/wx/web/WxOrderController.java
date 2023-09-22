@@ -221,20 +221,20 @@ public class WxOrderController {
     public Object confirm( @JsonBody String orderId, @RequestParam("file") MultipartFile file) {
         return orderService.confirm(orderId,file);
     }
-    /**
-     * 订单生成二维码
-     *
-     * @param orderId   订单信息，{ orderId：xxx }
-     * @return 订单操作结果
-     */
-    @PostMapping("createQrcode")
-    @ApiOperation(value = "订单生成二维码")
-    public Object createQrcode( @JsonBody String orderId) {
-        return orderService.createQrcode(orderId);
-    }
-    @PostMapping("getQrcode")
-    @ApiOperation(value = "获取订单二维码")
-    public Object getQrcode( @JsonBody String orderId) {
-        return orderService.getQrcode(orderId);
-    }
+//    /**
+//     * 订单生成二维码
+//     *
+//     * @param orderId   订单信息，{ orderId：xxx }
+//     * @return 订单操作结果
+//     */
+//    @PostMapping("createQrcode")
+//    @ApiOperation(value = "订单生成二维码")
+//    public Object createQrcode( @JsonBody String orderId) {
+//        return orderService.createQrcode(orderId);
+//    }
+//    @PostMapping("getQrcode")
+//    @ApiOperation(value = "获取订单二维码")
+//    public Object getQrcode( @JsonBody String orderId) {
+//        return orderService.getQrcode(orderId);
+//    }
 }

@@ -132,7 +132,10 @@ public class OrderInfo implements Serializable {
      * 订单状态描述
      */
     private String orderStatusText;
-
+    /**
+     * 订单二维码base64
+     */
+    private byte[] qrcode;
     /**
      * 用户可执行操作
      */

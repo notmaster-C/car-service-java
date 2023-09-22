@@ -730,6 +730,10 @@ public class WxWebOrderService {
         order.setComments(comments.shortValue());
         order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
         order.setQrcode(null);
+        order.setConfirmTime(LocalDateTime.now());
+        if (orderService.updateVersionSelective(order) == 0) {
+            throw new RuntimeException("订单数据失效");
+        }
         //保存订单核销记录
         carServiceOrderVerification.setUserId(order.getUserId());
         carServiceOrderVerification.setGoodsId(order.getGoodsId());
@@ -739,11 +743,6 @@ public class WxWebOrderService {
         carServiceOrderVerification.setStorageId(storageId);
         iCarServiceOrderVerificationService.add(carServiceOrderVerification);
 
-        order.setConfirmTime(LocalDateTime.now());
-        if (orderService.updateVersionSelective(order) == 0) {
-            throw new RuntimeException("订单数据失效");
-        }
-
         //删除确认收货定时任务
         taskService.removeTask(new OrderUnconfirmedTask(order));
 
@@ -751,7 +750,7 @@ public class WxWebOrderService {
         taskService.addTask(new OrderCommentTask(order));
 
         //获取店铺所有者向店家发放余额
-        slipCoreService.addOrderIntegral(order , brand);
+//        slipCoreService.addOrderIntegral(order , brand);
         return ResponseUtil.ok();
     }
 
@@ -1006,7 +1005,7 @@ public class WxWebOrderService {
             return ResponseUtil.fail("未找到订单");
         }
         if (order.getQrcode()==null){
-            return ResponseUtil.fail("订单无二维码,可能已使用");
+            return ResponseUtil.fail();
         }
         byte[] qrcode=order.getQrcode();
         return ResponseUtil.ok(qrcode);

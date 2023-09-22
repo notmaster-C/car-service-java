@@ -199,7 +199,7 @@ public class CarServiceOrder implements Serializable {
     /**
      * 订单二维码路径
      */
-    @TableField("`qrcode`")
+    @TableField(value="qrcode",updateStrategy =FieldStrategy.IGNORED)
     private byte[] qrcode;
     /**
      * 更新版本号

@@ -416,21 +416,21 @@ public class WxWebCartService {
         BigDecimal actualPrice = orderTotalPrice.subtract(couponPrice).subtract(grouponPrice).max(BigDecimal.valueOf(0));
 
         // 余额减免
-        BigDecimal integralPrice = new BigDecimal("0.00");
-        CarServiceUser user = userService.findById(userId);
-        if (user == null) {
-            throw new RuntimeException("用户不存在");
-        }
-        if (slipCoreService.isDeduction(user) == null){
-            BigDecimal userIntegral = user.getIntegral();
-            if (actualPrice.compareTo(userIntegral) >= 0){
-                actualPrice = actualPrice.subtract(userIntegral);
-                integralPrice = userIntegral;
-            }else {
-                integralPrice = actualPrice;
-                actualPrice = BigDecimal.valueOf(0);
-            }
-        }
+//        BigDecimal integralPrice = new BigDecimal("0.00");
+//        CarServiceUser user = userService.findById(userId);
+//        if (user == null) {
+//            throw new RuntimeException("用户不存在");
+//        }
+//        if (slipCoreService.isDeduction(user) == null){
+//            BigDecimal userIntegral = user.getIntegral();
+//            if (actualPrice.compareTo(userIntegral) >= 0){
+//                actualPrice = actualPrice.subtract(userIntegral);
+//                integralPrice = userIntegral;
+//            }else {
+//                integralPrice = actualPrice;
+//                actualPrice = BigDecimal.valueOf(0);
+//            }
+//        }
 
         CartCheckoutResult result = new CartCheckoutResult();
         result.setAddressId(addressId);
@@ -439,7 +439,7 @@ public class WxWebCartService {
         result.setCartId(cartId);
         result.setGrouponRulesId(grouponRulesId);
         result.setGrouponPrice(grouponPrice);
-        result.setIntegralPrice(integralPrice);
+//        result.setIntegralPrice(integralPrice);
         result.setCheckedAddress(checkedAddress);
         result.setAvailableCouponLength(availableCouponLength);
         result.setGoodsTotalPrice(checkedGoodsPrice);
