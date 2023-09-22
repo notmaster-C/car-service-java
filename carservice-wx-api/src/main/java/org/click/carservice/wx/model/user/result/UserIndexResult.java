@@ -18,9 +18,9 @@ public class UserIndexResult implements Serializable {
      */
     private BigDecimal integralPrice;
     /**
-     * 用户等级
+     * 用户类型
      */
-    private String userLevel;
+    private Integer userType;
     /**
      * 用户订单信息
      */

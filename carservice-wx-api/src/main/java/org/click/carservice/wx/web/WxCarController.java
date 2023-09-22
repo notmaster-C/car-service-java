@@ -3,6 +3,7 @@ package org.click.carservice.wx.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceCar;
 import org.click.carservice.wx.annotation.LoginUser;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -49,6 +48,9 @@ public class WxCarController {
     @PostMapping("add")
     @ApiOperation(value = "新增车牌信息")
     public ResponseUtil add(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
+        if (!ObjectUtils.allNotNull(carServiceCar.getCarNumber(), carServiceCar.getCarType(), carServiceCar.getEngineType())) {
+            return ResponseUtil.fail("车辆信息不能为空!");
+        }
         carServiceCar.setUserId(userId);
         carService.insertCarServiceCar(carServiceCar);
         return ResponseUtil.ok();
@@ -63,6 +65,9 @@ public class WxCarController {
     @PostMapping("/edit")
     @ApiOperation(value = "修改车牌信息")
     public ResponseUtil edit(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
+        if (!ObjectUtils.allNotNull(carServiceCar.getCarNumber(), carServiceCar.getCarType(), carServiceCar.getEngineType())) {
+            return ResponseUtil.fail("车辆信息不能为空!");
+        }
         carService.edit(userId, carServiceCar);
         return ResponseUtil.ok();
     }

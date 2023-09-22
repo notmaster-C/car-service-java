@@ -14,7 +14,6 @@ import org.click.carservice.db.domain.CarServiceUser;
 import org.click.carservice.db.entity.PageBody;
 import org.click.carservice.db.entity.UserInfo;
 import org.click.carservice.db.enums.DealType;
-import org.click.carservice.db.enums.UserLevel;
 import org.click.carservice.wx.model.user.result.TradingRecordResult;
 import org.click.carservice.wx.model.user.result.UserIndexResult;
 import org.click.carservice.wx.model.user.result.UserShareResult;
@@ -69,7 +68,7 @@ public class WxWebUserService {
         UserIndexResult result = new UserIndexResult();
         result.setOrder(orderService.orderInfo(userId));
         result.setBrand(brandService.findByUserId(userId));
-        result.setUserLevel(UserLevel.parseValue(user.getUserLevel()));
+        result.setUserType(user.getUserType());
         result.setIntegralPrice(user.getIntegral());
         return ResponseUtil.ok(result);
     }

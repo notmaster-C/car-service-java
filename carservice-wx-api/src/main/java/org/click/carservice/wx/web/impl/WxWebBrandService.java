@@ -151,6 +151,7 @@ public class WxWebBrandService {
 
             //更新店铺信息
             brand.setId(CarServiceBrand.getId());
+
             if (brandService.updateVersionSelective(brand) == 0) {
                 return ResponseUtil.updatedDataFailed();
             }
@@ -161,10 +162,10 @@ public class WxWebBrandService {
             }
             //奖励5毛
 //            slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);
-            user.setUserType(1);
         }
         if (StringUtils.hasText(body.getTrueName())){
             CarServiceUser service = userService.findById(userId);
+            service.setUserType(1);
             service.setTrueName(body.getTrueName());
             if (userService.updateVersionSelective(service) == 0){
                 throw new RuntimeException("用户更新失败请重试");
