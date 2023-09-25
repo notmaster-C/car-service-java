@@ -3,16 +3,16 @@ package org.click.carservice.wx.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceCar;
+import org.click.carservice.db.service.impl.CarServiceCarServiceImpl;
 import org.click.carservice.wx.annotation.LoginUser;
-import org.click.carservice.wx.service.WxCarService;
+import org.click.carservice.wx.web.impl.WxWebCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 /**
  * 微信-车牌控制器
@@ -22,54 +22,31 @@ import java.util.List;
 @Validated
 @Slf4j
 @Api(value = "微信-车牌", tags = "微信-车牌")
-public class WxCarController {
+public class WxCarController extends CarServiceCarServiceImpl {
 
     @Autowired
-    private WxCarService carService;
+    private WxWebCarService carService;
 
     @GetMapping("/list")
     @ApiOperation(value = "用户id查询用户所拥有的车辆牌照信息")
-    public ResponseUtil<List<CarServiceCar>> list(@LoginUser String userId) {
-        return ResponseUtil.ok(carService.queryByUid(userId));
+    public Object list(@LoginUser String userId) {
+        return carService.list(userId);
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "id查询车牌详情")
-    public ResponseUtil<CarServiceCar> detail(@LoginUser String userId, @RequestBody String id) {
-        CarServiceCar carServiceCar = carService.detail(userId, id);
-        return ResponseUtil.ok(carServiceCar);
+    public Object detail(@LoginUser String userId, @RequestBody String id) {
+        return carService.detail(userId, id);
     }
-
     /**
-     * 新增车牌信息
-     * @param carServiceCar
-     * @return
+     * 添加或更新收货地址
+     * @param userId  用户ID
+     * @param car 车辆信息
+     * @return 添加或更新操作结果
      */
-    @PostMapping("add")
-    @ApiOperation(value = "新增车牌信息")
-    public ResponseUtil add(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
-        if (!ObjectUtils.allNotNull(carServiceCar.getCarNumber(), carServiceCar.getCarType(), carServiceCar.getEngineType())) {
-            return ResponseUtil.fail("车辆信息不能为空!");
-        }
-        carServiceCar.setUserId(userId);
-        carService.insertCarServiceCar(carServiceCar);
-        return ResponseUtil.ok();
-    }
-
-    /**
-     * 修改车牌
-     * @param userId
-     * @param carServiceCar
-     * @return
-     */
-    @PostMapping("/edit")
-    @ApiOperation(value = "修改车牌信息")
-    public ResponseUtil edit(@LoginUser String userId, @RequestBody CarServiceCar carServiceCar) {
-        if (!ObjectUtils.allNotNull(carServiceCar.getCarNumber(), carServiceCar.getCarType(), carServiceCar.getEngineType())) {
-            return ResponseUtil.fail("车辆信息不能为空!");
-        }
-        carService.edit(userId, carServiceCar);
-        return ResponseUtil.ok();
+    @PostMapping("save")
+    public Object save(@LoginUser String userId, @Valid @RequestBody CarServiceCar car) {
+        return carService.save(userId , car);
     }
 
     /**

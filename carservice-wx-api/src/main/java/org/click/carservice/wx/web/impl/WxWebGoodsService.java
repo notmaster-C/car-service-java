@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 /**
  * 商品服务
@@ -237,7 +238,9 @@ public class WxWebGoodsService {
 
 		//查询列表数据
 		List<CarServiceGoods> goodsList = goodsService.querySelective(body);
-
+		//查询对应店铺信息
+		List<String> brandIds = goodsList.stream().map(CarServiceGoods::getBrandId).distinct().collect(Collectors.toList());
+		List<CarServiceBrand> brandList = brandService.queryByIds(brandIds);
 		// 查询商品所属类目列表。
 		List<String> goodsCatIds = goodsService.getCatIds(body.getBrandId(), body.getKeyword(), body.getIsHot(), body.getIsNew());
 		List<CarServiceCategory> categoryList;
@@ -255,6 +258,7 @@ public class WxWebGoodsService {
 		result.setLimit(pagedList.getPageSize());
 		result.setPages(pagedList.getPages());
 		result.setFilterCategoryList(categoryList);
+		result.setList2(brandList);
 		// 因为这里需要返回额外的filterCategoryList参数，因此不能方便使用ResponseUtil.okList
 		return ResponseUtil.ok(result);
 	}

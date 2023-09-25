@@ -81,6 +81,12 @@ public class WxBrandService extends BrandServiceImpl {
         return queryAll(wrapper);
     }
 
+    //@Cacheable(sync = true)
+    public List<CarServiceBrand> queryByIds(List<String> brandIds) {
+        QueryWrapper<CarServiceBrand> wrapper = new QueryWrapper<>();
+        wrapper.in(CarServiceBrand.ID, brandIds);
+        return queryAll(wrapper);
+    }
 
     //@Cacheable(sync = true)
     public CarServiceBrand findByUserId(String userId) {

@@ -1,16 +1,13 @@
 package org.click.carservice.wx.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.db.domain.CarServiceCar;
 import org.click.carservice.db.service.impl.CarServiceCarServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 车牌业务
@@ -26,50 +23,37 @@ public class WxCarService extends CarServiceCarServiceImpl {
      */
 //    //@Cacheable(sync = true)
     public List<CarServiceCar> queryByUid(String userId) {
-        LambdaQueryWrapper<CarServiceCar> queryWrapper = Wrappers.lambdaQuery(CarServiceCar.class).eq(CarServiceCar::getUserId, userId).orderByDesc(CarServiceCar::getAddTime);
-        return list(queryWrapper);
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.USER_ID, userId);
+        return queryAll(wrapper);
     }
-
     /**
-     * 设置默认车牌
-     * @param userId
-     * @param id
+     * 车牌查信息
+     * @param CarNumber
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    public Integer setDefaultCar(String userId, String id) {
-        // 获取设置的默认拍照
-        List<CarServiceCar> carServiceCars = queryByUid(userId);
-        Optional<CarServiceCar> defaultCar = carServiceCars.stream().filter(c -> Integer.valueOf(1).compareTo(c.getIsDefault()) == 0).findFirst();
-        // 存在则删除默认状态
-        if (defaultCar.isPresent()){
-            CarServiceCar carServiceCar = defaultCar.get();
-            carServiceCar.setIsDefault(0);
-            updateById(carServiceCar);
-        }
-        // 设置默认牌照
-        LambdaUpdateWrapper<CarServiceCar> updateWrapper = Wrappers.lambdaUpdate(CarServiceCar.class).set(CarServiceCar::getIsDefault, "1" )
-                .eq(CarServiceCar::getUserId, userId)
-                .eq(CarServiceCar::getId, id);
-        return update(updateWrapper) ? 1 : 0;
+//    //@Cacheable(sync = true)
+    public CarServiceCar queryByCarNumber(String CarNumber) {
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.CAR_NUMBER, CarNumber);
+        wrapper.eq(CarServiceCar.DELETED, 0);
+        return getOne(wrapper,false);
+    }
+//    @CacheEvict(allEntries = true)
+    public void resetDefault(String userId) {
+        CarServiceCar car = new CarServiceCar();
+        car.setIsDefault(0);
+        car.setUpdateTime(LocalDateTime.now());
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.USER_ID, userId);
+        update(car, wrapper);
     }
 
-    /**
-     * 修改
-     * @param userId
-     * @param carServiceCar
-     */
-    public void edit(String userId, CarServiceCar carServiceCar) {
-        updateById(carServiceCar);
+    public CarServiceCar query(String userId, String id) {
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.USER_ID, userId);
+        wrapper.eq(CarServiceCar.ID, id);
+        return getOne(wrapper);
     }
 
-    /**
-     * id查询详情
-     * @param userId
-     * @param id
-     * @return
-     */
-    public CarServiceCar detail(String userId, String id) {
-        return selectCarServiceCarById(id);
-    }
 }

@@ -18,6 +18,10 @@ public class GoodsListResult implements Serializable {
     private List<?> list;
 
     /**
+     * 数据列表2
+     */
+    private List<?> list2;
+    /**
      * 总数据条数
      */
     private long total;

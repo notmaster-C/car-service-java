@@ -1,7 +1,7 @@
 package org.click.carservice.db.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -9,9 +9,10 @@ import org.click.carservice.db.domain.CarServiceCar;
 import org.click.carservice.db.mapper.CarServiceCarMapper;
 import org.click.carservice.db.mybatis.IBaseServiceImpl;
 import org.click.carservice.db.service.ICarServiceCarService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ import java.util.List;
  * @since 2023-08-01
  */
 @Service
+@Primary
+@CacheConfig(cacheNames = "carservice_car")
 public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapper, CarServiceCar> implements ICarServiceCarService {
 
     /**
@@ -65,36 +68,46 @@ public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapp
         }
         return this.list(lqw);
     }
-
-    /**
-     * 新增
-     * @param carServiceCar
-     */
-    public void insertCarServiceCar(CarServiceCar carServiceCar) {
-        String carNumber = carServiceCar.getCarNumber();
-        List<CarServiceCar> carServiceCars = selectCarServiceCarList(new CarServiceCar().setCarNumber(carNumber));
-        if (CollUtil.isNotEmpty(carServiceCars)){
-            throw new RuntimeException("新增失败：系统已存在此牌照-" + carNumber);
-        }
-        this.getBaseMapper().insert(carServiceCar);
+    @Override
+    public CarServiceCar findById(String id) {
+        return getBaseMapper().selectById(id);
     }
 
-    /**
-     * 修改用户车牌信息
-     *
-     * @param carServiceCar 用户车牌信息
-     * @return 结果
-     */
-    public int updateCarServiceCar(CarServiceCar carServiceCar)
-    {
-        String carNumber = carServiceCar.getCarNumber();
-        List<CarServiceCar> carServiceCars = selectCarServiceCarList(new CarServiceCar().setCarNumber(carNumber));
-        if (CollUtil.isNotEmpty(carServiceCars)){
-            throw new RuntimeException("修改失败：系统已存在此牌照-" + carNumber);
-        }
-        carServiceCar.setUpdateTime(new Date());
-        return this.getBaseMapper().updateById(carServiceCar);
+    @Override
+    public List<CarServiceCar> queryAll(Wrapper<CarServiceCar> queryWrapper) {
+        return getBaseMapper().selectList(queryWrapper);
     }
+
+    @Override
+    public boolean exists(Wrapper<CarServiceCar> queryWrapper) {
+        return getBaseMapper().exists(queryWrapper);
+    }
+
+    @Override
+    public int add(CarServiceCar record) {
+        return getBaseMapper().insert(record);
+    }
+
+    @Override
+    public boolean batchAdd(List<CarServiceCar> list) {
+        return saveBatch(list);
+    }
+
+    @Override
+    public int updateSelective(CarServiceCar record) {
+        return getBaseMapper().updateById(record);
+    }
+
+    @Override
+    public int updateVersionSelective(CarServiceCar record) {
+        return getBaseMapper().updateById(record);
+    }
+
+    @Override
+    public int deleteById(String id) {
+        return getBaseMapper().deleteById(id);
+    }
+
 
     /**
      * 删除用户车牌信息信息

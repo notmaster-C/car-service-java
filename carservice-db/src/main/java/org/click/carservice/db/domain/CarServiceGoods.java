@@ -230,6 +230,10 @@ public class CarServiceGoods implements Serializable {
      */
     public static final String IS_HOT = "`is_hot`";
     /**
+     * 是否高价值商品
+     */
+    public static final String IS_VALUABLE = "`is_valuable`";
+    /**
      * 是否自提
      */
     public static final String IS_TAKE_THEIR = "`is_take_their`";
