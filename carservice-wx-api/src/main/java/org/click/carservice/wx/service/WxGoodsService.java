@@ -137,10 +137,10 @@ public class WxGoodsService extends GoodsServiceImpl {
         if (body.getCategoryId() != null && !body.getCategoryId().equals("0")) {
             wrapper.eq(CarServiceGoods.CATEGORY_ID, body.getCategoryId());
         }
-        if (body.getBrandId() != null) {
+        if (body.getBrandId() != null && body.getBrandId() != "") {
             wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
         }
-        if (body.getIsNew() != null) {
+        if (body.getIsNew() != null ) {
             wrapper.eq(CarServiceGoods.IS_NEW, body.getIsNew());
         }
         if (body.getIsHot() != null) {
