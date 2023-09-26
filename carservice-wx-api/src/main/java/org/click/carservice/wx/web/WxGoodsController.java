@@ -64,7 +64,7 @@ public class WxGoodsController {
      */
     @GetMapping("list")
     public Object list(@LoginUser(require = false) String userId, GoodsListBody body) {
-        return goodsService.list(userId , body);
+        return goodsService.listDistance(userId , body);
     }
 
     /**

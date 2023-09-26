@@ -18,6 +18,14 @@ public class GoodsDetailResult implements Serializable {
      */
     private CarServiceGoods info;
     /**
+     * 店铺经度
+     */
+    private Float latitude;
+    /**
+     * 店铺纬度
+     */
+    private Float longitude;
+    /**
      * 分享图片
      */
     private String shareImage;

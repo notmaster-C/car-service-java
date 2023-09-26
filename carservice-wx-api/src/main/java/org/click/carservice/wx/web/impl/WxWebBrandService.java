@@ -86,8 +86,8 @@ public class WxWebBrandService {
      * @param brandId 品牌ID
      * @return 品牌详情
      */
-    public Object read(String userId, String brandId) {
-        return ResponseUtil.ok(brandService.findByUserId(userId ,brandId));
+    public Object read( String brandId) {
+        return ResponseUtil.ok(brandService.findByBrandId(brandId));
     }
 
     /**

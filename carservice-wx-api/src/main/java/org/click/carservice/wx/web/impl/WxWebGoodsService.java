@@ -12,6 +12,7 @@ import org.click.carservice.db.enums.CollectType;
 import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.wx.model.goods.body.GoodsCommentListBody;
 import org.click.carservice.wx.model.goods.body.GoodsListBody;
+import org.click.carservice.wx.model.goods.body.GoodsListBodyB;
 import org.click.carservice.wx.model.goods.result.*;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,7 +241,10 @@ public class WxWebGoodsService {
 		List<CarServiceGoods> goodsList = goodsService.querySelective(body);
 		//查询对应店铺信息
 		List<String> brandIds = goodsList.stream().map(CarServiceGoods::getBrandId).distinct().collect(Collectors.toList());
-		List<CarServiceBrand> brandList = brandService.queryByIds(brandIds);
+		List<CarServiceBrand> brandList=null;
+		if(brandIds.size()>0) {
+			brandList = brandService.queryByIds(brandIds);
+		}
 		// 查询商品所属类目列表。
 		List<String> goodsCatIds = goodsService.getCatIds(body.getBrandId(), body.getKeyword(), body.getIsHot(), body.getIsNew());
 		List<CarServiceCategory> categoryList;
@@ -258,7 +262,58 @@ public class WxWebGoodsService {
 		result.setLimit(pagedList.getPageSize());
 		result.setPages(pagedList.getPages());
 		result.setFilterCategoryList(categoryList);
-		result.setList2(brandList);
+		// 因为这里需要返回额外的filterCategoryList参数，因此不能方便使用ResponseUtil.okList
+		return ResponseUtil.ok(result);
+	}
+
+	/**
+	 * 列表商品携带位置信息
+	 * @return 根据条件搜素的商品详情
+	 */
+	public Object listDistance(String userId, GoodsListBody body) {
+		//添加到搜索历史
+		if (userId != null && !Objects.isNull(body.getKeyword())) {
+			CarServiceSearchHistory searchHistory = searchHistoryService.findByKeyword(userId, body.getKeyword());
+			if (searchHistory != null){
+				searchHistoryService.updateVersionSelective(searchHistory);
+			} else {
+				CarServiceSearchHistory searchHistoryVo = new CarServiceSearchHistory();
+				searchHistoryVo.setKeyword(body.getKeyword());
+				searchHistoryVo.setUserId(userId);
+				searchHistoryVo.setFrom("wx");
+				searchHistoryVo.setVersion(1);
+				searchHistoryService.save(searchHistoryVo);
+			}
+		}
+
+		//查询列表数据
+		List<CarServiceGoods> goodsList = goodsService.querySelective(body);
+		List<GoodsListBodyB> goods=new ArrayList<>();
+		for(CarServiceGoods item:goodsList){
+			GoodsListBodyB t = new GoodsListBodyB();
+			t.setGoods(item);
+			CarServiceBrand brand = brandService.findByBrandId(item.getBrandId());
+			t.setLatitude(brand.getLatitude());
+			t.setLongitude(brand.getLongitude());
+			goods.add(t);
+		}
+		// 查询商品所属类目列表。
+		List<String> goodsCatIds = goodsService.getCatIds(body.getBrandId(), body.getKeyword(), body.getIsHot(), body.getIsNew());
+		List<CarServiceCategory> categoryList;
+		if (goodsCatIds.size() != 0) {
+			categoryList = categoryService.queryL2ByIds(goodsCatIds);
+		} else {
+			categoryList = new ArrayList<>(0);
+		}
+
+		PageInfo<CarServiceGoods> pagedList = PageInfo.of(goodsList);
+		GoodsListResult result = new GoodsListResult();
+		result.setList(goods);
+		result.setTotal(pagedList.getTotal());
+		result.setPage(pagedList.getPageNum());
+		result.setLimit(pagedList.getPageSize());
+		result.setPages(pagedList.getPages());
+		result.setFilterCategoryList(categoryList);
 		// 因为这里需要返回额外的filterCategoryList参数，因此不能方便使用ResponseUtil.okList
 		return ResponseUtil.ok(result);
 	}

@@ -1,5 +1,5 @@
 package org.click.carservice.wx.web.impl;
-import com.github.pagehelper.PageInfo;
+
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.service.RewardCoreService;
 import org.click.carservice.core.system.SystemConfig;
@@ -7,6 +7,7 @@ import org.click.carservice.core.tenant.handler.TenantContextHolder;
 import org.click.carservice.core.utils.Inheritable.InheritableCallable;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.*;
+import org.click.carservice.wx.model.goods.body.GoodsListBodyB;
 import org.click.carservice.wx.model.home.body.HomeNavigateBody;
 import org.click.carservice.wx.model.home.result.HomeAboutResult;
 import org.click.carservice.wx.model.home.result.HomeIndexResult;
@@ -14,6 +15,7 @@ import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.FutureTask;
@@ -100,25 +102,63 @@ public class WxWebHomeService {
 //                }
 //        );
         // 新品首发
-        FutureTask<List<CarServiceGoods>> newGoodsListTask = new FutureTask<>(
-            new InheritableCallable<List<CarServiceGoods>>(){
+        FutureTask<List<GoodsListBodyB>> newGoodsListTask = new FutureTask<>(
+            new InheritableCallable<List<GoodsListBodyB>>(){
                 @Override
-                public List<CarServiceGoods> runTask() {
-                    return goodsService.queryByNew(SystemConfig.getNewLimit());
+                public List<GoodsListBodyB> runTask() {
+                    List<CarServiceGoods> newGoods = goodsService.queryByNew(SystemConfig.getNewLimit());
+                    List<GoodsListBodyB> goods=new ArrayList<>();
+                    for(CarServiceGoods item:newGoods){
+                        GoodsListBodyB t = new GoodsListBodyB();
+                        t.setGoods(item);
+                        CarServiceBrand brand = brandService.findByBrandId(item.getBrandId());
+                        t.setLatitude(brand.getLatitude());
+                        t.setLongitude(brand.getLongitude());
+                        goods.add(t);
+                    }
+                    return goods;
                 }
             }
         );
 
         // 热卖专区
-        FutureTask<List<CarServiceGoods>> hotGoodsListTask = new FutureTask<>(
-            new InheritableCallable<List<CarServiceGoods>>(){
+        FutureTask<List<GoodsListBodyB>> hotGoodsListTask = new FutureTask<>(
+            new InheritableCallable<List<GoodsListBodyB>>(){
                 @Override
-                public List<CarServiceGoods> runTask() {
-                    return goodsService.queryByHot(SystemConfig.getHotLimit());
+                public List<GoodsListBodyB> runTask() {
+                    List<CarServiceGoods> hotGoods = goodsService.queryByHot(SystemConfig.getHotLimit());
+                    List<GoodsListBodyB> goods=new ArrayList<>();
+                    for(CarServiceGoods item:hotGoods){
+                        GoodsListBodyB t = new GoodsListBodyB();
+                        t.setGoods(item);
+                        CarServiceBrand brand = brandService.findByBrandId(item.getBrandId());
+                        t.setLatitude(brand.getLatitude());
+                        t.setLongitude(brand.getLongitude());
+                        goods.add(t);
+                    }
+                    return goods;
                 }
             }
         );
-
+        // 首页商品分页
+        FutureTask <List<GoodsListBodyB>> allGoodsListTask = new FutureTask<>(
+                new InheritableCallable <List<GoodsListBodyB>>(){
+                    @Override
+                    public List<GoodsListBodyB> runTask() {
+                        List<CarServiceGoods> allGoods=goodsService.queryByAll(SystemConfig.getAllLimit());
+                        List<GoodsListBodyB> goods=new ArrayList<>();
+                        for(CarServiceGoods item:allGoods){
+                            GoodsListBodyB t = new GoodsListBodyB();
+                            t.setGoods(item);
+                            CarServiceBrand brand = brandService.findByBrandId(item.getBrandId());
+                            t.setLatitude(brand.getLatitude());
+                            t.setLongitude(brand.getLongitude());
+                            goods.add(t);
+                        }
+                        return goods;
+                    }
+                }
+        );
         // 赏金任务
         FutureTask<List<CarServiceRewardTask>> rewardTaskListTask = new FutureTask<>(
             new InheritableCallable<List<CarServiceRewardTask>>(){
@@ -139,15 +179,6 @@ public class WxWebHomeService {
             }
         );
 
-        // 首页商品分页
-        FutureTask<PageInfo<CarServiceGoods>> allGoodsListTask = new FutureTask<>(
-            new InheritableCallable<PageInfo<CarServiceGoods>>(){
-                @Override
-                public PageInfo<CarServiceGoods> runTask() {
-                    return PageInfo.of(goodsService.queryByAll(SystemConfig.getAllLimit()));
-                }
-            }
-        );
 
         executorService.submit(bannerTask);
         executorService.submit(channelTask);

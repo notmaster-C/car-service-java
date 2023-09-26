@@ -16,11 +16,6 @@ public class GoodsListResult implements Serializable {
      * 数据列表
      */
     private List<?> list;
-
-    /**
-     * 数据列表2
-     */
-    private List<?> list2;
     /**
      * 总数据条数
      */

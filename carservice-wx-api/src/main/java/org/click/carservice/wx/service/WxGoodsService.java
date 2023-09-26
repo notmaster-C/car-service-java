@@ -18,8 +18,8 @@ import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.db.service.impl.GoodsServiceImpl;
 import org.click.carservice.wx.model.brand.result.BrandGoodsListBody;
 import org.click.carservice.wx.model.goods.body.GoodsListBody;
+import org.click.carservice.wx.model.goods.body.GoodsListBodyB;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -100,11 +100,18 @@ public class WxGoodsService extends GoodsServiceImpl {
      * 获取店铺下的商品
      */
     //@Cacheable(sync = true)
-    public List<CarServiceGoods> queryByBrand(BrandGoodsListBody body) {
+    public List<GoodsListBodyB> queryByBrand(BrandGoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
         wrapper.orderByDesc(CarServiceGoods.WEIGHT);
-        return queryAll(wrapper);
+        List<CarServiceGoods> good = queryAll(wrapper);
+        List<GoodsListBodyB> goods =new ArrayList<>();
+        for(CarServiceGoods item:good){
+            GoodsListBodyB t=new GoodsListBodyB ();
+            t.setGoods(item);
+            goods.add(t);
+        }
+        return goods;
     }
 
 

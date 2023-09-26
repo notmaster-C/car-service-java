@@ -65,8 +65,8 @@ public class WxBrandController {
      */
     @GetMapping("read")
     @ApiOperation(value = "用户id,品牌id,品牌信息")
-    public Object read(@LoginUser String userId, @JsonBody String brandId) {
-        return brandService.read(userId , brandId);
+    public Object read( @JsonBody String brandId) {
+        return brandService.read( brandId);
     }
 
     /**

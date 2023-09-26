@@ -1,8 +1,8 @@
 package org.click.carservice.wx.model.home.result;
 
-import com.github.pagehelper.PageInfo;
 import lombok.Data;
 import org.click.carservice.db.domain.*;
+import org.click.carservice.wx.model.goods.body.GoodsListBodyB;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,15 +34,15 @@ public class HomeIndexResult implements Serializable {
     /**
      * 新品商品
      */
-    private List<CarServiceGoods> newGoodsList;
+    private List<GoodsListBodyB> newGoodsList;
     /**
      * 热卖商品
      */
-    private List<CarServiceGoods> hotGoodsList;
+    private List<GoodsListBodyB> hotGoodsList;
     /**
      * 所有商品第一页
      */
-    private PageInfo<CarServiceGoods> allGoodsList;
+    private List<GoodsListBodyB> allGoodsList;
     /**
      * 赏金规则列表
      */
