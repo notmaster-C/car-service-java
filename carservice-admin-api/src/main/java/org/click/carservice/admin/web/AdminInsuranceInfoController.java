@@ -112,8 +112,8 @@ public class AdminInsuranceInfoController
      * @return
      * @throws Exception
      */
-    @SaCheckPermission("admin:insurance:import")
-    @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "导入")
+//    @SaCheckPermission("admin:insurance:import")
+//    @RequiresPermissionsDesc(menu = {"保险管理", "保险信息"}, button = "导入")
     @PostMapping("/importData")
     @ApiOperation("导入保单信息")
     public ResponseUtil importData(MultipartFile file) throws Exception
