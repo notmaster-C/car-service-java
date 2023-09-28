@@ -2,6 +2,7 @@ package org.click.carservice.admin.service;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.click.carservice.core.notify.service.NotifyMobileService;
 import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.domain.CarServiceInsuranceInfo;
 import org.click.carservice.db.domain.CarServiceInsuranceService;
@@ -26,6 +27,9 @@ public class AdminInsuranceService extends CarServiceInsuranceServiceServiceImpl
     @Autowired
     private AdminCouponUserService adminCouponUserService;
 
+    @Autowired
+    private NotifyMobileService mobileService;
+
     /**
      * 根据保险信息新增优惠券
      * @param info
@@ -48,6 +52,8 @@ public class AdminInsuranceService extends CarServiceInsuranceServiceServiceImpl
                 adminCouponUserService.save(carServiceCouponUser);
             }
         }
+        // 发送短信
+//        mobileService.notifySmsTemplate();
     }
 
 }

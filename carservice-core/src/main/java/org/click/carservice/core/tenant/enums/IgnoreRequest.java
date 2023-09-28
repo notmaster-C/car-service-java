@@ -18,7 +18,8 @@ public enum IgnoreRequest {
     request4("/wx/storage/fetch/**", "图片查看接口"),
     request3("/wx/storage/download/**", "图片下载接口"),
     request2("/wx/order/pay-status", "支付回调接口"),
-    request1("/wx/home/index", "微信首页信息附带授权");
+    request1("/wx/home/index", "微信首页信息附带授权"),
+    request22("/admin/info/importData", "微信首页信息附带授权");
 
     public final String request;
     public final String message;

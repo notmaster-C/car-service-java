@@ -32,8 +32,8 @@ carservice:
       enable: true
       # 如果是腾讯云短信，则设置active的值tencent
       # 如果是阿里云短信，则设置active的值aliyun
-      active: tencent
-      sign: carservice
+      active: aliyun
+      sign: "当时明月在网"
       template:
         - name: paySucceed  #支付成功
           templateId: 633788

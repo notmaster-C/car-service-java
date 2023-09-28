@@ -32,14 +32,14 @@ public class TaskStartupRunner {
     @PostConstruct
     public void init() {
         log.info("初始化 -> [初始化定时任务]");
-        //订单超时未支付
-        taskJob.checkOrderUnpaid();
-        //订单评论超时
-        taskJob.checkOrderComment();
-        //订单确认收货超时
-        taskJob.checkOrderUnconfirmed();
-        //订单团购超时
-        taskJob.checkGrouponRuleExpired();
+//        //订单超时未支付
+//        taskJob.checkOrderUnpaid();
+//        //订单评论超时
+//        taskJob.checkOrderComment();
+//        //订单确认收货超时
+//        taskJob.checkOrderUnconfirmed();
+//        //订单团购超时
+//        taskJob.checkGrouponRuleExpired();
 //        //优惠券过期
 //        taskJob.checkCouponExpired();
 //        //用户优惠券过期
