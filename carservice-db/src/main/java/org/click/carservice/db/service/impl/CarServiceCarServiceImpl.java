@@ -105,6 +105,9 @@ public class CarServiceCarServiceImpl extends IBaseServiceImpl<CarServiceCarMapp
 
     @Override
     public int deleteById(String id) {
+//        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+//        wrapper.eq(CarServiceCar.ID, id);
+//        remove(wrapper);
         return getBaseMapper().deleteById(id);
     }
 

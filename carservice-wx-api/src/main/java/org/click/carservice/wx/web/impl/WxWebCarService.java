@@ -95,7 +95,7 @@ public class WxWebCarService extends CarServiceCarServiceImpl {
         }
         CarServiceCar car = carService.query(userId, id);
         if (car == null) {
-            return ResponseUtil.fail("地址获取失败");
+            return ResponseUtil.fail("车辆信息获取失败");
         }
         return ResponseUtil.ok(car);
     }
@@ -130,6 +130,21 @@ public class WxWebCarService extends CarServiceCarServiceImpl {
                 .eq(CarServiceCar::getUserId, userId)
                 .eq(CarServiceCar::getId, id);
         return update(updateWrapper) ? 1 : 0;
+    }
+
+
+    /**
+     * 删除车辆信息
+     *
+     * @param userId  用户ID
+     * @param id 	  车辆ID
+     */
+    public Object delete(String userId, String id) {
+        if (Objects.isNull(userId)) {
+            return ResponseUtil.unlogin();
+        }
+        carService.delete(userId,id);
+        return ResponseUtil.ok();
     }
 
 }

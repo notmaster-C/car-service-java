@@ -55,5 +55,17 @@ public class WxCarService extends CarServiceCarServiceImpl {
         wrapper.eq(CarServiceCar.ID, id);
         return getOne(wrapper);
     }
+    /**
+     * 删除车辆信息
+     *
+     * @param userId  用户ID
+     * @param id 	  车辆ID
+     */
+    public void delete(String userId, String id) {
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.USER_ID, userId);
+        wrapper.eq(CarServiceCar.ID, id);
+        remove(wrapper);
+    }
 
 }

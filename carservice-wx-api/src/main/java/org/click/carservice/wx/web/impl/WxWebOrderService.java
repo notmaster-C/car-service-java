@@ -107,7 +107,7 @@ public class WxWebOrderService {
     @Autowired
     private WxOrderGoodsService orderGoodsService;
     @Autowired
-    private WxAddressService addressService;
+    private WxCarService carService;
     @Autowired
     private SubscribeMessageService subscribeMessageService;
     @Autowired
@@ -153,8 +153,6 @@ public class WxWebOrderService {
     @Autowired
     private WxGoodsService goodsService;
 
-    @Autowired
-    private WxCarService carService;
 
     /**
      * 订单列表
@@ -204,6 +202,9 @@ public class WxWebOrderService {
             if (order == null){
                 return ResponseUtil.fail( "订单不存在");
             }
+        }
+        if( order.getCarId()==null){
+            return ResponseUtil.fail( "订单信息异常，车辆不存在");
         }
 
         OrderInfo orderInfo = new OrderInfo();
@@ -267,7 +268,7 @@ public class WxWebOrderService {
         String cartId = body.getCartId();
         String message = body.getMessage();
         String couponId = body.getCouponId();
-        String addressId = body.getAddressId();
+//        String addressId = body.getAddressId();
         String carId = body.getCarId();
         String userCouponId = body.getUserCouponId();
         String rewardLinkId = body.getRewardLinkId();
@@ -352,6 +353,7 @@ public class WxWebOrderService {
 //            order.setConsignee(checkedAddress.getName());
             order.setBrandId(cartGoods.getBrandId());
 //            order.setAddress(checkedAddress.getAddressAll());
+            order.setCarId(carId);
             order.setOrderStatus(OrderStatus.STATUS_CREATE.getStatus());
             //订单编号
             order.setOrderSn(orderRandomCode.generateOrderSn(userId));

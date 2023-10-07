@@ -44,7 +44,7 @@ public class WxCarController extends CarServiceCarServiceImpl {
      * @param car 车辆信息
      * @return 添加或更新操作结果
      */
-    @PostMapping("save")
+    @PostMapping("/save")
     public Object save(@LoginUser String userId, @Valid @RequestBody CarServiceCar car) {
         return carService.save(userId , car);
     }
@@ -55,7 +55,7 @@ public class WxCarController extends CarServiceCarServiceImpl {
     @PostMapping("/delete")
     @ApiOperation("删除用户车牌信息")
     public ResponseUtil remove(@LoginUser String userId, @RequestBody String id) {
-        return ResponseUtil.ok(carService.deleteCarServiceCarById(userId, id));
+        return ResponseUtil.ok(carService.delete(userId, id));
     }
 
     /**

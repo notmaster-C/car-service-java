@@ -197,6 +197,11 @@ public class CarServiceOrder implements Serializable {
     @TableField("`tenant_id`")
     private String tenantId;
     /**
+     * 车辆信息ID
+     */
+    @TableField("`car_id`")
+    private String carId;
+    /**
      * 订单二维码路径
      */
     @TableField(value="qrcode",updateStrategy =FieldStrategy.IGNORED)

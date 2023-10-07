@@ -124,6 +124,11 @@ public class OrderInfo implements Serializable {
     private String expNo;
 
     /**
+     * 车辆信息
+     */
+    private String carId;
+
+    /**
      * 物流是否查询成功
      */
     private Boolean expSuccess;
