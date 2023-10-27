@@ -114,7 +114,7 @@ public class AliyunSmsSender implements SmsSender {
         request.setPhoneNumbers(phone);  // 设置手机号码
         request.setSignName(sign);  // 设置签名名称
         request.setTemplateCode(templateId);  // 设置模板CODE
-        request.setTemplateParam("{\"code\":\"123456\"}");  // 设置模板参数，例如验证码为123456
+        request.setTemplateParam(params);  // 设置模板参数，例如验证码为123456
 
         SendSmsResponse response = null;
         try {

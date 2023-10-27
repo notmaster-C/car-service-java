@@ -2,6 +2,7 @@ package org.click.carservice.admin.service;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.click.carservice.core.notify.model.NotifyType;
 import org.click.carservice.core.notify.service.NotifyMobileService;
 import org.click.carservice.db.domain.CarServiceCouponUser;
 import org.click.carservice.db.domain.CarServiceInsuranceInfo;
@@ -53,7 +54,7 @@ public class AdminInsuranceService extends CarServiceInsuranceServiceServiceImpl
             }
         }
         // 发送短信
-//        mobileService.notifySmsTemplate();
+        mobileService.notifySmsTemplate(info.getInsureUserPhone(), NotifyType.COUPON, "");
     }
 
 }
