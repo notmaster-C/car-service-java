@@ -100,9 +100,12 @@ public class WxGoodsService extends GoodsServiceImpl {
      * 获取店铺下的商品
      */
     //@Cacheable(sync = true)
-    public List<GoodsListBodyB> queryByBrand(BrandGoodsListBody body) {
+    public List<GoodsListBodyB> queryByBrand(Boolean isHost,BrandGoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
+        if(!isHost){
+            wrapper.eq(CarServiceGoods.STATUS,GoodsStatus.GOODS_ON_SALE.getStatus());
+        }
         wrapper.orderByDesc(CarServiceGoods.WEIGHT);
         List<CarServiceGoods> good = queryAll(wrapper);
         List<GoodsListBodyB> goods =new ArrayList<>();

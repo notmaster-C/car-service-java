@@ -127,8 +127,8 @@ public class WxBrandController {
      */
     @GetMapping("goods/list")
     @ApiOperation(value = "店铺商品列表")
-    public Object goodsList(BrandGoodsListBody body) {
-        return brandService.goodsList(body);
+    public Object goodsList(@LoginUser(require = false)String userId, BrandGoodsListBody body) {
+        return brandService.goodsList(userId,body);
     }
 
     /**
