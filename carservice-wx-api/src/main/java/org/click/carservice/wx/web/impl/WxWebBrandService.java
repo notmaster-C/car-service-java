@@ -149,13 +149,21 @@ public class WxWebBrandService {
 
             //更新店铺信息
             brand.setId(CarServiceBrand.getId());
+            brand.setStatus(BrandStatus.STATUS_CHECK.getStatus());
             if (brandService.updateVersionSelective(brand) == 0) {
                 return ResponseUtil.updatedDataFailed();
             }
         }else {
             brand.setUserId(userId);
+            brand.setStatus(BrandStatus.STATUS_CHECK.getStatus());
             if (brandService.add(brand) == 0){
                 throw new RuntimeException("店铺添加失败请重试");
+            }
+            // 更新用户类型（type)
+            CarServiceUser service = userService.findById(userId);
+            service.setUserType(UserType.TYPE_commercialTenant.getType());
+            if (userService.updateVersionSelective(service) == 0){
+                throw new RuntimeException("用户更新失败请重试");
             }
             //奖励5毛
             slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);

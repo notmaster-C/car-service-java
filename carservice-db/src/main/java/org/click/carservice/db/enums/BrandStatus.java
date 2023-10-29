@@ -24,7 +24,11 @@ public enum BrandStatus implements Serializable {
     /**
      * 注销
      */
-    STATUS_OUT((byte) 2, "注销");
+    STATUS_OUT((byte) 2, "注销"),
+    /**
+     * 审核
+     */
+    STATUS_CHECK((byte) 3, "审核");
 
     /**
      * 状态

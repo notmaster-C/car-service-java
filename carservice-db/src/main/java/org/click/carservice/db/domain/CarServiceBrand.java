@@ -95,10 +95,10 @@ public class CarServiceBrand implements Serializable {
     @ApiModelProperty("评论数量")
     private Long commentCount;
     /**
-     * 0 可用, 1 禁用, 2 注销
+     * 0 可用, 1 禁用, 2 注销 ,3 审核
      */
     @TableField("`status`")
-    @ApiModelProperty("0 可用, 1 禁用, 2 注销")
+    @ApiModelProperty("0 可用, 1 禁用, 2 注销, 3 审核")
     private Byte status;
     /**
      * 权重用于排序
