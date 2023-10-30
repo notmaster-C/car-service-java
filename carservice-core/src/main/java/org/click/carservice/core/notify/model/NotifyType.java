@@ -23,7 +23,8 @@ public enum NotifyType {
     /**退款*/
     REFUND("refund"),
     /**验证码*/
-    CAPTCHA("captcha");
+    CAPTCHA("captcha"),
+    COUPON("coupon");
 
     private final String type;
 

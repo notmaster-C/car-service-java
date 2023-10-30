@@ -59,7 +59,7 @@ public class NotifyMobileService implements Serializable {
      * @param params      通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
      */
     @Async
-    public void notifySmsTemplate(String phoneNumber, NotifyType notifyType, String[] params) {
+    public void notifySmsTemplate(String phoneNumber, NotifyType notifyType, String params) {
         if (smsSender == null) {
             return;
         }
@@ -79,7 +79,7 @@ public class NotifyMobileService implements Serializable {
      * @param notifyType  通知类别，通过该枚举值在配置文件中获取相应的模版ID
      * @param params      通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
      */
-    public SmsResult notifySmsTemplateSync(String phoneNumber, NotifyType notifyType, String[] params) {
+    public SmsResult notifySmsTemplateSync(String phoneNumber, NotifyType notifyType, String params) {
         if (smsSender == null) {
             return null;
         }
