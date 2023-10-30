@@ -1,14 +1,14 @@
 package org.click.carservice.wx.web.impl;
 /**
- *  Copyright (c) [ysling] [927069313@qq.com]
- *  [CarService-plus] is licensed under Mulan PSL v2.
- *  You can use this software according to the terms and conditions of the Mulan PSL v2.
- *  You may obtain a copy of Mulan PSL v2 at:
- *              http://license.coscl.org.cn/MulanPSL2
- *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *  See the Mulan PSL v2 for more details.
+ * Copyright (c) [ysling] [927069313@qq.com]
+ * [CarService-plus] is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  */
 
 import cn.hutool.core.bean.BeanUtil;
@@ -18,10 +18,7 @@ import org.click.carservice.core.system.SystemConfig;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.*;
 import org.click.carservice.db.entity.BaseOption;
-import org.click.carservice.db.enums.BrandStatus;
-import org.click.carservice.db.enums.GrouponStatus;
-import org.click.carservice.db.enums.LikeType;
-import org.click.carservice.db.enums.OrderStatus;
+import org.click.carservice.db.enums.*;
 import org.click.carservice.wx.model.brand.body.BrandListBody;
 import org.click.carservice.wx.model.brand.body.BrandOrderListBody;
 import org.click.carservice.wx.model.brand.body.BrandSaveBody;
@@ -39,6 +36,7 @@ import java.util.Map;
 
 /**
  * 店铺信息
+ *
  * @author Ysling
  */
 @Slf4j
@@ -83,19 +81,21 @@ public class WxWebBrandService {
 
     /**
      * 店铺详情
+     *
      * @param brandId 品牌ID
      * @return 品牌详情
      */
-    public Object read( String brandId) {
+    public Object read(String brandId) {
         return ResponseUtil.ok(brandService.findByBrandId(brandId));
     }
 
     /**
      * 店铺详情
+     *
      * @param brandId 品牌ID
      * @return 品牌详情
      */
-    public Object brandDetail(String userId ,String brandId) {
+    public Object brandDetail(String userId, String brandId) {
         CarServiceBrand brand = brandService.findById(brandId);
         if (brand == null) {
             return ResponseUtil.badArgumentValue();
@@ -106,7 +106,7 @@ public class WxWebBrandService {
         BrandDetailResult result = new BrandDetailResult();
         result.setBrand(brand);
         result.setBrandLike(likeService.count(LikeType.TYPE_BRAND, brand.getId(), userId));
-        if (brand.getUserId() != null){
+        if (brand.getUserId() != null) {
             result.setBrandUser(userService.findUserVoById(brand.getUserId()));
         }
         return ResponseUtil.ok(result);
@@ -115,13 +115,14 @@ public class WxWebBrandService {
 
     /**
      * 添加或修改店铺
-     * @param userId    用户ID
-     * @param body     店铺信息
+     *
+     * @param userId 用户ID
+     * @param body   店铺信息
      * @return 成功
      */
     public Object brandSave(String userId, BrandSaveBody body) {
         CarServiceBrand brand = new CarServiceBrand();
-        BeanUtil.copyProperties(body , brand);
+        BeanUtil.copyProperties(body, brand);
         Object error = brandService.validate(brand);
         if (error != null) {
             return error;
@@ -131,43 +132,53 @@ public class WxWebBrandService {
             return ResponseUtil.unlogin();
         }
 
-        if (brand.getId() != null && !brand.getId().equals("0")){
+        if (brand.getId() != null && !brand.getId().equals("0")) {
             CarServiceBrand CarServiceBrand = brandService.findById(brand.getId());
-            if (CarServiceBrand == null){
+            if (CarServiceBrand == null) {
                 return ResponseUtil.fail("店铺更新失败");
             }
 
-            if (!brand.getUserId().equals(userId)){
+            if (!brand.getUserId().equals(userId)) {
                 return ResponseUtil.fail("店铺更新失败");
             }
 
-            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_DISABLED.getStatus())){
+            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_DISABLED.getStatus())) {
                 return ResponseUtil.fail("店铺被禁用");
             }
 
-            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_OUT.getStatus())){
+            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_OUT.getStatus())) {
                 return ResponseUtil.fail("店铺被注销");
             }
 
             //更新店铺信息
             brand.setId(CarServiceBrand.getId());
+            // 设置店铺状态为审核
+            brand.setStatus(BrandStatus.STATUS_AUDIT.getStatus());
 
             if (brandService.updateVersionSelective(brand) == 0) {
                 return ResponseUtil.updatedDataFailed();
             }
-        }else {
+        } else {
             brand.setUserId(userId);
-            if (brandService.add(brand) == 0){
+            // 设置店铺状态为审核
+            brand.setStatus(BrandStatus.STATUS_AUDIT.getStatus());
+            if (brandService.add(brand) == 0) {
                 throw new RuntimeException("店铺添加失败请重试");
+            }
+            // 更新用户类型（type)
+            CarServiceUser service = userService.findById(userId);
+            service.setUserType(UserType.TYPE_commercialTenant.getType());
+            if (userService.updateVersionSelective(service) == 0) {
+                throw new RuntimeException("用户更新失败请重试");
             }
             //奖励5毛
 //            slipCoreService.addIntegral(user, BigDecimal.valueOf(0.52), DealType.TYPE_BRAND);
         }
-        if (StringUtils.hasText(body.getTrueName())){
+        if (StringUtils.hasText(body.getTrueName())) {
             CarServiceUser service = userService.findById(userId);
             service.setUserType(1);
             service.setTrueName(body.getTrueName());
-            if (userService.updateVersionSelective(service) == 0){
+            if (userService.updateVersionSelective(service) == 0) {
                 throw new RuntimeException("用户更新失败请重试");
             }
         }
@@ -179,8 +190,8 @@ public class WxWebBrandService {
      */
     public Object orderList(String userId, BrandOrderListBody body) {
         List<CarServiceBrand> brandList = brandService.queryByUserId(userId);
-        if (brandList.size() != 1){
-            return ResponseUtil.fail(800,"未找到店铺");
+        if (brandList.size() != 1) {
+            return ResponseUtil.fail(800, "未找到店铺");
         }
         CarServiceBrand brand = brandList.get(0);
         List<Short> orderStatus = OrderStatus.brandOrderStatus(body.getShowType());
@@ -191,7 +202,7 @@ public class WxWebBrandService {
             BrandOrderListResult result = new BrandOrderListResult();
             result.setGoods(orderGoodsService.findByOrderId(order.getId()));
             //拼装订单信息
-            BeanUtil.copyProperties(order , result);
+            BeanUtil.copyProperties(order, result);
             result.setOrderStatusText(OrderStatus.orderStatusText(order));
             //添加团购信息
             CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
@@ -208,11 +219,12 @@ public class WxWebBrandService {
             }
             orderVoList.add(result);
         }
-        return ResponseUtil.okList(orderVoList,orderList);
+        return ResponseUtil.okList(orderVoList, orderList);
     }
 
     /**
      * 商品上传参数初始化
+     *
      * @return 分类
      */
     public Object goodsInit() {
@@ -225,6 +237,7 @@ public class WxWebBrandService {
 
     /**
      * 分类列表
+     *
      * @return 分类
      */
     public Object catList() {
@@ -255,19 +268,22 @@ public class WxWebBrandService {
     /**
      * 店铺商品列表
      */
-    public Object goodsList(BrandGoodsListBody body) {
-        return ResponseUtil.okList(goodsService.queryByBrand(body));
+    public Object goodsList(String userId, BrandGoodsListBody body) {
+        CarServiceBrand byId = brandService.getById(body.getBrandId());
+        boolean isHost = byId.getUserId().equals(userId);
+        return ResponseUtil.okList(goodsService.queryByBrand(isHost, body));
     }
 
     /**
      * 店铺商品详情
+     *
      * @param id 商品ID
      * @return 商品信息
      */
     public Object goodsDetail(@NotNull String id) {
         CarServiceGoods goods = goodsService.findById(id);
-        if (goods == null){
-            return ResponseUtil.fail(600,"商品不存在");
+        if (goods == null) {
+            return ResponseUtil.fail(600, "商品不存在");
         }
         List<CarServiceGoodsProduct> products = productService.queryByGid(id);
         List<CarServiceGrouponRules> grouponRules = rulesService.queryByGoodsId(id);
@@ -287,7 +303,7 @@ public class WxWebBrandService {
         result.setAttributes(attributes);
         result.setProducts(products);
         result.setSpecifications(specifications);
-        if (goods.getIsGroupon() && grouponRules.size() > 0){
+        if (goods.getIsGroupon() && grouponRules.size() > 0) {
             result.setGrouponRules(grouponRules.get(0));
         }
         return ResponseUtil.ok(result);
