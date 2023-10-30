@@ -181,6 +181,8 @@ public class AdminRoleController {
         Set<String> curPermissions = new HashSet<>();
         if (!permissionService.checkSuperPermission(roleIds)) {
             curPermissions = permissionService.queryByRoleId(roleIds);
+        } else {
+            curPermissions = permissionsContext.getSystemPermissionsSet();
         }
         PermissionsResult result = new PermissionsResult();
         result.setSystemPermissions(permissionsContext.getSystemPermissionList());
