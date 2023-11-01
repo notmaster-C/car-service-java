@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.click.carservice.admin.model.goods.body.GoodsListBody;
 import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.enums.GoodsStatus;
+import org.click.carservice.db.enums.UserRole;
 import org.click.carservice.db.mapper.GoodsMapper;
 import org.click.carservice.db.service.IAddressService;
 import org.click.carservice.db.service.IAdminService;
@@ -71,7 +72,7 @@ public class AdminGoodsService extends GoodsServiceImpl {
          * 如果是租户则新加判断
          */
         // 管理员查询所有
-        if (StpUtil.getRoleList().contains("超级管理员")) {
+        if (StpUtil.getRoleList().contains(UserRole.Role_Admin.getName())) {
             if (body.getStatus() != null) {
                 wrapper.eq(CarServiceGoods.STATUS, body.getStatus());
             }

@@ -11,6 +11,7 @@ import org.click.carservice.core.utils.http.GlobalWebUtil;
 import org.click.carservice.core.utils.ip.IpUtil;
 import org.click.carservice.db.domain.CarServiceAdmin;
 import org.click.carservice.db.domain.CarServiceUser;
+import org.click.carservice.db.enums.UserRole;
 import org.click.carservice.db.service.IAdminService;
 import org.click.carservice.db.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +144,7 @@ public class AuthenticationInfo {
         //账号登陆
         StpUtil.login(admin.getId());
         // 判断用户是否商户，是则存储小程序商户id到session
-        if (StpUtil.getRoleList().contains("商户")) {
+        if (StpUtil.getRoleList().contains(UserRole.Role_commercialTenant.getName())) {
             String mobile = admin.getMobile();
             CarServiceUser carServiceUser = userService.selectUserByMobil(mobile);
             StpUtil.getSession().set("carServiceUserId", carServiceUser.getId());
