@@ -20,14 +20,10 @@ import org.click.carservice.db.domain.CarServiceGoods;
 import org.click.carservice.db.enums.GoodsStatus;
 import org.click.carservice.db.enums.UserRole;
 import org.click.carservice.db.mapper.GoodsMapper;
-import org.click.carservice.db.service.IAddressService;
-import org.click.carservice.db.service.IAdminService;
 import org.click.carservice.db.service.impl.GoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +68,8 @@ public class AdminGoodsService extends GoodsServiceImpl {
          * 如果是租户则新加判断
          */
         // 管理员查询所有
-        if (StpUtil.getRoleList().contains(UserRole.Role_Admin.getName())) {
+        if (StpUtil.getRoleList().contains(UserRole.Role_Super_Admin.getName())||
+                StpUtil.getRoleList().contains(UserRole.Role_Admin.getName())) {
             if (body.getStatus() != null) {
                 wrapper.eq(CarServiceGoods.STATUS, body.getStatus());
             }

@@ -146,7 +146,7 @@ public class WxWebBrandService {
                 return ResponseUtil.fail("店铺被禁用");
             }
 
-            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_OUT.getStatus())) {
+            if (CarServiceBrand.getStatus().equals(BrandStatus.STATUS_AUDIT.getStatus())) {
                 return ResponseUtil.fail("店铺被注销");
             }
 
