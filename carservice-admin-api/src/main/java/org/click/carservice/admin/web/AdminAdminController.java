@@ -139,7 +139,7 @@ public class AdminAdminController {
             return ResponseUtil.badArgument();
         }
         // 不允许管理员通过编辑接口修改密码
-        admin.setPassword(null);
+//        admin.setPassword(null);
         if (adminService.updateVersionSelective(admin) == 0) {
             throw new RuntimeException("网络繁忙,请重试");
         }

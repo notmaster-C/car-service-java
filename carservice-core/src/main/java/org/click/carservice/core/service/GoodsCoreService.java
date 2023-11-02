@@ -72,13 +72,25 @@ public class GoodsCoreService {
         String brief = goods.getBrief();
         String picUrl = goods.getPicUrl();
         String goodsSn = goods.getGoodsSn();
-        if (!ObjectUtils.allNotNull(name, goodsSn, unit, brief, picUrl)) {
-            return ResponseUtil.fail("商品信息错误");
+        if(name==null){
+            return ResponseUtil.fail("商品名称为空");
+        }
+        if(goodsSn==null){
+            return ResponseUtil.fail("商品编号为空");
+        }
+        if(unit==null){
+            return ResponseUtil.fail("商品单位为空");
+        }
+        if(brief==null){
+            return ResponseUtil.fail("商品简介为空");
+        }
+        if(picUrl==null){
+            return ResponseUtil.fail("商品图片为空");
         }
 
         BigDecimal counterPrice = goods.getCounterPrice();
-        if (counterPrice.intValue() > 9999999) {
-            return ResponseUtil.fail("市场售价不能太高");
+        if (counterPrice==null||counterPrice.intValue() > 9999999) {
+            return ResponseUtil.fail("市场售价错误");
         }
 
         String[] gallery = goods.getGallery();
