@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.click.carservice.core.handler.ActionLogHandler;
+import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.db.entity.PageResult;
 import org.click.carservice.db.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +141,9 @@ public class AdminAdminController {
         }
         // 不允许管理员通过编辑接口修改密码
 //        admin.setPassword(null);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String pwd = encoder.encode(admin.getPassword());
+        admin.setPassword(pwd);
         if (adminService.updateVersionSelective(admin) == 0) {
             throw new RuntimeException("网络繁忙,请重试");
         }
