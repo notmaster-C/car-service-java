@@ -3,6 +3,7 @@ package org.click.carservice.admin.web;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.dto.OrderVerificationExportDto;
 import org.click.carservice.db.domain.query.OrderVerificationQuery;
@@ -40,6 +41,7 @@ public class AdminStatementsController {
      * @return
      */
     @SaCheckPermission("admin:statement:list")
+    @RequiresPermissionsDesc(menu = {"订单管理", "订单列表"}, button = "查询订单")
     @PostMapping("/listOrder")
     @ApiOperation("对账单列表查询")
     public ResponseUtil<PageResult<OrderVerificationExportDto>> list(@RequestBody OrderVerificationQuery query) {
