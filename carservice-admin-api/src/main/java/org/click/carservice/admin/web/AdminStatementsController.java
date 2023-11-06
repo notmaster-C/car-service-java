@@ -54,6 +54,7 @@ public class AdminStatementsController {
      * 导出对账单
      */
     @SaCheckPermission("admin:statement:export")
+    @RequiresPermissionsDesc(menu = {"订单管理", "订单列表"}, button = "导出订单")
     @PostMapping("/export")
     @ApiOperation("导出对账单")
     public void export(HttpServletResponse response, OrderVerificationQuery query)
