@@ -11,24 +11,25 @@ package org.click.carservice.admin.web;
  * See the Mulan PSL v2 for more details.
  */
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.click.carservice.core.handler.ActionLogHandler;
-import org.click.carservice.db.entity.PageResult;
-import org.click.carservice.db.enums.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
 import org.click.carservice.admin.model.admin.result.AdminListResult;
+import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.core.annotation.JsonBody;
+import org.click.carservice.core.handler.ActionLogHandler;
+import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceAdmin;
-import org.click.carservice.admin.service.AdminAdminService;
+import org.click.carservice.db.entity.PageResult;
+import org.click.carservice.db.enums.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ import java.util.List;
 
 /**
  * 管理员管理
+ *
  * @author Ysling
  */
 @Slf4j
@@ -140,6 +142,9 @@ public class AdminAdminController {
         }
         // 不允许管理员通过编辑接口修改密码
 //        admin.setPassword(null);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String pwd = encoder.encode(admin.getPassword());
+        admin.setPassword(pwd);
         if (adminService.updateVersionSelective(admin) == 0) {
             throw new RuntimeException("网络繁忙,请重试");
         }

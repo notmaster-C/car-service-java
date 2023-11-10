@@ -12,6 +12,7 @@ package org.click.carservice.wx.web.impl;
  */
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.click.carservice.core.service.DealingSlipCoreService;
 import org.click.carservice.core.system.SystemConfig;
@@ -23,6 +24,8 @@ import org.click.carservice.wx.model.brand.body.BrandListBody;
 import org.click.carservice.wx.model.brand.body.BrandOrderListBody;
 import org.click.carservice.wx.model.brand.body.BrandSaveBody;
 import org.click.carservice.wx.model.brand.result.*;
+import org.click.carservice.wx.model.goods.body.GoodsListBodyB;
+import org.click.carservice.wx.model.goods.result.GoodsListResult;
 import org.click.carservice.wx.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -271,7 +274,24 @@ public class WxWebBrandService {
     public Object goodsList(String userId, BrandGoodsListBody body) {
         CarServiceBrand byId = brandService.getById(body.getBrandId());
         boolean isHost = byId.getUserId().equals(userId);
-        return ResponseUtil.okList(goodsService.queryByBrand(isHost, body));
+        List<GoodsListBodyB> goodsList = goodsService.queryByBrand(isHost, body);
+        // 查询商品所属类目列表。
+        List<String> goodsCatIds = goodsService.getCatIds(body.getBrandId(), body.getKeyword(), body.getIsHot(), body.getIsNew());
+        List<CarServiceCategory> categoryList;
+        if (goodsCatIds.size() != 0) {
+            categoryList = categoryService.queryL2ByIds(goodsCatIds);
+        } else {
+            categoryList = new ArrayList<>(0);
+        }
+        PageInfo<GoodsListBodyB> pagedList = PageInfo.of(goodsList);
+        GoodsListResult result = new GoodsListResult();
+        result.setList(goodsList);
+        result.setTotal(pagedList.getTotal());
+        result.setPage(pagedList.getPageNum());
+        result.setLimit(pagedList.getPageSize());
+        result.setPages(pagedList.getPages());
+        result.setFilterCategoryList(categoryList);
+        return ResponseUtil.ok(result);
     }
 
     /**

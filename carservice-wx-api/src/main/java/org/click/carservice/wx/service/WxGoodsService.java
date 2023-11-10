@@ -29,6 +29,7 @@ import java.util.Objects;
 
 /**
  * 商品服务
+ *
  * @author click
  */
 @Service
@@ -100,21 +101,21 @@ public class WxGoodsService extends GoodsServiceImpl {
      * 获取店铺下的商品
      */
     //@Cacheable(sync = true)
-    public List<GoodsListBodyB> queryByBrand(Boolean isHost,BrandGoodsListBody body) {
+    public List<GoodsListBodyB> queryByBrand(Boolean isHost, BrandGoodsListBody body) {
         QueryWrapper<CarServiceGoods> wrapper = startPage(body);
         wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
-        if(!isHost){
-            wrapper.eq(CarServiceGoods.STATUS,GoodsStatus.GOODS_ON_SALE.getStatus());
+        if (!isHost) {
+            wrapper.eq(CarServiceGoods.STATUS, GoodsStatus.GOODS_ON_SALE.getStatus());
         }
         wrapper.orderByDesc(CarServiceGoods.WEIGHT);
         List<CarServiceGoods> good = queryAll(wrapper);
-        List<GoodsListBodyB> goods =new ArrayList<>();
-        for(CarServiceGoods item:good){
-            GoodsListBodyB t=new GoodsListBodyB ();
+        List<GoodsListBodyB> goodsList = new ArrayList<>();
+        for (CarServiceGoods item : good) {
+            GoodsListBodyB t = new GoodsListBodyB();
             t.setGoods(item);
-            goods.add(t);
+            goodsList.add(t);
         }
-        return goods;
+        return goodsList;
     }
 
 
@@ -143,7 +144,7 @@ public class WxGoodsService extends GoodsServiceImpl {
         if (body.getBrandId() != null && body.getBrandId() != "") {
             wrapper.eq(CarServiceGoods.BRAND_ID, body.getBrandId());
         }
-        if (body.getIsNew() != null ) {
+        if (body.getIsNew() != null) {
             wrapper.eq(CarServiceGoods.IS_NEW, body.getIsNew());
         }
         if (body.getIsHot() != null) {
