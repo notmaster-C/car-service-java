@@ -44,6 +44,7 @@ import org.click.carservice.core.weixin.service.WxSecCheckService;
 import org.click.carservice.db.domain.*;
 import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
+import org.click.carservice.db.enums.BrandStatus;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
@@ -1076,10 +1077,13 @@ public class WxWebOrderService {
             return ResponseUtil.fail("未找到订单");
         }
         CarServiceBrand brand = brandService.findById(order.getBrandId());
-        if (brand == null || brand.getStatus() != '0') {
-            return ResponseUtil.fail("未找到店铺或者店铺已禁用！");
+        if (brand == null) {
+            return ResponseUtil.fail("未找到店铺！");
         }
-        if (brand.getUserId() != userId) {
+        if (!brand.getStatus().equals(BrandStatus.STATUS_NORMAL.getStatus())) {
+            return ResponseUtil.fail("店铺已停止使用！");
+        }
+        if (!brand.getUserId().equals(userId)) {
             return ResponseUtil.fail("请对应店铺商家进行核销！");
         }
         // 如果订单不是已付款状态，则不能发货
