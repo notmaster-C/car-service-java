@@ -63,6 +63,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -218,7 +219,11 @@ public class WxAuthController {
 
         //发送验证码到手机号
         if (mobileService.isSmsEnable()) {
-            mobileService.notifySmsTemplate(mobile, NotifyType.CAPTCHA, new String[]{code});
+            mobileService.notifySmsTemplate(mobile, NotifyType.CAPTCHA, new HashMap<String, String>() {
+                {
+                    put("code", code);
+                }
+            }.toString());
             return ResponseUtil.ok("验证码发送成功，请注意查收");
         }
 //        return ResponseUtil.ok("验证码发送成功，请注意查收" + "登录验证码：" + code);

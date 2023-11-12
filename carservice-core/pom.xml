@@ -16,6 +16,20 @@
             <artifactId>carservice-db</artifactId>
         </dependency>
 
+        <!--  V2.0 SDK  -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>ecs20140526</artifactId>
+            <version>3.1.12</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.aliyun/dysmsapi20170525 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dysmsapi20170525</artifactId>
+            <version>2.0.23</version>
+        </dependency>
+
         <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -82,10 +96,10 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.aliyun</groupId>-->
+<!--            <artifactId>aliyun-java-sdk-core</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

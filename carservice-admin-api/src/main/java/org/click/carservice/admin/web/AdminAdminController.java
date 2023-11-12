@@ -17,6 +17,12 @@ import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import org.click.carservice.core.handler.ActionLogHandler;
+import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
+import org.click.carservice.db.entity.PageResult;
+import org.click.carservice.db.enums.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
 import org.click.carservice.admin.model.admin.result.AdminListResult;
@@ -41,7 +47,6 @@ import java.util.List;
 
 /**
  * 管理员管理
- *
  * @author Ysling
  */
 @Slf4j
