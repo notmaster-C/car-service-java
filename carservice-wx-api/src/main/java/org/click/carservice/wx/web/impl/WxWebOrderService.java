@@ -44,10 +44,14 @@ import org.click.carservice.core.weixin.service.WxSecCheckService;
 import org.click.carservice.db.domain.*;
 import org.click.carservice.db.entity.OrderHandleOption;
 import org.click.carservice.db.entity.UserInfo;
+import org.click.carservice.db.enums.BrandStatus;
 import org.click.carservice.db.enums.GrouponRuleStatus;
 import org.click.carservice.db.enums.OrderStatus;
 import org.click.carservice.db.service.ICarServiceOrderVerificationService;
-import org.click.carservice.wx.model.order.body.*;
+import org.click.carservice.wx.model.order.body.OrderAdminRefundBody;
+import org.click.carservice.wx.model.order.body.OrderCommentBody;
+import org.click.carservice.wx.model.order.body.OrderListBody;
+import org.click.carservice.wx.model.order.body.OrderSubmitBody;
 import org.click.carservice.wx.model.order.result.AttachResult;
 import org.click.carservice.wx.model.order.result.OrderDetailResult;
 import org.click.carservice.wx.model.order.result.OrderInfo;
@@ -86,6 +90,7 @@ import java.util.Objects;
  * 当301商家已发货时，此时用户可以有确认收货的操作
  * 当401用户确认收货以后，此时用户可以进行的操作是删除订单，评价商品，申请售后，或者再次购买
  * 当402系统自动确认收货以后，此时用户可以删除订单，评价商品，申请售后，或者再次购买
+ *
  * @author click
  */
 @Slf4j
@@ -163,13 +168,13 @@ public class WxWebOrderService {
         List<org.ysling.CarService.wx.model.order.result.OrderListResult> orderVoList = new ArrayList<>(orderList.size());
         for (CarServiceOrder order : orderList) {
             org.ysling.CarService.wx.model.order.result.OrderListResult orderVo = new org.ysling.CarService.wx.model.order.result.OrderListResult();
-            BeanUtil.copyProperties(order , orderVo);
+            BeanUtil.copyProperties(order, orderVo);
             orderVo.setOrderStatusText(OrderStatus.orderStatusText(order));
             orderVo.setHandleOption(OrderStatus.build(order));
             orderVo.setOrderGoods(orderGoodsService.findByOrderId(order.getId()));
             CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
             orderVo.setIsGroupon(groupon != null);
-            if (groupon != null){
+            if (groupon != null) {
                 orderVo.setGroupon(groupon);
                 CarServiceGrouponRules grouponRules = grouponRulesService.findById(groupon.getRulesId());
                 orderVo.setGrouponStatus(GrouponRuleStatus.parseValue(grouponRules.getStatus()));
@@ -195,42 +200,42 @@ public class WxWebOrderService {
         CarServiceOrder order = orderService.findById(userId, orderId);
         if (order == null) {
             CarServiceBrand brand = brandService.findByUserId(userId);
-            if (brand == null){
+            if (brand == null) {
                 return ResponseUtil.fail("订单不存在");
             }
             order = orderService.findByBrandId(brand.getId(), orderId);
-            if (order == null){
-                return ResponseUtil.fail( "订单不存在");
+            if (order == null) {
+                return ResponseUtil.fail("订单不存在");
             }
         }
-        if( order.getCarId()==null){
-            return ResponseUtil.fail( "订单信息异常，车辆不存在");
+        if (order.getCarId() == null) {
+            return ResponseUtil.fail("订单信息异常，车辆不存在");
         }
 
         OrderInfo orderInfo = new OrderInfo();
-        BeanUtil.copyProperties(order , orderInfo);
+        BeanUtil.copyProperties(order, orderInfo);
         orderInfo.setOrderStatusText(OrderStatus.orderStatusText(order));
         orderInfo.setHandleOption(OrderStatus.build(order));
         orderInfo.setExpCode(order.getShipChannel());
         orderInfo.setExpName(expressService.getVendorName(order.getShipChannel()));
         orderInfo.setExpNo(order.getShipSn());
-        if (!Objects.equals(order.getShipChannel(),"ZS") && StringUtils.hasText(order.getShipSn())){
+        if (!Objects.equals(order.getShipChannel(), "ZS") && StringUtils.hasText(order.getShipSn())) {
             orderInfo.setExpSuccess(true);
         }
 
         OrderDetailResult result = new OrderDetailResult();
         result.setOrderInfo(orderInfo);
-        result.setGrouponBasics((short)0);
+        result.setGrouponBasics((short) 0);
         result.setOrderBasics(OrderStatus.orderBasics(order));
         result.setOrderGoods(orderGoodsService.findByOrderId(order.getId()));
         //团购信息
         CarServiceGroupon groupon = grouponService.findByOrderId(order.getId());
-        if (groupon != null){
+        if (groupon != null) {
             CarServiceGrouponRules rules = grouponRulesService.findById(groupon.getRulesId());
 
             // 获取团购加入id
             String grouponId = groupon.getGrouponId();
-            String linkGrouponId = "0".equals(grouponId)? groupon.getId(): groupon.getGrouponId();
+            String linkGrouponId = "0".equals(grouponId) ? groupon.getId() : groupon.getGrouponId();
 
             //参与记录
             UserInfo creator = userService.findUserVoById(groupon.getCreatorUserId());
@@ -279,19 +284,19 @@ public class WxWebOrderService {
         //如果是团购项目,验证活动是否有效
         if (grouponRulesId != null && !"0".equals(grouponRulesId)) {
             Object groupon = grouponService.isGroupon(grouponRulesId, grouponLinkId, userId);
-            if (groupon != null){
+            if (groupon != null) {
                 return groupon;
             }
         }
 
         //判断是否存在赏金活动
-        if (rewardLinkId != null && !"0".equals(rewardLinkId)){
+        if (rewardLinkId != null && !"0".equals(rewardLinkId)) {
             CarServiceReward reward = rewardService.findById(rewardLinkId);
-            if (reward == null){
+            if (reward == null) {
                 return ResponseUtil.badArgument();
             }
             Object serviceReward = rewardCoreService.isReward(reward.getTaskId());
-            if (serviceReward != null){
+            if (serviceReward != null) {
                 return serviceReward;
             }
         }
@@ -308,7 +313,7 @@ public class WxWebOrderService {
 //        }
 
         //选中的商品
-        List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
+        List<CarServiceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
         if (checkedGoodsList == null) {
             return ResponseUtil.badArgument();
         }
@@ -385,7 +390,7 @@ public class WxWebOrderService {
                 order.setCouponPrice(BigDecimal.ZERO);
             }
             //添加订单
-            orderCoreService.addOrderAndOrderGoods(cartGoods, order , user);
+            orderCoreService.addOrderAndOrderGoods(cartGoods, order, user);
 
             //减少库存
             orderCoreService.reduceStock(cartGoods);
@@ -430,8 +435,8 @@ public class WxWebOrderService {
      * 2. 微信商户平台返回支付订单ID
      * 3. 设置订单付款状态
      *
-     * @param userId 用户ID
-     * @param orderIds   订单ID列表
+     * @param userId   用户ID
+     * @param orderIds 订单ID列表
      * @return 支付订单ID
      */
     public Object prepay(String userId, List<String> orderIds, HttpServletRequest request) {
@@ -439,7 +444,7 @@ public class WxWebOrderService {
         attach.setTenantId(TenantContextHolder.getLocalTenantId());
         attach.setOrderIds(orderIds);
         String toJson = JacksonUtil.toJson(attach);
-        if (toJson == null || toJson.length() > 128){
+        if (toJson == null || toJson.length() > 128) {
             return ResponseUtil.fail("支付商品超限，请减少支付商品");
         }
 
@@ -456,7 +461,7 @@ public class WxWebOrderService {
         //检查订单
         for (String orderId : orderIds) {
             if (orderId == null) {
-                return ResponseUtil.fail( "未找到订单");
+                return ResponseUtil.fail("未找到订单");
             }
 
             //获取订单
@@ -496,13 +501,13 @@ public class WxWebOrderService {
             orderRequest.setSpbillCreateIp(IpUtil.getIpAddr(request));
             result = wxPayService.createOrder(orderRequest);
             // 添加操作日志
-            ActionLogHandler.logOrderSucceed("订单预支付","{订单编号："+outTradeNo+"}{支付金额："+allPrice+"}");
+            ActionLogHandler.logOrderSucceed("订单预支付", "{订单编号：" + outTradeNo + "}{支付金额：" + allPrice + "}");
         } catch (WxPayException e) {
             //给管理员发送订单支付错误邮件
             mailService.notifyMail("订单支付异常-订单不能支付", e.getXmlString());
             // 添加操作日志
-            ActionLogHandler.logOrderSucceed("订单预支付","订单支付异常-订单不能支付",e.getXmlString());
-            return ResponseUtil.fail( "订单不能支付");
+            ActionLogHandler.logOrderSucceed("订单预支付", "订单支付异常-订单不能支付", e.getXmlString());
+            return ResponseUtil.fail("订单不能支付");
         }
 
         for (CarServiceOrder order : orders) {
@@ -521,7 +526,7 @@ public class WxWebOrderService {
      * 2. 设置订单付款成功状态相关信息;
      * 3. 响应微信商户平台.
      *
-     * @param request  请求内容
+     * @param request 请求内容
      * @return 操作结果
      */
     public Object payNotify(HttpServletRequest request) {
@@ -535,14 +540,14 @@ public class WxWebOrderService {
         WxPayOrderNotifyResult result;
         try {
             result = wxPayService.parseOrderNotifyResult(xmlResult);
-            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getResultCode())){
+            if (!WxPayConstants.ResultCode.SUCCESS.equals(result.getResultCode())) {
                 // 添加操作日志
-                ActionLogHandler.logOrderFail("支付回调",xmlResult);
+                ActionLogHandler.logOrderFail("支付回调", xmlResult);
                 return WxPayNotifyResponse.fail("微信通知支付失败！");
             }
-            if(!WxPayConstants.ResultCode.SUCCESS.equals(result.getReturnCode())){
+            if (!WxPayConstants.ResultCode.SUCCESS.equals(result.getReturnCode())) {
                 // 添加操作日志
-                ActionLogHandler.logOrderFail("支付回调",xmlResult);
+                ActionLogHandler.logOrderFail("支付回调", xmlResult);
                 return WxPayNotifyResponse.fail("微信通知支付失败！");
             }
         } catch (WxPayException e) {
@@ -552,16 +557,16 @@ public class WxWebOrderService {
 
         String tenantId = JacksonUtil.parseString(result.getAttach(), "tenantId");
         TenantContextHolder.setLocalTenantId(tenantId);
-        if (tenantId == null){
-            ActionLogHandler.logOrderFail("支付回调","未找到当前租户");
+        if (tenantId == null) {
+            ActionLogHandler.logOrderFail("支付回调", "未找到当前租户");
             return WxPayNotifyResponse.fail("未找到当前租户");
         }
 
         //获取自定义参数
         List<String> orderIds = JacksonUtil.parseStringList(result.getAttach(), "orderIds");
-        if (orderIds == null || orderIds.size() <= 0){
+        if (orderIds == null || orderIds.size() <= 0) {
             log.error("自定义参数异常" + result);
-            ActionLogHandler.logOrderFail("支付回调","自定义参数异常" + result);
+            ActionLogHandler.logOrderFail("支付回调", "自定义参数异常" + result);
             return WxPayNotifyResponse.fail("自定义参数异常");
         }
 
@@ -575,14 +580,14 @@ public class WxWebOrderService {
             CarServiceOrder order = orderService.findById(orderId);
             if (order == null) {
                 log.error("订单不存在 =" + orderId);
-                ActionLogHandler.logOrderFail("支付回调","订单不存在 =" + orderId);
+                ActionLogHandler.logOrderFail("支付回调", "订单不存在 =" + orderId);
                 continue;
             }
 
             // 检查这个订单是否已经处理过
             if (OrderStatus.hasPayed(order) || !OrderStatus.isPayed(order)) {
-                log.error(orderId+"=订单已经处理!");
-                ActionLogHandler.logOrderFail("支付回调",orderId+"=订单已经处理!");
+                log.error(orderId + "=订单已经处理!");
+                ActionLogHandler.logOrderFail("支付回调", orderId + "=订单已经处理!");
                 continue;
             }
 
@@ -596,7 +601,7 @@ public class WxWebOrderService {
         // 检查支付订单金额
         if (!totalFee.equals(allPrice.toString())) {
             log.error(result.getAttach() + " : 支付金额不符合 totalFee=" + totalFee);
-            ActionLogHandler.logOrderFail("支付回调",result.getAttach() + " : 支付金额不符合 totalFee=" + totalFee);
+            ActionLogHandler.logOrderFail("支付回调", result.getAttach() + " : 支付金额不符合 totalFee=" + totalFee);
             return WxPayNotifyResponse.fail(result.getAttach() + " : 支付金额不符合 totalFee=" + totalFee);
         }
 
@@ -610,7 +615,7 @@ public class WxWebOrderService {
         }
 
         // 添加操作日志
-        ActionLogHandler.logOrderSucceed("支付回调成功","{订单编号："+result.getOutTradeNo()+"}{支付金额："+totalFee+"}");
+        ActionLogHandler.logOrderSucceed("支付回调成功", "{订单编号：" + result.getOutTradeNo() + "}{支付金额：" + totalFee + "}");
         return WxPayNotifyResponse.success("处理成功!");
     }
 
@@ -622,8 +627,8 @@ public class WxWebOrderService {
      * 3. 商品货品库存恢复；
      * 4. 返还优惠券；
      *
-     * @param userId 用户ID
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param userId  用户ID
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 取消订单操作结果
      */
     public Object cancel(String userId, String orderId) {
@@ -639,7 +644,7 @@ public class WxWebOrderService {
         // 检测是否能够取消
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isCancel()) {
-            return ResponseUtil.fail( "订单不能取消");
+            return ResponseUtil.fail("订单不能取消");
         }
 
         // 设置订单已取消状态
@@ -659,8 +664,8 @@ public class WxWebOrderService {
      * 1. 检测当前订单是否能够退款；
      * 2. 设置订单申请退款状态。
      *
-     * @param userId 用户ID
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param userId  用户ID
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 订单退款操作结果
      */
     public Object refund(String userId, String orderId) {
@@ -675,7 +680,7 @@ public class WxWebOrderService {
 
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isRefund()) {
-            return ResponseUtil.fail( "订单不能取消");
+            return ResponseUtil.fail("订单不能取消");
         }
 
         // 设置订单申请退款状态
@@ -696,11 +701,11 @@ public class WxWebOrderService {
      * 1. 检测当前订单是否能够确认收货；
      * 2. 设置订单确认收货状态。
      *
-     * @param orderId   订单信息，{ orderId：xxx }
-     * @param file   核销照片，MultipartFile
+     * @param orderId 订单信息，{ orderId：xxx }
+     * @param file    核销照片，MultipartFile
      * @return 订单操作结果
      */
-    public Object confirm(String orderId,@RequestParam("file")  MultipartFile file) {
+    public Object confirm(String orderId, @RequestParam("file") MultipartFile file) {
         //获取订单
         CarServiceOrder order = orderService.findById(orderId);
         CarServiceOrderVerification carServiceOrderVerification = new CarServiceOrderVerification();
@@ -711,22 +716,22 @@ public class WxWebOrderService {
         //判断订单状态
         OrderHandleOption handleOption = OrderStatus.build(order);
         if (!handleOption.isConfirm() || !OrderStatus.isShipStatus(order)) {
-            return ResponseUtil.fail( "订单不能使用");
+            return ResponseUtil.fail("订单不能使用");
         }
 
         //获取商品信息
         CarServiceOrderGoods orderGoods = orderGoodsService.findByOrderId(orderId);
-        if (orderGoods == null){
-            return ResponseUtil.fail( "商品不存在");
+        if (orderGoods == null) {
+            return ResponseUtil.fail("商品不存在");
         }
 
         //获取店铺信息
         CarServiceBrand brand = brandService.findById(order.getBrandId());
-        if (brand == null){
+        if (brand == null) {
             return ResponseUtil.fail("店铺信息获取失败");
         }
         //存放照片到数据库
-        String storageId=storageService.store(file).getId();
+        String storageId = storageService.store(file).getId();
         //更新订单
         Integer comments = orderGoodsService.getComments(orderId);
         order.setComments(comments.shortValue());
@@ -762,8 +767,8 @@ public class WxWebOrderService {
      * 1. 检测当前订单是否可以删除；
      * 2. 删除订单。
      *
-     * @param userId 用户ID
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param userId  用户ID
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 订单操作结果
      */
     public Object delete(String userId, String orderId) {
@@ -824,21 +829,21 @@ public class WxWebOrderService {
             return ResponseUtil.badArgumentValue();
         }
         if (!OrderStatus.isConfirmStatus(order) && !OrderStatus.isAutoConfirmStatus(order)) {
-            return ResponseUtil.fail( "当前商品不能评价");
+            return ResponseUtil.fail("当前商品不能评价");
         }
         if (!order.getUserId().equals(userId)) {
-            return ResponseUtil.fail( "当前商品不属于用户");
+            return ResponseUtil.fail("当前商品不属于用户");
         }
         Integer commentId = orderGoods.getComment();
         if (commentId == -1 || OrderStatus.isCommentOvertimeStatus(order)) {
-            return ResponseUtil.fail( "当前商品评价时间已经过期");
+            return ResponseUtil.fail("当前商品评价时间已经过期");
         }
         if (commentId != 0 || OrderStatus.isOrderSucceedStatus(order)) {
-            return ResponseUtil.fail( "订单商品已评价");
+            return ResponseUtil.fail("订单商品已评价");
         }
 
         String content = body.getContent();
-        if (!StringUtils.hasText(content)){
+        if (!StringUtils.hasText(content)) {
             return ResponseUtil.fail("评论内容不能为空");
         }
         Integer star = body.getStar();
@@ -867,7 +872,7 @@ public class WxWebOrderService {
 
         // 2. 更新订单商品的评价列表
         orderGoods.setComment(200);
-        if (orderGoodsService.updateVersionSelective(orderGoods) == 0){
+        if (orderGoodsService.updateVersionSelective(orderGoods) == 0) {
             throw new RuntimeException("商品评论更新失败");
         }
 
@@ -878,7 +883,7 @@ public class WxWebOrderService {
         }
 
         //判断是否还有待评论订单
-        if (commentCount == 0){
+        if (commentCount == 0) {
             order.setOrderStatus(OrderStatus.ORDER_SUCCEED.getStatus());
         }
 
@@ -911,11 +916,11 @@ public class WxWebOrderService {
         String refundMoney = body.getRefundMoney();
 
         CarServiceBrand brand = brandService.findByUserId(userId);
-        if (brand == null){
+        if (brand == null) {
             return ResponseUtil.fail("未找到店铺");
         }
 
-        CarServiceOrder order = orderService.findByBrandId(brand.getId() ,orderId);
+        CarServiceOrder order = orderService.findByBrandId(brand.getId(), orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
@@ -925,15 +930,15 @@ public class WxWebOrderService {
         }
 
         // 如果订单不是退款状态，则不能退款
-        if (!(OrderStatus.isRefundStatus(order) || OrderStatus.isGrouponFailStatus(order))){
-            return ResponseUtil.fail( "订单不是退款状态，不能退款");
+        if (!(OrderStatus.isRefundStatus(order) || OrderStatus.isGrouponFailStatus(order))) {
+            return ResponseUtil.fail("订单不是退款状态，不能退款");
         }
 
         //如果订单金额为零则跳过退款接口直接修改订单状态
         if (new BigDecimal(refundMoney).compareTo(BigDecimal.ZERO) > 0) {
             // 微信退款
             WxPayRefundResult refundResult = wxPayRefundService.wxPayRefund(order);
-            if (refundResult != null){
+            if (refundResult != null) {
                 order.setRefundContent(refundResult.getRefundId());
             }
         } else {
@@ -954,7 +959,7 @@ public class WxWebOrderService {
 
         //订单退款订阅通知
         CarServiceUser user = userService.findById(order.getUserId());
-        subscribeMessageService.refundSubscribe(user.getOpenid(),order);
+        subscribeMessageService.refundSubscribe(user.getOpenid(), order);
 
         //记录操作日志
         ActionLogHandler.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
@@ -970,21 +975,21 @@ public class WxWebOrderService {
      * 3. 生成二维码；
      * 4. 返回二维码；
      *
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 取消订单操作结果
      */
-    public Object createQrcode( String orderId) {
-        CarServiceOrder order =orderService.findById(orderId);
+    public Object createQrcode(String orderId) {
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if ( order.getQrcode()!=null){
+        if (order.getQrcode() != null) {
             return ResponseUtil.fail("订单已有二维码");
         }
-        if (order.getOrderStatus().toString().equals(OrderStatus.STATUS_PAY.getStatus().toString()) || order.getOrderStatus().toString().equals(OrderStatus.STATUS_BTL_PAY.getStatus().toString())){
-            byte[] qrcode=QRCodeUtil.createQRCodeByte(orderId,300);
+        if (order.getOrderStatus().toString().equals(OrderStatus.STATUS_PAY.getStatus().toString()) || order.getOrderStatus().toString().equals(OrderStatus.STATUS_BTL_PAY.getStatus().toString())) {
+            byte[] qrcode = QRCodeUtil.createQRCodeByte(orderId, 300);
             order.setQrcode(qrcode);
-            if(orderService.updateById(order))return ResponseUtil.ok(order.getQrcode());
+            if (orderService.updateById(order)) return ResponseUtil.ok(order.getQrcode());
             else ResponseUtil.fail("订单二维码更新失败！请联系管理员");
         }
         return ResponseUtil.fail("订单状态不是已付款");
@@ -998,20 +1003,21 @@ public class WxWebOrderService {
      * 3. 生成二维码；
      * 4. 返回二维码；
      *
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 取消订单操作结果
      */
-    public Object getQrcode( String orderId) {
-        CarServiceOrder order =orderService.findById(orderId);
+    public Object getQrcode(String orderId) {
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
-        if (order.getQrcode()==null){
+        if (order.getQrcode() == null) {
             return ResponseUtil.fail();
         }
-        byte[] qrcode=order.getQrcode();
+        byte[] qrcode = order.getQrcode();
         return ResponseUtil.ok(qrcode);
     }
+
     /**
      * 管理员取消订单
      * <p>
@@ -1020,7 +1026,7 @@ public class WxWebOrderService {
      * 3. 商品货品库存恢复；
      * 4. 返还优惠券；
      *
-     * @param orderId   订单信息，{ orderId：xxx }
+     * @param orderId 订单信息，{ orderId：xxx }
      * @return 取消订单操作结果
      */
     public Object adminCancel(String orderId) {
@@ -1029,18 +1035,18 @@ public class WxWebOrderService {
 //            return ResponseUtil.fail("未找到店铺");
 //        }
 
-        CarServiceOrder order = orderService.findById( orderId);
+        CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
 
         // 如果订单不是已付款状态，则不能取消
-        if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不能取消");
+        if (!OrderStatus.hasShip(order)) {
+            return ResponseUtil.fail("订单不能取消");
         }
 
         // 设置订单已取消状态
-        if (order.getActualPrice().compareTo(BigDecimal.ZERO) > 0){
+        if (order.getActualPrice().compareTo(BigDecimal.ZERO) > 0) {
             order.setOrderStatus(OrderStatus.STATUS_REFUND.getStatus());
         } else {
             order.setOrderStatus(OrderStatus.STATUS_BRAND_CANCEL.getStatus());
@@ -1064,25 +1070,28 @@ public class WxWebOrderService {
      * 成功则 { errno: 0, errmsg: '成功' }
      * 失败则 { errno: XXX, errmsg: XXX }
      */
-    public Object adminUse(String userId,String orderId) {
+    public Object adminUse(String userId, String orderId) {
 
         CarServiceOrder order = orderService.findById(orderId);
         if (order == null) {
             return ResponseUtil.fail("未找到订单");
         }
         CarServiceBrand brand = brandService.findById(order.getBrandId());
-        if (brand == null || brand.getStatus()!='0') {
-            return ResponseUtil.fail("未找到店铺或者店铺已禁用！");
+        if (brand == null) {
+            return ResponseUtil.fail("未找到店铺！");
         }
-        if(brand.getUserId()!=userId){
+        if (!brand.getStatus().equals(BrandStatus.STATUS_NORMAL.getStatus())) {
+            return ResponseUtil.fail("店铺已停止使用！");
+        }
+        if (!brand.getUserId().equals(userId)) {
             return ResponseUtil.fail("请对应店铺商家进行核销！");
         }
         // 如果订单不是已付款状态，则不能发货
-        if(!OrderStatus.hasShip(order)){
-            return ResponseUtil.fail( "订单不是已付款状态，不能使用");
+        if (!OrderStatus.hasShip(order)) {
+            return ResponseUtil.fail("订单不是已付款状态，不能使用");
         }
-        CarServiceGoods goods=  goodsService.findById(order.getGoodsId());
-        if (goods.getIsValuable()==false){
+        CarServiceGoods goods = goodsService.findById(order.getGoodsId());
+        if (goods.getIsValuable() == false) {
             order.setOrderStatus(OrderStatus.STATUS_CONFIRM.getStatus());
             order.setQrcode(null);
             //记录操作日志

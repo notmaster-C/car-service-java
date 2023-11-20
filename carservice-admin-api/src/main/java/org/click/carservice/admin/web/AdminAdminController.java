@@ -11,6 +11,7 @@ package org.click.carservice.admin.web;
  * See the Mulan PSL v2 for more details.
  */
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
@@ -25,11 +26,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.click.carservice.admin.annotation.RequiresPermissionsDesc;
 import org.click.carservice.admin.model.admin.body.AdminListBody;
 import org.click.carservice.admin.model.admin.result.AdminListResult;
+import org.click.carservice.admin.service.AdminAdminService;
 import org.click.carservice.core.annotation.JsonBody;
+import org.click.carservice.core.handler.ActionLogHandler;
+import org.click.carservice.core.utils.bcrypt.BCryptPasswordEncoder;
 import org.click.carservice.core.utils.response.ResponseStatus;
 import org.click.carservice.core.utils.response.ResponseUtil;
 import org.click.carservice.db.domain.CarServiceAdmin;
-import org.click.carservice.admin.service.AdminAdminService;
+import org.click.carservice.db.entity.PageResult;
+import org.click.carservice.db.enums.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
