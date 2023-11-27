@@ -43,6 +43,8 @@ public class UserInfo implements Serializable {
      */
     @ApiModelProperty("用户类型: 0:普通用户，1:商户")
     private Integer userType;
+    @ApiModelProperty("0 普通用户，1 VIP用户，2 高级VIP用户")
+    private Byte userLevel;
     /**
      * 用户头像
      */
