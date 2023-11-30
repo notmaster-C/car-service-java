@@ -18,6 +18,7 @@ public class WxCarService extends CarServiceCarServiceImpl {
 
     /**
      * 用户id查询用户所拥有的车辆拍照信息
+     *
      * @param userId
      * @return
      */
@@ -27,8 +28,10 @@ public class WxCarService extends CarServiceCarServiceImpl {
         wrapper.eq(CarServiceCar.USER_ID, userId);
         return queryAll(wrapper);
     }
+
     /**
      * 车牌查信息
+     *
      * @param CarNumber
      * @return
      */
@@ -37,9 +40,10 @@ public class WxCarService extends CarServiceCarServiceImpl {
         QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
         wrapper.eq(CarServiceCar.CAR_NUMBER, CarNumber);
         wrapper.eq(CarServiceCar.DELETED, 0);
-        return getOne(wrapper,false);
+        return getOne(wrapper, false);
     }
-//    @CacheEvict(allEntries = true)
+
+    //    @CacheEvict(allEntries = true)
     public void resetDefault(String userId) {
         CarServiceCar car = new CarServiceCar();
         car.setIsDefault(0);
@@ -55,11 +59,19 @@ public class WxCarService extends CarServiceCarServiceImpl {
         wrapper.eq(CarServiceCar.ID, id);
         return getOne(wrapper);
     }
+
+    public CarServiceCar query(String userId) {
+        QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();
+        wrapper.eq(CarServiceCar.USER_ID, userId);
+        wrapper.eq(CarServiceCar.IS_DEFAULT, 1);
+        return getOne(wrapper);
+    }
+
     /**
      * 删除车辆信息
      *
-     * @param userId  用户ID
-     * @param id 	  车辆ID
+     * @param userId 用户ID
+     * @param id     车辆ID
      */
     public void delete(String userId, String id) {
         QueryWrapper<CarServiceCar> wrapper = new QueryWrapper<>();

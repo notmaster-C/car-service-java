@@ -33,20 +33,28 @@ public class WxCarController extends CarServiceCarServiceImpl {
         return carService.list(userId);
     }
 
+    @GetMapping("/defaultCar")
+    @ApiOperation(value = "用户id查询用户默认车辆牌照信息")
+    public Object defaultCar(@LoginUser String userId) {
+        return carService.defaultCar(userId);
+    }
+
     @PostMapping("/detail")
     @ApiOperation(value = "id查询车牌详情")
     public Object detail(@LoginUser String userId, @RequestBody String id) {
         return carService.detail(userId, id);
     }
+
     /**
      * 添加或更新收货地址
-     * @param userId  用户ID
-     * @param car 车辆信息
+     *
+     * @param userId 用户ID
+     * @param car    车辆信息
      * @return 添加或更新操作结果
      */
     @PostMapping("/save")
     public Object save(@LoginUser String userId, @Valid @RequestBody CarServiceCar car) {
-        return carService.save(userId , car);
+        return carService.save(userId, car);
     }
 
     /**
@@ -60,13 +68,14 @@ public class WxCarController extends CarServiceCarServiceImpl {
 
     /**
      * 设置默认牌照
+     *
      * @param userId
      * @param id
      * @return
      */
     @PostMapping("/setDefault")
     @ApiOperation("设置默认牌照")
-    public ResponseUtil<Integer> setDefaultCar(@LoginUser String userId, @RequestBody String id){
+    public ResponseUtil<Integer> setDefaultCar(@LoginUser String userId, @RequestBody String id) {
         return ResponseUtil.ok(carService.setDefaultCar(userId, id));
     }
 
