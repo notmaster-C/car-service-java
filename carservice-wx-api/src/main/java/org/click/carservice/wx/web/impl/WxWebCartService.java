@@ -1,14 +1,14 @@
 package org.click.carservice.wx.web.impl;
 /**
- *  Copyright (c) [click] [927069313@qq.com]
- *  [CarService-plus] is licensed under Mulan PSL v2.
- *  You can use this software according to the terms and conditions of the Mulan PSL v2.
- *  You may obtain a copy of Mulan PSL v2 at:
- *              http://license.coscl.org.cn/MulanPSL2
- *  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- *  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- *  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *  See the Mulan PSL v2 for more details.
+ * Copyright (c) [click] [927069313@qq.com]
+ * [CarService-plus] is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  */
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,7 @@ import java.util.Objects;
 
 /**
  * 用户购物车服务
+ *
  * @author click
  */
 @Slf4j
@@ -81,11 +82,11 @@ public class WxWebCartService {
         for (CarServiceCart cart : list) {
             CarServiceGoods goods = goodsService.findById(cart.getGoodsId());
             if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
-                if (cartService.deleteById(cart.getId()) == 0){
+                if (cartService.deleteById(cart.getId()) == 0) {
                     throw new RuntimeException("购物车商品删除失败");
                 }
                 log.debug("系统自动删除失效购物车商品 goodsId=" + cart.getGoodsId() + " productId=" + cart.getProductId());
-            } else{
+            } else {
                 cartList.add(cart);
             }
         }
@@ -155,13 +156,13 @@ public class WxWebCartService {
         if (existCart == null) {
             //取得规格的信息,判断规格库存
             if (cartService.addCart(userId, cart, goods, product)) {
-                return ResponseUtil.fail( "库存不足");
+                return ResponseUtil.fail("库存不足");
             }
         } else {
             //取得规格的信息,判断规格库存
             int num = existCart.getNumber() + number;
             if (num > product.getNumber()) {
-                return ResponseUtil.fail( "库存不足");
+                return ResponseUtil.fail("库存不足");
             }
             existCart.setNumber((short) num);
             if (cartService.updateVersionSelective(existCart) == 0) {
@@ -193,7 +194,7 @@ public class WxWebCartService {
         //判断商品是否可以购买
         CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
-            return ResponseUtil.fail( "商品已下架");
+            return ResponseUtil.fail("商品已下架");
         }
 
         //添加店铺名称
@@ -213,7 +214,7 @@ public class WxWebCartService {
         } else {
             //取得规格的信息,判断规格库存
             if (number > product.getNumber()) {
-                return ResponseUtil.fail( "库存不足");
+                return ResponseUtil.fail("库存不足");
             }
             existCart.setNumber((short) number);
             if (cartService.updateVersionSelective(existCart) == 0) {
@@ -226,8 +227,9 @@ public class WxWebCartService {
 
     /**
      * 修改购物车商品货品数量
-     * @param userId 用户ID
-     * @param cartItem   购物车商品信息， { id: xxx, goodsId: xxx, productId: xxx, number: xxx }
+     *
+     * @param userId   用户ID
+     * @param cartItem 购物车商品信息， { id: xxx, goodsId: xxx, productId: xxx, number: xxx }
      * @return 修改结果
      */
     public Object update(String userId, CarServiceCart cartItem) {
@@ -254,13 +256,13 @@ public class WxWebCartService {
         //判断商品是否可以购买
         CarServiceGoods goods = goodsService.findById(goodsId);
         if (goods == null || !GoodsStatus.getIsOnSale(goods)) {
-            return ResponseUtil.fail( "商品已下架");
+            return ResponseUtil.fail("商品已下架");
         }
 
         //取得规格的信息,判断规格库存
         CarServiceGoodsProduct product = productService.findById(productId);
         if (product == null || product.getNumber() < number) {
-            return ResponseUtil.fail( "库存不足");
+            return ResponseUtil.fail("库存不足");
         }
 
         existCart.setNumber(number.shortValue());
@@ -295,8 +297,9 @@ public class WxWebCartService {
 
     /**
      * 购物车商品删除
-     * @param userId 用户ID
-     * @param productIds   购物车商品信息， { productIds: xxx }
+     *
+     * @param userId     用户ID
+     * @param productIds 购物车商品信息， { productIds: xxx }
      * @return 购物车信息
      */
     public Object delete(String userId, List<String> productIds) {
@@ -331,31 +334,32 @@ public class WxWebCartService {
     public Object checkout(String userId, CartCheckoutBody body) {
         String cartId = body.getCartId();
         String couponId = body.getCouponId();
-        String addressId = body.getAddressId();
+//        String addressId = body.getAddressId();
         String carId = body.getCarId();
         String userCouponId = body.getUserCouponId();
         String grouponRulesId = body.getGrouponRulesId();
 
+
         // 收货地址
-        CarServiceAddress checkedAddress = null;
-        if (addressId != null && !addressId.equals("0")) {
-            checkedAddress = addressService.query(userId, addressId);
-        }
-        if (checkedAddress == null) {
-            checkedAddress = addressService.findDefault(userId);
-            // 如果仍然没有地址，则是没有收货地址
-            // 返回一个空的地址id=0，这样前端则会提醒添加地址
-            if (checkedAddress == null) {
-                checkedAddress = new CarServiceAddress();
-                checkedAddress.setId("0");
-                addressId = "0";
-            } else {
-                addressId = checkedAddress.getId();
-            }
-        }
+//        CarServiceAddress checkedAddress = null;
+//        if (addressId != null && !addressId.equals("0")) {
+//            checkedAddress = addressService.query(userId, addressId);
+//        }
+//        if (checkedAddress == null) {
+//            checkedAddress = addressService.findDefault(userId);
+//            // 如果仍然没有地址，则是没有收货地址
+//            // 返回一个空的地址id=0，这样前端则会提醒添加地址
+//            if (checkedAddress == null) {
+//                checkedAddress = new CarServiceAddress();
+//                checkedAddress.setId("0");
+//                addressId = "0";
+//            } else {
+//                addressId = checkedAddress.getId();
+//            }
+//        }
 
         //选中的商品
-        List<CarServiceCart> checkedGoodsList  = cartService.getCheckedGoods(userId, cartId);
+        List<CarServiceCart> checkedGoodsList = cartService.getCheckedGoods(userId, cartId);
         if (checkedGoodsList == null) {
             return ResponseUtil.badArgument();
         }
@@ -364,7 +368,7 @@ public class WxWebCartService {
         BigDecimal grouponPrice = new BigDecimal("0.00");
         // 商品总价
         BigDecimal checkedGoodsPrice = new BigDecimal("0.00");
-        for (CarServiceCart cart :checkedGoodsList) {
+        for (CarServiceCart cart : checkedGoodsList) {
             checkedGoodsPrice = checkedGoodsPrice.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
             CarServiceGrouponRules grouponRules = grouponRulesService.findById(grouponRulesId);
             if (grouponRules != null) {
@@ -384,7 +388,7 @@ public class WxWebCartService {
         // 1. 用户不想使用优惠券，则不处理
         // 2. 用户想自动使用优惠券，则选择合适优惠券
         // 3. 用户已选择优惠券，则测试优惠券是否合适
-        if (couponId == null || couponId.equals("-1")){
+        if (couponId == null || couponId.equals("-1")) {
             couponId = "-1";
             userCouponId = "-1";
         } else if (couponId.equals("0")) {
@@ -394,7 +398,7 @@ public class WxWebCartService {
         } else {
             CarServiceCoupon coupon = couponVerifyService.checkCoupon(userId, couponId, userCouponId, carId, checkedGoodsList);
             // 用户选择的优惠券有问题，则选择合适优惠券，否则使用用户选择的优惠券
-            if (coupon == null){
+            if (coupon == null) {
                 couponPrice = tmpCouponPrice;
                 couponId = tmpCouponId;
                 userCouponId = tmpUserCouponId;
@@ -433,14 +437,14 @@ public class WxWebCartService {
 //        }
 
         CartCheckoutResult result = new CartCheckoutResult();
-        result.setAddressId(addressId);
+//        result.setAddressId(addressId);
         result.setCouponId(couponId);
         result.setUserCouponId(userCouponId);
         result.setCartId(cartId);
         result.setGrouponRulesId(grouponRulesId);
         result.setGrouponPrice(grouponPrice);
 //        result.setIntegralPrice(integralPrice);
-        result.setCheckedAddress(checkedAddress);
+//        result.setCheckedAddress(checkedAddress);
         result.setAvailableCouponLength(availableCouponLength);
         result.setGoodsTotalPrice(checkedGoodsPrice);
         result.setFreightPrice(freightPrice);

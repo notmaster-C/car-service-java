@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * 项目启动时初始化
+ *
  * @author click
  */
 @Slf4j
@@ -33,7 +34,7 @@ public class TaskStartupRunner {
     public void init() {
         log.info("初始化 -> [初始化定时任务]");
 //        //订单超时未支付
-//        taskJob.checkOrderUnpaid();
+        taskJob.checkOrderUnpaid();
 //        //订单评论超时
 //        taskJob.checkOrderComment();
 //        //订单确认收货超时
